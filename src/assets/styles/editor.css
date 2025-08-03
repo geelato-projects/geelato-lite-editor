@@ -1,0 +1,508 @@
+/* 任务列表样式 */
+.gl-task-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.gl-task-item {
+  display: flex;
+  align-items: flex-start;
+  margin: 0.5rem 0;
+  padding: 0;
+}
+
+.gl-task-item input[type="checkbox"] {
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.gl-task-item p {
+  margin: 0;
+  flex: 1;
+}
+
+.gl-task-item[data-checked="true"] p {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* 嵌套任务列表 */
+.gl-task-item .gl-task-list {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+/* 编辑器内容区域 */
+.ProseMirror {
+  outline: none;
+  padding: 1rem;
+  min-height: 200px;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
+}
+
+/* 文本对齐样式 */
+.ProseMirror [data-text-align="left"] {
+  text-align: left;
+}
+
+.ProseMirror [data-text-align="center"] {
+  text-align: center;
+}
+
+.ProseMirror [data-text-align="right"] {
+  text-align: right;
+}
+
+.ProseMirror [data-text-align="justify"] {
+  text-align: justify;
+}
+
+/* 列表样式 */
+.ProseMirror ul, .ProseMirror ol {
+  padding-left: 1.5rem;
+}
+
+.ProseMirror li {
+  margin: 0.25rem 0;
+}
+
+/* 引用块样式 */
+.ProseMirror blockquote {
+  border-left: 4px solid #e9ecef;
+  margin: 1rem 0;
+  padding-left: 1rem;
+  font-style: italic;
+  color: #6c757d;
+}
+
+/* 代码样式 */
+.ProseMirror code {
+  background-color: #f8f9fa;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+}
+
+.ProseMirror pre {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+.ProseMirror pre code {
+  background: none;
+  padding: 0;
+}
+
+/* 表格样式 */
+.ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.ProseMirror table td,
+.ProseMirror table th {
+  min-width: 1em;
+  border: 2px solid #ced4da;
+  padding: 3px 5px;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.ProseMirror table th {
+  font-weight: bold;
+  text-align: left;
+  background-color: #f8f9fa;
+}
+
+/* 链接样式 */
+.ProseMirror a {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.ProseMirror a:hover {
+  color: #0056b3;
+}
+
+/* 图片容器样式 */
+.gl-image-wrapper {
+  display: inline-block;
+  position: relative;
+  margin: 8px 0;
+  max-width: 100%;
+}
+
+/* es-drager 容器样式 */
+.gl-image-drager {
+  display: inline-block;
+  position: relative;
+}
+
+/* 图片基础样式 */
+.ProseMirror .gl-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: block;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+/* 图片悬停效果 */
+.ProseMirror .gl-image:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* 只读模式图片样式 */
+.ProseMirror .gl-image--readonly {
+  cursor: default;
+}
+
+/* 图片选中状态 */
+.ProseMirror .ProseMirror-selectednode .gl-image {
+  box-shadow: 0 0 0 2px #3a7afe, 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* es-drager 控制点样式优化 */
+.gl-image-wrapper .es-drager-handle {
+  background: #3a7afe;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+/* 修复把柄位置对齐 */
+.gl-image-wrapper .es-drager-handle.es-drager-handle-tl {
+  top: 0;
+  left: 0;
+}
+
+.gl-image-wrapper .es-drager-handle.es-drager-handle-tm {
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.gl-image-wrapper .es-drager-handle.es-drager-handle-tr {
+  top: 0;
+  right: 0;
+  left: auto;
+  transform: translate(50%, -50%);
+}
+
+.gl-image-wrapper .es-drager-handle.es-drager-handle-ml {
+  top: 50%;
+  left: 0;
+}
+
+.gl-image-wrapper .es-drager-handle.es-drager-handle-mr {
+  top: 50%;
+  right: 0;
+  left: auto;
+  transform: translate(50%, -50%);
+}
+
+.gl-image-wrapper .es-drager-handle.es-drager-handle-bl {
+  bottom: 0;
+  left: 0;
+  top: auto;
+  transform: translate(-50%, 50%);
+}
+
+.gl-image-wrapper .es-drager-handle.es-drager-handle-bm {
+  bottom: 0;
+  left: 50%;
+  top: auto;
+  transform: translate(-50%, 50%);
+}
+
+.gl-image-wrapper .es-drager-handle.es-drager-handle-br {
+  bottom: 0;
+  right: 0;
+  left: auto;
+  top: auto;
+  transform: translate(50%, 50%);
+}
+
+.gl-image-wrapper .es-drager-handle:hover {
+  background: #2563eb;
+}
+
+.gl-image-wrapper .es-drager-handle.es-drager-handle-tl:hover,
+.gl-image-wrapper .es-drager-handle.es-drager-handle-tm:hover,
+.gl-image-wrapper .es-drager-handle.es-drager-handle-ml:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+.gl-image-wrapper .es-drager-handle.es-drager-handle-tr:hover,
+.gl-image-wrapper .es-drager-handle.es-drager-handle-mr:hover {
+  transform: translate(50%, -50%) scale(1.2);
+}
+
+.gl-image-wrapper .es-drager-handle.es-drager-handle-bl:hover,
+.gl-image-wrapper .es-drager-handle.es-drager-handle-bm:hover {
+  transform: translate(-50%, 50%) scale(1.2);
+}
+
+.gl-image-wrapper .es-drager-handle.es-drager-handle-br:hover {
+  transform: translate(50%, 50%) scale(1.2);
+}
+
+/* 旋转控制点样式 */
+.gl-image-wrapper .es-drager-rotate {
+  background: #10b981;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.gl-image-wrapper .es-drager-rotate:hover {
+  background: #059669;
+  transform: scale(1.2);
+}
+
+/* 拖拽边框样式 */
+.gl-image-wrapper .es-drager-border {
+  border: 1px dashed #3a7afe;
+  background: rgba(58, 122, 254, 0.05);
+  /* 确保边框完全覆盖图片 */
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+/* 修复拖拽容器稳定性 */
+.gl-image-wrapper .gl-image-drager {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+}
+
+/* 确保图片在拖拽容器内正确定位 */
+.gl-image-wrapper .gl-image-drager .gl-image {
+  position: relative;
+  z-index: 2;
+}
+
+/* 图片对齐样式 */
+.gl-image-wrapper {
+  display: block;
+  margin: 8px 0;
+}
+
+.gl-image-wrapper--align-left {
+  text-align: left;
+}
+
+.gl-image-wrapper--align-center {
+  text-align: center;
+}
+
+.gl-image-wrapper--align-right {
+  text-align: right;
+}
+
+/* 选中状态样式 */
+.gl-image-wrapper--selected {
+  position: relative;
+}
+
+/* BubbleMenu定位 */
+.image-bubble-menu-wrapper {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+}
+
+/* 拖拽时的样式 */
+.gl-image-wrapper .es-drager.es-drager-dragging {
+  z-index: 1000;
+}
+
+/* 调整时的样式 */
+.gl-image-wrapper .es-drager.es-drager-resizing {
+  z-index: 1000;
+}
+
+/* 响应式图片处理 */
+@media (max-width: 768px) {
+  .gl-image-wrapper {
+    max-width: 100%;
+  }
+  
+  .ProseMirror .gl-image {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* 高亮样式 */
+.ProseMirror mark {
+  background-color: #fff3cd;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.125rem;
+}
+
+/* 选中状态 */
+.ProseMirror .selectedCell:after {
+  z-index: 2;
+  position: absolute;
+  content: "";
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(200, 200, 255, 0.4);
+  pointer-events: none;
+}
+
+/* 文本选择样式 */
+.gl-text-selection {
+  background-color: rgba(24, 144, 255, 0.2);
+  border-radius: 2px;
+}
+
+/* 节点选中样式 */
+.gl-node-selected {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* 节点高亮样式 */
+.gl-node-highlighted {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  position: relative;
+}
+
+/* 拖拽手柄样式 */
+.gl-node-drag-handle {
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666666;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.gl-node-drag-handle:hover {
+  background: #f5f5f5;
+  border-color: #007bff;
+  color: #007bff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.gl-node-drag-handle:active {
+  cursor: grabbing;
+  transform: scale(0.95);
+}
+
+.gl-node-drag-handle svg {
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+}
+
+/* 暗色主题适配 */
+.dark .ProseMirror {
+  color: #f8f9fa;
+}
+
+.dark .ProseMirror blockquote {
+  border-left-color: #495057;
+  color: #adb5bd;
+}
+
+.dark .ProseMirror code {
+  background-color: #343a40;
+  color: #f8f9fa;
+}
+
+.dark .ProseMirror pre {
+  background-color: #343a40;
+}
+
+.dark .ProseMirror table th {
+  background-color: #495057;
+  color: #f8f9fa;
+}
+
+.dark .ProseMirror table td,
+.dark .ProseMirror table th {
+  border-color: #495057;
+}
+
+.dark .ProseMirror mark {
+  background-color: #856404;
+  color: #fff3cd;
+}
+
+.dark .ProseMirror a {
+  color: #66b3ff;
+}
+
+.dark .ProseMirror a:hover {
+  color: #4da6ff;
+}
+
+/* 暗色主题选择样式 */
+.dark .gl-text-selection {
+  background-color: rgba(66, 179, 255, 0.3);
+}
+
+.dark .gl-node-selected {
+  background-color: rgba(255, 255, 255, 0.08);
+  outline-color: #66b3ff;
+}
+
+.dark .gl-node-highlighted {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .gl-node-drag-handle {
+  background: #2d2d2d;
+  border-color: #404040;
+  color: #cccccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dark .gl-node-drag-handle:hover {
+  background: #3a3a3a;
+  border-color: #66b3ff;
+  color: #66b3ff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
