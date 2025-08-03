@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import dts from 'vite-plugin-dts'
 import { resolve } from 'path'
 import { fileURLToPath, URL } from 'node:url'
 
@@ -8,7 +9,14 @@ export default defineConfig(({ mode }) => {
   const isLib = mode === 'lib'
   
   return {
-    plugins: [vue()],
+    plugins: [
+      vue(),
+      ...(isLib ? [dts({
+        include: ['src/**/*.ts', 'src/**/*.vue'],
+        exclude: ['src/**/*.test.*', 'src/**/*.spec.*', 'src/vite-env.d.ts'],
+        outDir: 'dist'
+      })] : [])
+    ],
     
     // 非库模式的构建配置
     ...(!isLib && {

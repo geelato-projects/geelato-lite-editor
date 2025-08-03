@@ -38,13 +38,13 @@
 
 ```bash
 # 使用 pnpm（推荐）
-pnpm install geelato-lite-editor
+pnpm install @geelato/lite-editor
 
 # 使用 npm
-npm install geelato-lite-editor
+npm install @geelato/lite-editor
 
 # 使用 yarn
-yarn add geelato-lite-editor
+yarn add @geelato/lite-editor
 ```
 
 ### 基础使用
@@ -66,8 +66,8 @@ yarn add geelato-lite-editor
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { GeelatoLiteEditor } from 'geelato-lite-editor'
-import type { EditorContent } from 'geelato-lite-editor'
+import { GeelatoLiteEditor } from '@geelato/lite-editor'
+import type { EditorContent } from '@geelato/lite-editor'
 
 const content = ref('<p>Hello World!</p>')
 
@@ -105,14 +105,14 @@ const handleChange = (editorContent: EditorContent) => {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { GeelatoLiteEditor, createExtensions } from 'geelato-lite-editor'
+import { GeelatoLiteEditor, createExtensions } from '@geelato/lite-editor'
 import type { 
   EditorContent, 
   SelectionState, 
   ToolbarConfig,
   ThemeType,
   ComponentSize 
-} from 'geelato-lite-editor'
+} from '@geelato/lite-editor'
 
 const content = ref('')
 const editable = ref(true)
@@ -251,7 +251,7 @@ const customExtensions = [
 ### 自定义工具栏按钮
 
 ```typescript
-import { useToolbar } from 'geelato-lite-editor'
+import { useToolbar } from '@geelato/lite-editor'
 
 // 1. 定义按钮配置
 const customButton = {
@@ -328,8 +328,8 @@ const customTheme = {
 
 ```bash
 # 克隆项目
-git clone <repository-url>
-cd geelato-lite-editor
+git clone https://github.com/geelato-projects/geelato-lite-editor.git
+cd lite-editor
 
 # 安装依赖
 pnpm install
