@@ -47,6 +47,18 @@ npm install @geelato/lite-editor
 yarn add @geelato/lite-editor
 ```
 
+### 样式导入
+
+**重要**: 使用编辑器时，必须导入样式文件以确保编辑器正常显示和功能完整。
+
+```javascript
+// 方式一：在主入口文件（如 main.js 或 main.ts）中全局导入（推荐）
+import '@geelato/lite-editor/dist/geelato-lite-editor.css'
+
+// 方式二：在使用编辑器的组件中单独导入
+import '@geelato/lite-editor/dist/geelato-lite-editor.css'
+```
+
 ### 基础使用
 
 ```vue
@@ -67,6 +79,8 @@ yarn add @geelato/lite-editor
 <script setup lang="ts">
 import { ref } from 'vue'
 import { GeelatoLiteEditor } from '@geelato/lite-editor'
+// 导入样式文件
+import '@geelato/lite-editor/dist/geelato-lite-editor.css'
 import type { EditorContent } from '@geelato/lite-editor'
 
 const content = ref('<p>Hello World!</p>')

@@ -432,7 +432,7 @@ const TOOLBAR_BUTTONS: Record<string, ToolbarButtonConfig> = {
 const TOOLBAR_CONFIGS: Record<ToolbarMode, string[]> = {
   full: [
     'undo', 'redo','bold', 'italic', 'underline', 'strike', '|',
-    'heading', 'paragraph', '|',
+    'heading', '|',
     'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', '|',
     'list', 'blockquote', '|',
     'link', 'image', '|',

@@ -62,18 +62,18 @@ const currentIcon = computed((): IconName => {
 const currentTitle = computed(() => {
   const level = currentHeadingLevel.value
   if (level === 0) return '正文'
-  return `标题${level}`
+  return `H${level}`
 })
 
 // 标题选项
 const headingOptions = [
   { level: 0, title: '正文', fontSize: '14px' },
-  { level: 1, title: '标题1', fontSize: '20px' },
-  { level: 2, title: '标题2', fontSize: '18px' },
-  { level: 3, title: '标题3', fontSize: '16px' },
-  { level: 4, title: '标题4', fontSize: '15px' },
-  { level: 5, title: '标题5', fontSize: '14px' },
-  { level: 6, title: '标题6', fontSize: '13px' }
+  { level: 1, title: 'H1', fontSize: '20px' },
+  { level: 2, title: 'H2', fontSize: '18px' },
+  { level: 3, title: 'H3', fontSize: '16px' },
+  { level: 4, title: 'H4', fontSize: '15px' },
+  { level: 5, title: 'H5', fontSize: '14px' },
+  { level: 6, title: 'H6', fontSize: '13px' }
 ]
 
 // 切换下拉菜单
