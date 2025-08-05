@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
       vue(),
       ...(isLib ? [dts({
         include: ['src/**/*.ts', 'src/**/*.vue'],
-        exclude: ['src/**/*.test.*', 'src/**/*.spec.*', 'src/vite-env.d.ts'],
+        exclude: ['src/**/*.test.*', 'src/**/*.spec.*', 'src/vite-env.d.ts', 'src/Demo.vue'],
         outDir: 'dist'
       })] : [])
     ],

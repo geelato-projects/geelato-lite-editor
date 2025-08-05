@@ -3,6 +3,10 @@ src/
 public/
 scripts/
 
+# 演示文件
+Demo.vue
+src/Demo.vue
+
 # 开发配置文件
 vite.config.ts
 tsconfig.*.json
