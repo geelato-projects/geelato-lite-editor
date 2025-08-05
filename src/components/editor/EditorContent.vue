@@ -156,7 +156,7 @@ const handlePlaceholderClick = () => {
   background: var(--gl-editor-bg, #ffffff);
   border: 1px solid var(--gl-border-color, #e0e0e0);
   border-top: none;
-  overflow: hidden;
+  overflow-y: auto;
   
   &--small {
     .gl-editor-content__editor {

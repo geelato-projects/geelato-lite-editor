@@ -431,23 +431,22 @@ const TOOLBAR_BUTTONS: Record<string, ToolbarButtonConfig> = {
 // 预定义工具栏配置
 const TOOLBAR_CONFIGS: Record<ToolbarMode, string[]> = {
   full: [
-    'undo', 'redo','bold', 'italic', 'underline', 'strike', '|',
-    'heading', '|',
+    'undo', 'redo','bold', 'italic', 'underline', 'strike',    'textColor', 'highlight','|',
+    'heading', 'paragraph', '|',
     'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', '|',
     'list', 'blockquote', '|',
-    'link', 'image', '|',
+    'image', 'link','|',
     'table', '|',
     'mergeCells', 'splitCell', '|',
-    'textColor', 'highlight'
   ],
   simple: [
-    'undo', 'redo','bold', 'italic', 'underline', '|',
+    'undo', 'redo','bold', 'italic', 'underline', 'textColor',  '|',
     'heading', 'list', '|',
     'alignLeft', 'alignCenter', 'alignRight', '|',
     'link', 'image', 'table'
   ],
   minimal: [
-    'undo', 'redo','bold', 'italic', 'link'
+    'bold', 'italic', 'textColor','heading', 'list'
   ],
   none: []
 }

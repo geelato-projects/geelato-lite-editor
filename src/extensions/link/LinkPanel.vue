@@ -114,16 +114,8 @@ const handleOpenLink = () => {
 }
 
 const handleDelete = () => {
-  console.log('LinkPanel handleDelete 函数被调用')
-  
-  // 添加详细的删除日志
-  console.log('触发删除事件')
   emit('delete')
-  
-  console.log('触发关闭事件')
   emit('close')
-  
-  console.log('LinkPanel handleDelete 函数执行完成')
 }
 
 const handleClose = () => {

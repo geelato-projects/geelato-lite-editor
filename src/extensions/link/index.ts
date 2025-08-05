@@ -55,9 +55,15 @@ export default Link.extend<LinkConfig>({
                 })
                 
                 // 在编辑器容器上触发事件
-                const editorElement = view.dom.closest('.gl-lite-editor')
-                if (editorElement) {
-                  editorElement.dispatchEvent(customEvent)
+                try {
+                  if (view.dom) {
+                    const editorElement = view.dom.closest('.gl-lite-editor')
+                    if (editorElement) {
+                      editorElement.dispatchEvent(customEvent)
+                    }
+                  }
+                } catch (error) {
+                  console.error('Error dispatching link click event:', error)
                 }
                 
                 return true

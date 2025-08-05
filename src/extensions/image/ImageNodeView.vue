@@ -153,7 +153,7 @@ const handleResize = (dragData: any) => {
     height: imageHeight.value
   })
   
-  console.log('图片尺寸调整:', { width: newWidth, height: newHeight, direction: dragData.direction })
+  // 图片尺寸调整完成
 }
 
 
@@ -161,7 +161,6 @@ const handleResize = (dragData: any) => {
 // 处理位置和其他变化
 const handleChange = (dragData: any) => {
   // 可以在这里处理其他变化，如位置等
-  console.log('图片属性变化:', dragData)
 }
 
 // 组件挂载时初始化

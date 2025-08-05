@@ -289,21 +289,16 @@ const handleLinkConfirm = (url: string) => {
 
 // 处理链接删除
 const handleLinkDelete = () => {
-  console.log('EditorToolbar handleLinkDelete 函数被调用')
-  
   if (!props.editor) {
-    console.log('编辑器不存在，无法删除链接')
     return
   }
   
   try {
-    console.log('开始删除链接')
     
     // 获取当前状态
     const { state } = props.editor
     const { selection } = state
-    console.log('删除前选择范围:', { from: selection.from, to: selection.to })
-    console.log('删除前HTML:', props.editor.getHTML())
+    // 获取当前选择范围
     
     // 查找完整的链接范围
     let linkStart = selection.from
@@ -368,8 +363,7 @@ const handleLinkDelete = () => {
             }
             
             foundLinkRange = { start: rangeStart, end: rangeEnd, href: linkMark.attrs.href }
-            console.log('找到完整链接范围:', foundLinkRange)
-            console.log('链接文本:', doc.textBetween(rangeStart, rangeEnd))
+            // 找到完整链接范围
             return false // 停止遍历
           }
         }
@@ -385,26 +379,19 @@ const handleLinkDelete = () => {
     // 选中完整的链接范围
     if (linkStart !== linkEnd) {
       props.editor.commands.setTextSelection({ from: linkStart, to: linkEnd })
-      console.log('已选中完整链接范围:', { from: linkStart, to: linkEnd })
+      // 选中完整链接范围
     }
     
     // 使用TipTap内置的unsetLink命令删除链接
     const result = props.editor.chain().focus().unsetLink().run()
-    console.log('unsetLink 命令执行结果:', result)
+    // 执行unsetLink命令
     
     // 检查删除结果
     setTimeout(() => {
       if (!props.editor) return
       const newHTML = props.editor.getHTML()
       const linkCount = (newHTML.match(/<a[^>]*>/g) || []).length
-      console.log('删除后HTML:', newHTML)
-      console.log('删除后链接数量:', linkCount)
-      
-      if (linkCount === 0) {
-        console.log('✅ 链接删除成功')
-      } else {
-        console.log('❌ 链接删除失败，仍有残留')
-      }
+      // 检查删除结果
     }, 100)
     
   } catch (error) {
@@ -412,7 +399,6 @@ const handleLinkDelete = () => {
   }
   
   linkPanelVisible.value = false
-  console.log('链接面板已关闭')
 }
 
 // 处理链接面板关闭
@@ -484,7 +470,6 @@ const handleTextColorPanelClose = () => {
 
 // 处理编辑器中链接点击事件
 const handleEditorLinkClick = (event: CustomEvent) => {
-  console.log('handleEditorLinkClick called:', event.detail)
   if (!props.editor) return
   
   const { url, position, element } = event.detail
@@ -543,23 +528,34 @@ const handleEditorLinkClick = (event: CustomEvent) => {
 
 // 绑定事件监听器的函数
 const bindEventListener = () => {
-  if (props.editor?.view?.dom) {
+  // 确保编辑器存在且已完全初始化
+  if (!props.editor) {
+    return
+  }
+  
+  // 检查编辑器是否已销毁
+  if (props.editor.isDestroyed) {
+    return
+  }
+  
+  // 检查view和dom是否可用
+  if (!props.editor.view || !props.editor.view.dom) {
+    return
+  }
+  
+  try {
     const editorElement = props.editor.view.dom.closest('.gl-lite-editor')
-    console.log('Binding event listener to:', editorElement)
     if (editorElement) {
       editorElement.addEventListener('editor:link:click', handleEditorLinkClick as EventListener)
-      console.log('Event listener bound successfully')
-    } else {
-      console.warn('Could not find .gl-lite-editor container')
     }
-  } else {
-    console.warn('Editor view DOM not available')
+  } catch (error) {
+    console.error('Error binding event listener:', error)
   }
 }
 
 // 监听editor prop变化
 watch(() => props.editor, (newEditor) => {
-  if (newEditor?.view?.dom) {
+  if (newEditor && !newEditor.isDestroyed && newEditor.view?.dom) {
     nextTick(() => {
       bindEventListener()
     })
@@ -576,11 +572,23 @@ onMounted(() => {
 
 // 移除事件监听
 onUnmounted(() => {
-  if (props.editor?.view?.dom) {
+  // 确保编辑器存在且未销毁
+  if (!props.editor || props.editor.isDestroyed) {
+    return
+  }
+  
+  // 检查view和dom是否可用
+  if (!props.editor.view || !props.editor.view.dom) {
+    return
+  }
+  
+  try {
     const editorElement = props.editor.view.dom.closest('.gl-lite-editor')
     if (editorElement) {
       editorElement.removeEventListener('editor:link:click', handleEditorLinkClick as EventListener)
     }
+  } catch (error) {
+    console.error('Error removing event listener:', error)
   }
 })
 </script>
