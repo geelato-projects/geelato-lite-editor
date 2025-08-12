@@ -2,15 +2,12 @@ import { ref, computed, watch, onBeforeUnmount } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
 import { useEditor as useTiptapEditor } from '@tiptap/vue-3'
 import type { Editor } from '@tiptap/core'
-import type { Editor as VueEditor } from '@tiptap/vue-3'
 import { createExtensions, EXTENSION_CONFIGS } from '../extensions'
+import { convertToInlineStyles } from '../utils/htmlInlineStyles'
 import type {
-  GeelateLiteEditorProps,
-  EditorContent,
   SelectionState,
   GeelatoEditorState,
   ExtensionConfig,
-  ToolbarMode
 } from '../types'
 
 // 编辑器配置接口
@@ -50,6 +47,7 @@ export interface UseEditorReturn {
   canUndo: ComputedRef<boolean>
   canRedo: ComputedRef<boolean>
   getContent: (format?: 'html' | 'json' | 'text') => string | any
+  getInlineHTML: () => string
   setContent: (content: string, emitUpdate?: boolean) => void
   clearContent: () => void
   focus: (position?: 'start' | 'end' | number) => void
@@ -178,6 +176,13 @@ export function useEditor(options: UseEditorOptions = {}): UseEditorReturn {
         default:
           return editor.value.getHTML()
       }
+    },
+
+    // 获取内联样式HTML（适用于邮件等场景）
+    getInlineHTML: () => {
+      if (!editor.value) return ''
+      const html = editor.value.getHTML()
+      return convertToInlineStyles(html)
     },
 
     // 设置内容

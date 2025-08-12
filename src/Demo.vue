@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, nextTick } from 'vue'
 import { GeelatoLiteEditor } from './index'
+import { convertToInlineStyles } from './utils/htmlInlineStyles'
 
 const content = ref('<p>欢迎使用 Geelato Lite Editor！</p><p>这是一个基于 TipTap 的轻量级富文本编辑器。</p>')
-const currentView = ref<'demo' | 'test' | 'height-test'>('demo')
+const currentView = ref<'demo' | 'test' | 'height-test' | 'preview-test'>('demo')
 
 // 高度测试相关状态
 const heightTestContent = ref(`
@@ -31,6 +32,122 @@ const heightTestContent = ref(`
 <p>继续添加内容以确保超出最大高度限制...</p>
 <p>最后一段内容，用于测试滚动到底部的效果。</p>
 `)
+
+// 预览测试相关状态
+const previewTestContent = ref(`
+<h2>HTML预览测试内容</h2>
+<p>这是一段用于测试HTML预览功能的<strong>富文本内容</strong>。</p>
+<ul>
+  <li>支持<em>斜体</em>和<strong>粗体</strong>文字</li>
+  <li>支持有序和无序列表</li>
+  <li>支持<a href="#" style="color: #1890ff;">链接</a>功能</li>
+</ul>
+<blockquote>
+  <p>这是一个引用块，用于测试样式渲染效果。</p>
+</blockquote>
+<p style="color: #1890ff; font-size: 16px;">这是一段带颜色的文字，测试样式是否正确应用。</p>
+<div style="background: #f0f0f0; padding: 12px; border-radius: 4px; margin: 12px 0;">
+  <p style="margin: 0;">这是一个自定义样式的div块，测试复杂HTML结构的渲染效果。</p>
+</div>
+`)
+
+// 预览相关
+const previewIframe = ref<HTMLIFrameElement>()
+const emailPreviewIframe = ref<HTMLIFrameElement>()
+const previewMode = ref<'normal' | 'email'>('normal')
+
+// 普通HTML预览（无样式）
+const previewHtmlContent = computed(() => {
+  return `
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML预览</title>
+</head>
+<body>
+${previewTestContent.value}
+</body>
+</html>
+  `
+})
+
+// 邮件HTML预览（内联样式）- 使用编辑器的getInlineHTML方法
+const emailHtmlContent = computed(() => {
+  if (previewEditorRef.value && previewEditorRef.value.getInlineHTML) {
+    try {
+      const inlineHTML = previewEditorRef.value.getInlineHTML()
+      return `
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>邮件HTML预览（getInlineHTML方法）</title>
+</head>
+<body>
+${inlineHTML}
+</body>
+</html>
+      `
+    } catch (error) {
+      console.error('获取内联HTML失败:', error)
+      return `
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>错误</title>
+</head>
+<body>
+  <p style="color: red;">获取内联HTML失败: ${error}</p>
+</body>
+</html>
+      `
+    }
+  }
+  // 如果编辑器还未准备好，返回默认内容
+  return `
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>加载中</title>
+</head>
+<body>
+  <p>编辑器加载中...</p>
+</body>
+</html>
+  `
+})
+
+const onPreviewContentChange = () => {
+  // 内容变化时自动更新预览
+  nextTick(() => {
+    if (previewIframe.value) {
+      previewIframe.value.srcdoc = previewHtmlContent.value
+    }
+    if (emailPreviewIframe.value) {
+      emailPreviewIframe.value.srcdoc = emailHtmlContent.value
+    }
+  })
+}
+
+const refreshPreview = () => {
+  if (previewIframe.value) {
+    previewIframe.value.srcdoc = previewHtmlContent.value
+  }
+  if (emailPreviewIframe.value) {
+    emailPreviewIframe.value.srcdoc = emailHtmlContent.value
+  }
+}
+
+const switchPreviewMode = (mode: 'normal' | 'email') => {
+  previewMode.value = mode
+}
 const testMinHeight = ref('150px')
 const testMaxHeight = ref('300px')
 const theme = ref<'light' | 'dark' | 'auto'>('auto')
@@ -43,6 +160,7 @@ const primaryColor = ref('#1890ff')
 
 // 编辑器实例引用
 const editorRef = ref()
+const previewEditorRef = ref()
 
 // 暴露编辑器到全局变量
 onMounted(() => {
@@ -112,7 +230,7 @@ const togglePrimaryColor = () => {
 }
 
 // 视图切换
-const switchView = (view: 'demo' | 'test' | 'height-test') => {
+const switchView = (view: 'demo' | 'test' | 'height-test' | 'preview-test') => {
   currentView.value = view
 }
 
@@ -142,6 +260,9 @@ const adjustMaxHeight = (delta: number) => {
           </button>
           <button @click="switchView('height-test')" :class="['control-btn', { 'view-switch': currentView === 'height-test' }]">
             高度测试
+          </button>
+          <button @click="switchView('preview-test')" :class="['control-btn', { 'view-switch': currentView === 'preview-test' }]">
+            预览测试
           </button>
         </div>
         
@@ -241,6 +362,82 @@ const adjustMaxHeight = (delta: number) => {
         </div>
       </div>
       
+      <!-- 预览测试视图 -->
+      <div class="preview-test-view" v-if="currentView === 'preview-test'">
+        <div class="preview-controls">
+          <h3>HTML预览测试</h3>
+          <p class="test-description">
+            将编辑器内容以HTML形式在iframe中渲染，测试最终展示效果和样式兼容性。
+          </p>
+          <div class="preview-options">
+            <label class="option-item">
+              <input type="checkbox" v-model="bordered" />
+              编辑器显示边框
+            </label>
+            <label class="option-item">
+              <input type="checkbox" v-model="showStatusBar" />
+              编辑器显示状态栏
+            </label>
+            <div class="preview-mode-switch">
+              <label class="mode-option">
+                <input type="radio" value="normal" v-model="previewMode" @change="switchPreviewMode('normal')" />
+                普通HTML预览
+              </label>
+              <label class="mode-option">
+                <input type="radio" value="email" v-model="previewMode" @change="switchPreviewMode('email')" />
+                getInlineHTML()方法预览（内联样式）
+              </label>
+            </div>
+            <button @click="refreshPreview" class="refresh-btn">
+              刷新预览
+            </button>
+          </div>
+        </div>
+        
+        <div class="preview-container">
+          <div class="preview-editor">
+            <h4>编辑器</h4>
+            <GeelatoLiteEditor
+              ref="previewEditorRef"
+              v-model="previewTestContent"
+              :theme="theme"
+              :size="size"
+              :toolbar="'simple'"
+              :show-status-bar="showStatusBar"
+              :editable="true"
+              :bordered="bordered"
+              :primary-color="primaryColor"
+              :min-height="'300px'"
+              :max-height="'500px'"
+              @update:modelValue="onPreviewContentChange"
+            />
+          </div>
+          
+          <div class="preview-iframe-container">
+            <h4>{{ previewMode === 'email' ? 'getInlineHTML()方法预览效果（内联样式）' : 'HTML预览效果（无外部样式）' }}</h4>
+            <iframe 
+               v-if="previewMode === 'normal'"
+               ref="previewIframe"
+               class="preview-iframe"
+               :srcdoc="previewHtmlContent"
+               sandbox="allow-same-origin allow-scripts"
+             ></iframe>
+            <iframe 
+               v-if="previewMode === 'email'"
+               ref="emailPreviewIframe"
+               class="preview-iframe"
+               :srcdoc="emailHtmlContent"
+               sandbox="allow-same-origin allow-scripts"
+             ></iframe>
+          </div>
+        </div>
+        
+        <div class="preview-content-display">
+          <h4>{{ previewMode === 'email' ? 'getInlineHTML()方法输出的HTML源码（包含内联样式）' : '原始HTML源码' }}</h4>
+          <pre class="content-code"><code>{{ previewMode === 'email' ? (previewEditorRef?.getInlineHTML?.() || '编辑器未准备好') : previewTestContent }}</code></pre>
+        </div>
+      </div>
+      
     </main>
   </div>
 </template>
@@ -289,7 +486,8 @@ const adjustMaxHeight = (delta: number) => {
   color: white !important;
 }
 
-.height-test-view {
+.height-test-view,
+.preview-test-view {
   grid-column: 1 / -1;
 }
 
@@ -475,6 +673,148 @@ const adjustMaxHeight = (delta: number) => {
   .control-btn {
     padding: 6px 12px;
     font-size: 13px;
+  }
+}
+
+/* 预览测试样式 */
+.preview-controls {
+  margin-bottom: 24px;
+  padding: 20px;
+  background: var(--gl-bg-secondary, #f8f9fa);
+  border-radius: 8px;
+  border: 1px solid var(--gl-border-color, #e0e0e0);
+}
+
+.preview-controls h3 {
+  margin: 0 0 12px 0;
+  color: var(--gl-primary-color, #1890ff);
+  font-size: 18px;
+}
+
+.preview-options {
+  display: flex;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.option-item input[type="checkbox"] {
+  margin: 0;
+}
+
+.refresh-btn {
+  padding: 6px 12px;
+  background: var(--gl-primary-color, #1890ff);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.refresh-btn:hover {
+  background: var(--gl-primary-color-hover, #40a9ff);
+}
+
+.preview-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.preview-editor,
+.preview-iframe-container {
+  padding: 16px;
+  border: 1px solid var(--gl-border-color, #e0e0e0);
+  border-radius: 8px;
+  background: var(--gl-bg-color, #ffffff);
+}
+
+.preview-editor h4,
+.preview-iframe-container h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: var(--gl-text-color, #333333);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--gl-border-color, #e0e0e0);
+}
+
+.preview-iframe {
+  width: 100%;
+  height: 400px;
+  border: 1px solid var(--gl-border-color, #e0e0e0);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.preview-content-display {
+  padding: 16px;
+  border: 1px solid var(--gl-border-color, #e0e0e0);
+  border-radius: 8px;
+  background: var(--gl-bg-secondary, #f8f9fa);
+}
+
+.preview-content-display h4 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: var(--gl-text-color, #333333);
+}
+
+.content-code {
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 16px;
+  margin: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.preview-mode-switch {
+  display: flex;
+  gap: 16px;
+  margin: 8px 0;
+}
+
+.mode-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--gl-text-color, #333333);
+  cursor: pointer;
+}
+
+.mode-option input[type="radio"] {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .preview-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .preview-options {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .preview-mode-switch {
+    flex-direction: column;
+    gap: 8px;
   }
 }
 </style>

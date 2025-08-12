@@ -64,6 +64,7 @@ const {
   isEmpty,
   contentStats,
   getContent,
+  getInlineHTML,
   setContent,
   clearContent,
   focus,
@@ -187,6 +188,7 @@ watch(
 watch(
   () => props.modelValue,
   (newValue) => {
+    console.log()
     if (editor.value && newValue !== getContent()) {
       setContent(newValue)
     }
@@ -269,6 +271,7 @@ defineExpose({
 
   // 内容操作
   getContent,
+  getInlineHTML,
   setContent,
   clearContent,
 
