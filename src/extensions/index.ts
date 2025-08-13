@@ -1,4 +1,4 @@
-import { Extension } from '@tiptap/core'
+import type { Extension } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import { TableKit } from '@tiptap/extension-table'
 import { TextStyle } from '@tiptap/extension-text-style'

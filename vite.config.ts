@@ -13,8 +13,12 @@ export default defineConfig(({ mode }) => {
       vue(),
       ...(isLib ? [dts({
         include: ['src/**/*.ts', 'src/**/*.vue'],
-        exclude: ['src/**/*.test.*', 'src/**/*.spec.*', 'src/vite-env.d.ts', 'src/Demo.vue'],
-        outDir: 'dist'
+        exclude: ['src/**/*.test.*', 'src/**/*.spec.*'],
+        outDir: 'dist',
+        insertTypesEntry: true,
+        copyDtsFiles: true,
+        staticImport: true,
+        logLevel: 'info'
       })] : [])
     ],
     
@@ -82,7 +86,7 @@ export default defineConfig(({ mode }) => {
         lib: {
           entry: resolve(fileURLToPath(new URL('.', import.meta.url)), 'src/index.ts'),
           name: 'GeelatoLiteEditor',
-          fileName: 'geelato-lite-editor',
+          fileName: (format) => `geelato-lite-editor.${format}.js`,
           formats: ['es', 'umd']
         },
         rollupOptions: {
@@ -122,10 +126,41 @@ export default defineConfig(({ mode }) => {
             'prosemirror-view'
           ],
           output: {
+            exports: 'named',
             globals: {
               vue: 'Vue',
               '@tiptap/core': 'TiptapCore',
-              '@tiptap/vue-3': 'TiptapVue3'
+              '@tiptap/vue-3': 'TiptapVue3',
+              '@tiptap/starter-kit': 'TiptapStarterKit',
+              '@tiptap/extension-blockquote': 'TiptapBlockquote',
+              '@tiptap/extension-bold': 'TiptapBold',
+              '@tiptap/extension-bullet-list': 'TiptapBulletList',
+              '@tiptap/extension-code': 'TiptapCode',
+              '@tiptap/extension-code-block': 'TiptapCodeBlock',
+              '@tiptap/extension-color': 'TiptapColor',
+              '@tiptap/extension-heading': 'TiptapHeading',
+              '@tiptap/extension-highlight': 'TiptapHighlight',
+              '@tiptap/extension-image': 'TiptapImage',
+              '@tiptap/extension-italic': 'TiptapItalic',
+              '@tiptap/extension-link': 'TiptapLink',
+              '@tiptap/extension-list-item': 'TiptapListItem',
+              '@tiptap/extension-ordered-list': 'TiptapOrderedList',
+              '@tiptap/extension-strike': 'TiptapStrike',
+              '@tiptap/extension-table': 'TiptapTable',
+              '@tiptap/extension-table-cell': 'TiptapTableCell',
+              '@tiptap/extension-table-header': 'TiptapTableHeader',
+              '@tiptap/extension-table-row': 'TiptapTableRow',
+              '@tiptap/extension-task-item': 'TiptapTaskItem',
+              '@tiptap/extension-task-list': 'TiptapTaskList',
+              '@tiptap/extension-text-align': 'TiptapTextAlign',
+              '@tiptap/extension-text-style': 'TiptapTextStyle',
+              '@tiptap/extension-underline': 'TiptapUnderline',
+              '@tiptap/pm': 'TiptapPm',
+              '@floating-ui/vue': 'FloatingUIVue',
+              '@vueuse/core': 'VueUseCore',
+              'prosemirror-model': 'ProseMirrorModel',
+              'prosemirror-state': 'ProseMirrorState',
+              'prosemirror-view': 'ProseMirrorView'
             }
           }
         },
