@@ -7,6 +7,9 @@
 export * from './editor'
 export * from './content'
 
+// 从 @tiptap/core 重新导出 Editor 类型
+export type { Editor } from '@tiptap/core'
+
 // 重新导出重命名的类型
 export type { GeelatoEditorState as EditorState } from './editor'
 

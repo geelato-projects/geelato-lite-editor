@@ -2,6 +2,13 @@
 
 一个基于 Vue 3 + TypeScript + TipTap 的轻量级富文本编辑器组件，提供丰富的编辑功能和高度可定制的扩展机制。
 
+## 📦 包大小
+
+- **ES 模块**: ~154KB (gzip: ~32KB)
+- **UMD 模块**: ~96KB (gzip: ~26KB) 
+- **CSS 样式**: ~36KB (gzip: ~6KB)
+- **类型定义**: ~3KB
+
 ## ✨ 特性
 
 ### 🎯 核心功能
@@ -54,10 +61,10 @@ yarn add @geelato/lite-editor
 
 ```javascript
 // 方式一：在主入口文件（如 main.js 或 main.ts）中全局导入（推荐）
-import '@geelato/lite-editor/dist/geelato-lite-editor.css'
+import '@geelato/lite-editor/dist/lite-editor.css'
 
 // 方式二：在使用编辑器的组件中单独导入
-import '@geelato/lite-editor/dist/geelato-lite-editor.css'
+import '@geelato/lite-editor/dist/lite-editor.css'
 ```
 
 ### 基础使用
@@ -81,7 +88,7 @@ import '@geelato/lite-editor/dist/geelato-lite-editor.css'
 import { ref } from 'vue'
 import { GeelatoLiteEditor } from '@geelato/lite-editor'
 // 导入样式文件
-import '@geelato/lite-editor/dist/geelato-lite-editor.css'
+import '@geelato/lite-editor/dist/lite-editor.css'
 import type { EditorContent } from '@geelato/lite-editor'
 
 const content = ref('<p>Hello World!</p>')
@@ -344,7 +351,7 @@ const customTheme = {
 ```bash
 # 克隆项目
 git clone https://github.com/geelato-projects/geelato-lite-editor.git
-cd lite-editor
+cd geelato-lite-editor
 
 # 安装依赖
 pnpm install

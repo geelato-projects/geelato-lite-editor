@@ -1,18 +1,18 @@
 {
   "name": "@geelato/lite-editor",
-  "version": "1.1.8",
+  "version": "1.1.12",
   "description": "A lightweight, extensible rich text editor based on TipTap and Vue 3",
   "type": "module",
-  "main": "./dist/geelato-lite-editor.umd.cjs",
-  "module": "./dist/geelato-lite-editor.js",
+  "main": "./dist/geelato-lite-editor.umd.js",
+  "module": "./dist/geelato-lite-editor.es.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/geelato-lite-editor.js",
-      "require": "./dist/geelato-lite-editor.umd.cjs"
+      "import": "./dist/geelato-lite-editor.es.js",
+      "require": "./dist/geelato-lite-editor.umd.js"
     },
-    "./dist/geelato-lite-editor.css": "./dist/geelato-lite-editor.css"
+    "./dist/lite-editor.css": "./dist/lite-editor.css"
   },
   "files": [
     "dist",
@@ -46,7 +46,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "build:lib": "vue-tsc -b && vite build --mode lib",
+    "build:lib": "vue-tsc -b tsconfig.lib.json && vite build --mode lib",
     "preview": "vite preview",
     "generate-icons": "node scripts/generate-icons.js",
     "prepublishOnly": "npm run build:lib",
@@ -91,10 +91,13 @@
   "devDependencies": {
     "@types/node": "^24.1.0",
     "@vitejs/plugin-vue": "^6.0.0",
+    "@vitejs/plugin-vue-jsx": "^5.0.1",
     "@vue/tsconfig": "^0.7.0",
     "less": "^4.4.0",
+    "terser": "^5.43.1",
     "typescript": "~5.8.3",
     "vite": "^7.0.4",
+    "vite-plugin-compression2": "^2.2.0",
     "vite-plugin-dts": "^4.5.4",
     "vue-tsc": "^2.2.12"
   }

@@ -30,6 +30,7 @@ export {
 // 类型导出
 export type {
   // 编辑器相关类型
+  Editor,
   ThemeType,
   ComponentSize,
   ToolbarMode,
