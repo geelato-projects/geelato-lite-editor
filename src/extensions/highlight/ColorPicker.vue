@@ -28,10 +28,10 @@
           'color-picker__clear--active': selectedColor === null,
           'color-picker__clear--dark': isDark
         }"
-        title="取消高亮"
+        :title="props.clearButtonTitle"
         @click="clearColor"
       >
-        <svg width="16" height="16" viewBox="0 0 1024 1024" fill="currentColor">
+        <svg width="24" height="24" viewBox="0 0 1024 1024" fill="currentColor">
           <path d="M872.615385 151.384615c-198.892308-198.892308-522.584615-198.892308-721.476923 0-198.892308 198.892308-198.892308 522.584615 0 721.476923 99.446154 99.446154 230.153846 149.169231 360.615384 149.169231S772.923077 972.307692 872.369231 872.861538c199.384615-199.138462 199.384615-522.584615 0.246154-721.476923z m-678.892308 42.338462C281.6 106.092308 396.8 62.030769 512 62.030769c105.846154 0 211.446154 37.415385 296.123077 111.507693L173.538462 807.876923c-154.584615-176.492308-148.184615-445.784615 20.184615-614.153846z m636.553846 636.553846c-168.369231 168.369231-437.661538 174.769231-614.4 20.184615L850.215385 216.123077c154.830769 176.492308 148.430769 445.784615-19.938462 614.153846z" />
         </svg>
       </button>
@@ -50,9 +50,10 @@ interface Props {
   colors?: ColorOption[]
   selectedColor?: string | null
   isDark?: boolean
+  clearButtonTitle?: string
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   title: '',
   colors: () => [
     { name: '绿色', value: '#dcfce7' },
@@ -62,7 +63,8 @@ withDefaults(defineProps<Props>(), {
     { name: '黄色', value: '#fef3c7' }
   ],
   selectedColor: null,
-  isDark: false
+  isDark: false,
+  clearButtonTitle: '取消颜色'
 })
 
 const emit = defineEmits<{
@@ -117,7 +119,7 @@ const getBorderColor = (backgroundColor: string) => {
 .color-picker__title {
   font-size: 12px;
   font-weight: 500;
-  color: var(--color-text-secondary, #6b7280);
+  color: var(--color-text-secondary, #9ca3af);
   margin: 0;
   padding: 0 4px;
 }
@@ -177,37 +179,45 @@ const getBorderColor = (backgroundColor: string) => {
   max-width: 24px !important;
   max-height: 24px !important;
   padding: 0 !important;
-  border-radius: 50% !important;
-  border: 2px solid transparent;
-  background: var(--color-bg, #ffffff);
+  border: none;
+  background: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.15s ease;
-  color: var(--color-text-secondary, #6b7280);
+  color: var(--color-text-secondary, #9ca3af);
   flex-shrink: 0 !important;
   box-sizing: border-box !important;
   font-size: inherit !important;
 }
 
 .color-picker__clear:hover {
-  border-color: #9ca3af;
-  background: var(--color-bg-hover, #f9fafb);
+  background: #f3f4f6;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #e5e7eb;
+  transform: scale(1.05);
+  transition: all 0.15s ease;
 }
 
 .color-picker__clear--active {
-  border-color: #6b7280 !important;
   background: var(--color-primary-light, #eff6ff);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #f3f4f6;
 }
 
 .color-picker__clear--dark {
-  background: var(--color-bg-dark, #374151);
+  background: transparent;
   color: var(--color-text-secondary-dark, #9ca3af);
 }
 
 .color-picker__clear--dark:hover {
-  border-color: #6b7280;
   background: var(--color-bg-hover-dark, #4b5563);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #4b5563;
+}
+
+.color-picker__clear--dark.color-picker__clear--active {
+  box-shadow: 0 0 0 2px #4b5563;
 }
 </style>

@@ -227,7 +227,7 @@ watch(
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: var(--gl-z-index-modal, 1090);
   backdrop-filter: blur(2px);
 }
 

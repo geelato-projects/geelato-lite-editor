@@ -13,6 +13,7 @@
       :colors="highlightColors"
       :selectedColor="currentColor"
       :isDark="isDark"
+      clearButtonTitle="取消高亮"
       @color-select="handleColorSelect"
     />
   </FloatingPanel>

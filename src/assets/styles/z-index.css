@@ -1,0 +1,49 @@
+/**
+ * Z-Index 层级管理
+ * 解决弹窗组件层级冲突问题
+ */
+
+:root {
+  /* 基础层级 */
+  --gl-z-index-base: 1;
+  --gl-z-index-affix: 10;
+  --gl-z-index-back-top: 15;
+  
+  /* 导航层级 */
+  --gl-z-index-sticky: 100;
+  --gl-z-index-fixed: 200;
+  
+  /* 遮罩和背景层级 */
+  --gl-z-index-mask: 1000;
+  --gl-z-index-backdrop: 1040;
+  
+  /* 弹出层级 - 按重要性递增 */
+  --gl-z-index-dropdown: 1050;
+  --gl-z-index-tooltip: 1060;
+  --gl-z-index-popover: 1070;
+  --gl-z-index-floating-panel: 1080;
+  --gl-z-index-modal: 1090;
+  
+  /* 最高优先级层级 */
+  --gl-z-index-notification: 2000;
+  --gl-z-index-message: 2010;
+  --gl-z-index-loading: 2020;
+}
+
+/* 
+ * 层级说明：
+ * 1-99: 基础元素层级
+ * 100-999: 导航和固定元素
+ * 1000-1999: 弹出层和遮罩
+ * 2000+: 全局消息和加载层
+ * 
+ * 具体分配：
+ * - dropdown: 1050 (下拉菜单)
+ * - tooltip: 1060 (工具提示)
+ * - popover: 1070 (气泡卡片)
+ * - floating-panel: 1080 (浮动面板，包括颜色选择器)
+ * - modal: 1090 (模态框)
+ * - notification: 2000 (通知)
+ * - message: 2010 (消息提示)
+ * - loading: 2020 (加载层)
+ */

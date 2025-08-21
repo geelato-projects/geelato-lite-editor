@@ -175,7 +175,7 @@ onUnmounted(() => {
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: 1000;
+  z-index: var(--gl-z-index-dropdown, 1050);
   min-width: 140px;
   background: var(--gl-bg-color, #ffffff);
   border: 1px solid var(--gl-border-color, #e0e0e0);

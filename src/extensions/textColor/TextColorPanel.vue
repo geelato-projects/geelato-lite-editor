@@ -13,6 +13,7 @@
       :colors="textColors"
       :selectedColor="currentColor"
       :isDark="isDark"
+      clearButtonTitle="取消文字颜色"
       @color-select="handleColorSelect"
     />
   </FloatingPanel>

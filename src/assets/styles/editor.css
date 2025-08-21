@@ -1,3 +1,6 @@
+/* 引入 z-index 层级管理 */
+@import './z-index.css';
+
 /* 任务列表样式 */
 .gl-task-list {
   list-style: none;
@@ -338,17 +341,17 @@
   top: -50px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1001;
+  z-index: var(--gl-z-index-tooltip, 1060);
 }
 
 /* 拖拽时的样式 */
 .gl-image-wrapper .es-drager.es-drager-dragging {
-  z-index: 1000;
+  z-index: var(--gl-z-index-floating-panel, 1080);
 }
 
 /* 调整时的样式 */
 .gl-image-wrapper .es-drager.es-drager-resizing {
-  z-index: 1000;
+  z-index: var(--gl-z-index-floating-panel, 1080);
 }
 
 /* 响应式图片处理 */

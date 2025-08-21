@@ -92,7 +92,7 @@ const panelClasses = computed(() => [
 /* 外层包装器，由 Floating UI 定位 */
 .floating-panel-wrapper {
   position: absolute;
-  z-index: 1000;
+  z-index: var(--gl-z-index-floating-panel, 1080);
   /* 避免初始闪烁，确保在定位完成前不可见 */
   opacity: 0;
   animation: fadeIn 0.1s ease-out forwards;

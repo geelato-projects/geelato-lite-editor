@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, nextTick } from 'vue'
 import { GeelatoLiteEditor } from './index'
-import { convertToInlineStyles } from './utils/htmlInlineStyles'
+import { convertToInlineStyles, createEmailHtml } from './utils/htmlInlineStyles'
 
 const content = ref('<p>欢迎使用 Geelato Lite Editor！</p><p>这是一个基于 TipTap 的轻量级富文本编辑器。</p>')
 const currentView = ref<'demo' | 'test' | 'height-test' | 'preview-test'>('demo')
@@ -73,55 +73,9 @@ ${previewTestContent.value}
   `
 })
 
-// 邮件HTML预览（内联样式）- 使用编辑器的getInlineHTML方法
+// 邮件HTML预览（内联样式）
 const emailHtmlContent = computed(() => {
-  if (previewEditorRef.value && previewEditorRef.value.getInlineHTML) {
-    try {
-      const inlineHTML = previewEditorRef.value.getInlineHTML()
-      return `
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>邮件HTML预览（getInlineHTML方法）</title>
-</head>
-<body>
-${inlineHTML}
-</body>
-</html>
-      `
-    } catch (error) {
-      console.error('获取内联HTML失败:', error)
-      return `
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>错误</title>
-</head>
-<body>
-  <p style="color: red;">获取内联HTML失败: ${error}</p>
-</body>
-</html>
-      `
-    }
-  }
-  // 如果编辑器还未准备好，返回默认内容
-  return `
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>加载中</title>
-</head>
-<body>
-  <p>编辑器加载中...</p>
-</body>
-</html>
-  `
+  return createEmailHtml(previewTestContent.value, 'HTML邮件预览')
 })
 
 const onPreviewContentChange = () => {
@@ -160,7 +114,6 @@ const primaryColor = ref('#1890ff')
 
 // 编辑器实例引用
 const editorRef = ref()
-const previewEditorRef = ref()
 
 // 暴露编辑器到全局变量
 onMounted(() => {
@@ -385,7 +338,7 @@ const adjustMaxHeight = (delta: number) => {
               </label>
               <label class="mode-option">
                 <input type="radio" value="email" v-model="previewMode" @change="switchPreviewMode('email')" />
-                getInlineHTML()方法预览（内联样式）
+                邮件HTML预览（内联样式）
               </label>
             </div>
             <button @click="refreshPreview" class="refresh-btn">
@@ -398,11 +351,10 @@ const adjustMaxHeight = (delta: number) => {
           <div class="preview-editor">
             <h4>编辑器</h4>
             <GeelatoLiteEditor
-              ref="previewEditorRef"
               v-model="previewTestContent"
               :theme="theme"
               :size="size"
-              :toolbar="'simple'"
+              :toolbar-mode="'simple'"
               :show-status-bar="showStatusBar"
               :editable="true"
               :bordered="bordered"
@@ -414,7 +366,7 @@ const adjustMaxHeight = (delta: number) => {
           </div>
           
           <div class="preview-iframe-container">
-            <h4>{{ previewMode === 'email' ? 'getInlineHTML()方法预览效果（内联样式）' : 'HTML预览效果（无外部样式）' }}</h4>
+            <h4>{{ previewMode === 'email' ? '邮件HTML预览效果（内联样式）' : 'HTML预览效果（无外部样式）' }}</h4>
             <iframe 
                v-if="previewMode === 'normal'"
                ref="previewIframe"
@@ -433,8 +385,8 @@ const adjustMaxHeight = (delta: number) => {
         </div>
         
         <div class="preview-content-display">
-          <h4>{{ previewMode === 'email' ? 'getInlineHTML()方法输出的HTML源码（包含内联样式）' : '原始HTML源码' }}</h4>
-          <pre class="content-code"><code>{{ previewMode === 'email' ? (previewEditorRef?.getInlineHTML?.() || '编辑器未准备好') : previewTestContent }}</code></pre>
+          <h4>{{ previewMode === 'email' ? '邮件HTML源码（包含内联样式）' : '原始HTML源码' }}</h4>
+          <pre class="content-code"><code>{{ previewMode === 'email' ? emailHtmlContent : previewTestContent }}</code></pre>
         </div>
       </div>
       
