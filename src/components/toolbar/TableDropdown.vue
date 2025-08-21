@@ -10,7 +10,9 @@
     />
     <div 
       v-if="isOpen" 
+      ref="menuRef"
       class="table-dropdown-menu"
+      :style="{ top: menuPosition.top + 'px', left: menuPosition.left + 'px' }"
       @click.stop
     >
       <div class="table-dropdown-section">
@@ -91,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
 import ToolbarButton from '../ui/ToolbarButton.vue'
 import SvgIcon from '../ui/SvgIcon.vue'
@@ -103,10 +105,26 @@ interface Props {
 const props = defineProps<Props>()
 
 const dropdownRef = ref<HTMLElement>()
+const menuRef = ref<HTMLElement>()
 const isOpen = ref(false)
+const menuPosition = ref({ top: 0, left: 0 })
 
-const toggleDropdown = () => {
+const updateMenuPosition = async () => {
+  if (!dropdownRef.value) return
+  
+  await nextTick()
+  const rect = dropdownRef.value.getBoundingClientRect()
+  menuPosition.value = {
+    top: rect.bottom + 4,
+    left: rect.left
+  }
+}
+
+const toggleDropdown = async () => {
   isOpen.value = !isOpen.value
+  if (isOpen.value) {
+    await updateMenuPosition()
+  }
 }
 
 const closeDropdown = () => {
@@ -152,12 +170,22 @@ const handleClickOutside = (event: Event) => {
   }
 }
 
+const handleResize = () => {
+  if (isOpen.value) {
+    updateMenuPosition()
+  }
+}
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  window.addEventListener('resize', handleResize)
+  window.addEventListener('scroll', handleResize)
 })
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
+  window.removeEventListener('resize', handleResize)
+  window.removeEventListener('scroll', handleResize)
 })
 </script>
 
@@ -172,9 +200,7 @@ onUnmounted(() => {
 }
 
 .table-dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
+  position: fixed;
   z-index: var(--gl-z-index-dropdown, 1050);
   min-width: 140px;
   background: var(--gl-bg-color, #ffffff);
@@ -182,7 +208,6 @@ onUnmounted(() => {
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 4px 0;
-  margin-top: 4px;
 }
 
 .table-dropdown-section {
