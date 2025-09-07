@@ -22,6 +22,7 @@
         data-drag-handle
         @load="handleImageLoad"
         @error="handleImageError"
+        @dblclick="handleDoubleClick"
       />
     </ResizableImage>
     
@@ -36,6 +37,7 @@
       :style="imageStyle"
       class="gl-image gl-image--readonly"
       data-drag-handle
+      @dblclick="handleDoubleClick"
     />
     
     <!-- 暂时禁用图片BubbleMenu -->
@@ -50,6 +52,15 @@
       @interact="resetBubbleMenuTimer"
       class="image-bubble-menu-wrapper"
     /> -->
+    
+    <!-- 图片预览组件 -->
+    <ImagePreview
+      :visible="showPreview"
+      :image-src="node.attrs.src"
+      :image-alt="node.attrs.alt || ''"
+      @close="closePreview"
+      @update:visible="showPreview = $event"
+    />
   </node-view-wrapper>
 </template>
 
@@ -60,6 +71,7 @@ import type { Node } from '@tiptap/pm/model'
 import type { Editor } from '@tiptap/vue-3'
 import type { NodeViewProps } from '@tiptap/core'
 import ResizableImage from '../../components/ui/ResizableImage.vue'
+import ImagePreview from './ImagePreview.vue'
 
 interface Props extends NodeViewProps {
   // All required props are inherited from NodeViewProps
@@ -73,6 +85,9 @@ const imageHeight = ref(props.node.attrs.height || 150)
 
 // 是否为只读模式
 const readonly = computed(() => !props.editor.isEditable)
+
+// 预览相关状态
+const showPreview = ref(false)
 
 // 移除BubbleMenu相关状态
 
@@ -132,6 +147,16 @@ const handleImageLoad = (event: Event) => {
 // 处理图片加载错误
 const handleImageError = () => {
   console.warn('图片加载失败:', props.node.attrs.src)
+}
+
+// 处理双击事件，打开预览
+const handleDoubleClick = () => {
+  showPreview.value = true
+}
+
+// 关闭预览
+const closePreview = () => {
+  showPreview.value = false
 }
 
 // 移除气泡菜单相关的事件处理函数
