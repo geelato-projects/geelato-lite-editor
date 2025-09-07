@@ -14,7 +14,7 @@
       <img
         :src="node.attrs.src"
         :alt="node.attrs.alt || ''"
-        :title="node.attrs.title || ''"
+        :title="node.attrs.title || '双击预览图片'"
         :width="imageWidth"
         :height="imageHeight"
         :style="imageStyle"
@@ -31,7 +31,7 @@
       v-else
       :src="node.attrs.src"
       :alt="node.attrs.alt || ''"
-      :title="node.attrs.title || ''"
+      :title="node.attrs.title || '双击预览图片'"
       :width="imageWidth"
       :height="imageHeight"
       :style="imageStyle"
