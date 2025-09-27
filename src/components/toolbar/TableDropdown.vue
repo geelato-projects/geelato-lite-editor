@@ -105,13 +105,19 @@
       <div class="table-size-selector">
         <div class="grid-container">
           <div
-            v-for="(cell, index) in 80"
-            :key="index"
-            class="grid-cell"
-            :class="{ active: Math.floor(index / 10) + 1 <= selectedRows && (index % 10) + 1 <= selectedCols }"
-            @mouseenter="onCellHover(Math.floor(index / 10) + 1, (index % 10) + 1)"
-            @click="onCellClick(Math.floor(index / 10) + 1, (index % 10) + 1)"
-          />
+            v-for="row in 8"
+            :key="`row-${row}`"
+            class="grid-row"
+          >
+            <div
+              v-for="col in 10"
+              :key="`cell-${row}-${col}`"
+              class="grid-cell"
+              :class="{ active: row <= selectedRows && col <= selectedCols }"
+              @mouseenter="onCellHover(row, col)"
+              @click="onCellClick(row, col)"
+            />
+          </div>
         </div>
         <div class="size-display">
           {{ selectedRows }} × {{ selectedCols }} 表格
@@ -162,8 +168,19 @@ const updateSelectorPosition = async () => {
   const rect = insertTableItem.getBoundingClientRect()
   const selector = document.querySelector('.table-size-selector-container') as HTMLElement
   if (selector) {
+    // 确保选择器显示在插入表格项的右侧，并考虑视口边界
+    const viewportWidth = window.innerWidth
+    const selectorWidth = 220 // 预估选择器宽度
+    
+    let left = rect.right + 8
+    // 如果右侧空间不够，显示在左侧
+    if (left + selectorWidth > viewportWidth) {
+      left = rect.left - selectorWidth - 8
+    }
+    
     selector.style.top = `${rect.top}px`
-    selector.style.left = `${rect.right + 16}px`
+    selector.style.left = `${left}px`
+    selector.style.zIndex = '1060' // 确保在菜单之上
   }
 }
 
@@ -396,9 +413,10 @@ onUnmounted(() => {
   border: 1px solid var(--gl-border-color, #e0e0e0);
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: var(--gl-z-index-dropdown, 1052);
+  z-index: 1060; /* 确保在菜单之上 */
   min-width: 200px;
   white-space: nowrap;
+  pointer-events: auto; /* 确保可以接收鼠标事件 */
 }
 
 .table-size-selector {
@@ -408,15 +426,15 @@ onUnmounted(() => {
 }
 
 .grid-container {
-  display: grid;
-  grid-template-columns: repeat(10, 16px);
-  grid-template-rows: repeat(8, 16px);
+  display: flex;
+  flex-direction: column;
   gap: 2px;
   margin-bottom: 8px;
 }
 
 .grid-row {
-  /* 移除，不再需要 */
+  display: flex;
+  gap: 2px;
 }
 
 .grid-cell {

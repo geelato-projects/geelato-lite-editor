@@ -8,9 +8,8 @@
     :theme="isDark ? 'dark' : 'light'"
     @click-outside="handleClickOutside"
   >
-    <ColorPicker
+    <ColorPalette
       title="选择高亮颜色"
-      :colors="highlightColors"
       :selectedColor="currentColor"
       :isDark="isDark"
       clearButtonTitle="取消高亮"
@@ -22,7 +21,7 @@
 <script setup lang="ts">
 // import { computed } from 'vue'
 import FloatingPanel from '../../components/ui/FloatingPanel.vue'
-import ColorPicker from './ColorPicker.vue'
+import ColorPalette from '../../components/ui/ColorPalette.vue'
 
 interface Props {
   visible?: boolean
@@ -48,15 +47,6 @@ const emit = defineEmits<{
   colorSelect: [color: string | null]
   close: []
 }>()
-
-// 高亮颜色选项
-const highlightColors = [
-  { name: '绿色高亮', value: '#dcfce7' },
-  { name: '蓝色高亮', value: '#dbeafe' },
-  { name: '粉色高亮', value: '#fce7f3' },
-  { name: '紫色高亮', value: '#e9d5ff' },
-  { name: '黄色高亮', value: '#fef3c7' }
-]
 
 const handleColorSelect = (color: string | null) => {
   emit('colorSelect', color)

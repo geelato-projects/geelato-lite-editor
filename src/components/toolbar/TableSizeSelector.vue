@@ -40,6 +40,7 @@ const onCellHover = (row: number, col: number) => {
 }
 
 const onCellClick = (row: number, col: number) => {
+  console.log(`点击单元格: 行${row}, 列${col}`)
   emit('select', row, col)
 }
 </script>

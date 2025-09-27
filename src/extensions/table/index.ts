@@ -47,6 +47,7 @@ const CustomTableCell = TableCell.extend({
 
   renderHTML({ HTMLAttributes, node }) {
     const colwidth = node.attrs.colwidth;
+    const backgroundColor = node.attrs.backgroundColor;
     let totalWidth = 0;
     let fixedWidth = true;
 
@@ -62,10 +63,12 @@ const CustomTableCell = TableCell.extend({
       fixedWidth = false;
     }
 
-    // 处理背景色样式
+    // 处理样式
     let style = '';
-    if (HTMLAttributes.backgroundColor) {
-      style += `background-color: ${HTMLAttributes.backgroundColor};`;
+    
+    // 处理背景色样式
+    if (backgroundColor) {
+      style += `background-color: ${backgroundColor};`;
     }
 
     // 处理列宽样式
@@ -126,6 +129,7 @@ const CustomTableHeader = TableHeader.extend({
 
   renderHTML({ HTMLAttributes, node }) {
     const colwidth = node.attrs.colwidth;
+    const backgroundColor = node.attrs.backgroundColor;
     let totalWidth = 0;
     let fixedWidth = true;
 
@@ -141,10 +145,12 @@ const CustomTableHeader = TableHeader.extend({
       fixedWidth = false;
     }
 
-    // 处理背景色样式
+    // 处理样式
     let style = '';
-    if (HTMLAttributes.backgroundColor) {
-      style += `background-color: ${HTMLAttributes.backgroundColor};`;
+    
+    // 处理背景色样式
+    if (backgroundColor) {
+      style += `background-color: ${backgroundColor};`;
     }
 
     // 处理列宽样式

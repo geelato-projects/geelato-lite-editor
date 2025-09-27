@@ -10,10 +10,18 @@ export { default as EditorContent } from './editor/EditorContent.vue'
 // UI 组件
 export { default as ToolbarButton } from './ui/ToolbarButton.vue'
 export { default as ToolbarSeparator } from './ui/ToolbarSeparator.vue'
-export { default as InputModal } from './ui/InputModal.vue'
 export { default as FloatingPanel } from './ui/FloatingPanel.vue'
-export { default as ColorPicker } from '../extensions/highlight/ColorPicker.vue'
+export { default as InputModal } from './ui/InputModal.vue'
+export { default as ColorPalette } from './ui/ColorPalette.vue'
+export { default as EnhancedColorPicker } from './ui/EnhancedColorPicker.vue'
+export { default as TableSizeSelector } from './toolbar/TableSizeSelector.vue'
+export { default as HeadingDropdown } from './toolbar/HeadingDropdown.vue'
+export { default as ListDropdown } from './toolbar/ListDropdown.vue'
+export { default as TableDropdown } from './toolbar/TableDropdown.vue'
+export { default as LinkPanel } from '../extensions/link/LinkPanel.vue'
 export { default as HighlightPanel } from '../extensions/highlight/HighlightPanel.vue'
+export { default as TextColorPanel } from '../extensions/textColor/TextColorPanel.vue'
+export { default as TableFillColorPanel } from '../extensions/tableFillColor/TableFillColorPanel.vue'
 
 // 编辑器扩展组件
 

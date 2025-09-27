@@ -8,9 +8,8 @@
     :theme="isDark ? 'dark' : 'light'"
     @click-outside="handleClickOutside"
   >
-    <ColorPicker
+    <ColorPalette
       title="选择文字颜色"
-      :colors="textColors"
       :selectedColor="currentColor"
       :isDark="isDark"
       clearButtonTitle="取消文字颜色"
@@ -21,7 +20,7 @@
 
 <script setup lang="ts">
 import FloatingPanel from '../../components/ui/FloatingPanel.vue'
-import ColorPicker from '../highlight/ColorPicker.vue'
+import ColorPalette from '../../components/ui/ColorPalette.vue'
 
 interface Props {
   visible?: boolean
@@ -47,18 +46,6 @@ const emit = defineEmits<{
   colorSelect: [color: string | null]
   close: []
 }>()
-
-// 文字颜色选项
-const textColors = [
-  { name: '黑色', value: '#000000' },
-  { name: '深灰', value: '#666666' },
-  { name: '红色', value: '#ff4d4f' },
-  { name: '橙色', value: '#ff7a45' },
-  { name: '黄色', value: '#faad14' },
-  { name: '绿色', value: '#52c41a' },
-  { name: '蓝色', value: '#1890ff' },
-  { name: '紫色', value: '#722ed1' }
-]
 
 const handleColorSelect = (color: string | null) => {
   emit('colorSelect', color)

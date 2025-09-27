@@ -23,17 +23,23 @@ function createColumnHandles(doc: any, tablePos: number, table: any): Decoration
   if (!firstRow) return decorations
   
   let colIndex = 0
-  firstRow.forEach((cell: any, offset: number) => {
-    const cellPos = tablePos + 1 + offset // +1 for table node
-    
-    // 不为最后一列创建手柄（根据配置）
+  let currentOffset = 1 // 从表格节点后开始
+  
+  firstRow.forEach((cell: any) => {
+    // 不为最后一列创建手柄
     if (colIndex < firstRow.childCount - 1) {
+      // 计算手柄位置 - 在单元格的右边界
+      const handlePos = tablePos + currentOffset + cell.nodeSize - 1
+      
+      // 捕获当前的 colIndex 值，避免闭包问题
+      const currentColIndex = colIndex
+      
       const decoration = Decoration.widget(
-        cellPos + cell.nodeSize,
+        handlePos,
         () => {
           const handle = document.createElement('div')
           handle.className = 'column-resize-handle'
-          handle.setAttribute('data-col-index', colIndex.toString())
+          handle.setAttribute('data-col-index', currentColIndex.toString()) // 使用捕获的 currentColIndex
           handle.style.cssText = `
             position: absolute;
             right: -2px;
@@ -76,13 +82,14 @@ function createColumnHandles(doc: any, tablePos: number, table: any): Decoration
         },
         {
           side: 1,
-          key: `column-handle-${colIndex}`
+          key: `column-handle-${currentColIndex}-${tablePos}` // 使用捕获的 currentColIndex 确保唯一性
         }
       )
       
       decorations.push(decoration)
     }
     
+    currentOffset += cell.nodeSize
     colIndex++
   })
   
@@ -125,35 +132,81 @@ function getColumnWidths(table: any): number[] {
   return widths
 }
 
-// 更新列宽度
+// 更新列宽度 - 只调整相邻的两列
 function updateColumnWidth(
   view: any,
   tablePos: number,
   table: any,
   colIndex: number,
-  newWidth: number
+  newWidth: number,
+  originalWidth: number
 ) {
   const tr = view.state.tr
+  const firstRow = table.child(0)
   
-  // 遍历表格的所有行，更新指定列的宽度
-  let rowIndex = 0
-  table.forEach((row: any, rowOffset: number) => {
-    let cellIndex = 0
-    row.forEach((cell: any, cellOffset: number) => {
+  // 计算宽度变化
+  const widthDelta = newWidth - originalWidth
+  
+  // 确保有下一列可以调整
+  if (colIndex >= firstRow.childCount - 1) {
+    return
+  }
+  
+  // 获取下一列的当前宽度
+  const nextColCell = firstRow.child(colIndex + 1)
+  const nextColCurrentWidth = (nextColCell.attrs.colwidth && nextColCell.attrs.colwidth[0]) || 50
+  const nextColNewWidth = Math.max(25, nextColCurrentWidth - widthDelta) // 最小宽度25px
+  
+  console.log(`更新列宽: 列${colIndex} ${originalWidth}px -> ${newWidth}px, 列${colIndex + 1} ${nextColCurrentWidth}px -> ${nextColNewWidth}px`)
+  
+  // 批量收集所有需要更新的单元格位置和属性
+  const updates: Array<{ pos: number, attrs: any }> = []
+  
+  // 更新表格中所有行的对应列
+  for (let rowIndex = 0; rowIndex < table.childCount; rowIndex++) {
+    const row = table.child(rowIndex)
+    let cellPos = tablePos + 1 // 表格开始位置 + 1
+    
+    // 计算到当前行的偏移
+    for (let i = 0; i < rowIndex; i++) {
+      cellPos += table.child(i).nodeSize
+    }
+    cellPos += 1 // 行开始标记
+    
+    // 收集当前行中需要更新的列
+    for (let cellIndex = 0; cellIndex < row.childCount; cellIndex++) {
+      const cell = row.child(cellIndex)
+      
       if (cellIndex === colIndex) {
-        const cellPos = tablePos + 1 + rowOffset + cellOffset
-        const newColwidth = [newWidth]
-        
-        tr.setNodeMarkup(cellPos, null, {
-          ...cell.attrs,
-          colwidth: newColwidth
+        // 收集当前列的更新信息
+        updates.push({
+          pos: cellPos,
+          attrs: {
+            ...cell.attrs,
+            colwidth: [newWidth]
+          }
+        })
+      } else if (cellIndex === colIndex + 1) {
+        // 收集下一列的更新信息
+        updates.push({
+          pos: cellPos,
+          attrs: {
+            ...cell.attrs,
+            colwidth: [nextColNewWidth]
+          }
         })
       }
-      cellIndex++
-    })
-    rowIndex++
+      
+      cellPos += cell.nodeSize
+    }
+  }
+  
+  // 一次性应用所有更新，减少重渲染次数
+  updates.forEach(update => {
+    tr.setNodeMarkup(update.pos, null, update.attrs)
   })
   
+  // 只分发一次事务
   view.dispatch(tr)
 }
 
@@ -202,8 +255,12 @@ export const CustomColumnResizing = Extension.create({
               const target = event.target as HTMLElement
               
               if (target.classList.contains('column-resize-handle')) {
+                // 阻止默认行为和事件冒泡，防止文本选择
                 event.preventDefault()
                 event.stopPropagation()
+                
+                // 阻止文本选择
+                document.getSelection()?.removeAllRanges()
                 
                 const colIndex = parseInt(target.getAttribute('data-col-index') || '0')
                 const startX = event.clientX
@@ -226,19 +283,35 @@ export const CustomColumnResizing = Extension.create({
                   
                   // 改进的鼠标移动处理
                   const handleMouseMove = (e: MouseEvent) => {
+                    // 阻止默认行为和事件冒泡，防止文本选择
                     e.preventDefault()
                     e.stopPropagation()
+                    
+                    // 持续阻止文本选择 - 使用更强的阻止逻辑
+                    const selection = document.getSelection()
+                    if (selection) {
+                      selection.removeAllRanges()
+                      // 额外的阻止逻辑
+                      if (selection.rangeCount > 0) {
+                        selection.deleteFromDocument()
+                      }
+                    }
+                    
+                    // 阻止用户选择
+                    document.body.style.userSelect = 'none'
+                    document.body.style.webkitUserSelect = 'none'
                     
                     const deltaX = e.clientX - startX
                     const newWidth = Math.max(25, startWidth + deltaX) // 最小宽度25px
                     
-                    // 实时更新列宽
+                    // 实时更新列宽 - 传入原始宽度参数
                     updateColumnWidth(
                       view,
                       tableInfo.pos,
                       tableInfo.node,
                       colIndex,
-                      newWidth
+                      newWidth,
+                      startWidth
                     )
                   }
                   
@@ -255,6 +328,16 @@ export const CustomColumnResizing = Extension.create({
                     
                     // 移除resize cursor
                     document.body.classList.remove('column-resizing')
+                    
+                    // 恢复用户选择
+                    document.body.style.userSelect = ''
+                    document.body.style.webkitUserSelect = ''
+                    
+                    // 清除任何残留的选择
+                    const selection = document.getSelection()
+                    if (selection) {
+                      selection.removeAllRanges()
+                    }
                   }
                   
                   // 使用捕获模式添加全局事件监听器，提高响应性
