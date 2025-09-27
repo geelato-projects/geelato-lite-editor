@@ -225,6 +225,11 @@ const handlePlaceholderClick = () => {
         margin-top: 0;
         padding-top: 0;
       }
+    }
+    
+    // 表格中的段落不应用bottom margin，确保行高一致
+    table td p, table th p {
+      margin-bottom: 0 !important;
       
       &.is-editor-empty:first-child::before {
         content: attr(data-placeholder);
@@ -331,23 +336,105 @@ const handlePlaceholderClick = () => {
       border-radius: 0;
     }
     
-    // 表格样式
     table {
       width: 100%;
-      margin: 16px 0;
       border-collapse: collapse;
-      border: 1px solid var(--gl-border-color, #e0e0e0);
-      
-      th, td {
-        padding: 8px 12px;
-        border: 1px solid var(--gl-border-color, #e0e0e0);
+      border: 1px solid #ccc;
+      table-layout: fixed;
+      overflow: hidden;
+      margin: 0;
+
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 6px 8px;
         text-align: left;
+        height: auto;
+        vertical-align: top;
+        position: relative;
+        box-sizing: border-box;
+        min-width: 1em;
+
+        > * {
+          margin-bottom: 0;
+        }
+      }
+
+      // 统一边框处理，确保所有行高度一致
+      // 所有单元格都保持相同的边框配置
+      th,
+      td {
+        border-top: 0.8px solid var(--gl-border-color);
+        border-left: 0.8px solid var(--gl-border-color);
+      }
+
+      // 最后一行添加下边框
+      tr:last-child {
+        th,
+        td {
+          border-bottom: 0.8px solid var(--gl-border-color);
+        }
+      }
+
+      // 最后一列添加右边框
+      th:last-child,
+      td:last-child {
+        border-right: 0.8px solid var(--gl-border-color);
+      }
+
+      th {
+        background-color: #f5f5f5;
+        font-weight: bold;
+      }
+
+      .selectedCell:after {
+        background: rgba(200, 200, 255, 0.4);
+        content: '';
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        pointer-events: none;
+        position: absolute;
+        z-index: 2;
+      }
+
+      .column-resize-handle {
+        background-color: #adf;
+        bottom: -2px;
+        pointer-events: none;
+        position: absolute;
+        right: -2px;
+        top: 0;
+        width: 4px;
+
+        &:hover {
+          background-color: #8cf;
+        }
+      }
+    }
+
+    .tableWrapper {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+
+    // 表格拖拽样式
+    .ProseMirror {
+      &.resize-cursor {
+        cursor: ew-resize !important;
+        cursor: col-resize !important;
       }
       
-      th {
-        background: var(--gl-table-header-bg, #f8f9fa);
-        font-weight: 600;
+      &.resize-cursor * {
+        cursor: ew-resize !important;
+        cursor: col-resize !important;
       }
+    }
+
+    &.resize-cursor {
+      cursor: ew-resize;
+      cursor: col-resize;
     }
     
     // 水平分割线

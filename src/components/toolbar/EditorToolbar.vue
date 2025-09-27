@@ -28,7 +28,7 @@
       <!-- 工具栏按钮 -->
       <ToolbarButton
         v-else-if="item !== '|' && !isTableOperation(item) && !isListOperation(item) && !isHeadingOperation(item)"
-        :ref="item === 'highlight' ? (el) => { if (el) highlightButtonRef = (el as any).buttonRef } : item === 'textColor' ? (el) => { if (el) textColorButtonRef = (el as any).buttonRef } : item === 'link' ? (el) => { if (el) linkButtonRef = (el as any).buttonRef } : undefined"
+        :ref="item === 'highlight' ? (el) => { if (el) highlightButtonRef = (el as any).buttonRef } : item === 'textColor' ? (el) => { if (el) textColorButtonRef = (el as any).buttonRef } : item === 'tableFillColor' ? (el) => { if (el) tableFillColorButtonRef = (el as any).buttonRef } : item === 'link' ? (el) => { if (el) linkButtonRef = (el as any).buttonRef } : undefined"
         :icon="getButtonConfig(item)?.icon"
         :title="getButtonConfig(item)?.title"
         :active="isButtonActive(item)"
@@ -67,6 +67,15 @@
       @color-select="handleTextColorSelect"
       @close="handleTextColorPanelClose"
     />
+    
+    <!-- 表格填充颜色选择面板 -->
+    <TableFillColorPanel
+      :visible="tableFillColorPanelVisible"
+      :reference="tableFillColorButtonRef"
+      :current-color="currentTableFillColor"
+      @color-select="handleTableFillColorSelect"
+      @close="handleTableFillColorPanelClose"
+    />
   </div>
 </template>
 
@@ -79,6 +88,7 @@ import InputModal from '../ui/InputModal.vue'
 import HighlightPanel from '../../extensions/highlight/HighlightPanel.vue'
 import TextColorPanel from '../../extensions/textColor/TextColorPanel.vue'
 import LinkPanel from '../../extensions/link/LinkPanel.vue'
+import { TableFillColorPanel } from '../../extensions/tableFillColor'
 import TableDropdown from './TableDropdown.vue'
 import ListDropdown from './ListDropdown.vue'
 import HeadingDropdown from './HeadingDropdown.vue'
@@ -170,6 +180,15 @@ const currentTextColor = computed(() => {
   return textStyle?.color || null
 })
 
+// 表格填充颜色面板状态
+const tableFillColorPanelVisible = ref(false)
+const tableFillColorButtonRef = ref<HTMLElement | null>(null)
+const currentTableFillColor = computed(() => {
+  if (!props.editor) return null
+  const tableCell = props.editor.getAttributes('tableCell')
+  return tableCell?.backgroundColor || null
+})
+
 // 工具栏类名
 const toolbarClass = computed(() => {
   const classes = [
@@ -202,6 +221,8 @@ const handleButtonClick = (buttonName: string, event?: Event) => {
     handleHighlightButtonClick(event)
   } else if (buttonName === 'textColor') {
     handleTextColorButtonClick(event)
+  } else if (buttonName === 'tableFillColor') {
+    handleTableFillColorButtonClick(event)
   } else {
     // 执行默认动作
     executeButtonAction(buttonName)
@@ -466,6 +487,34 @@ const handleTextColorSelect = (color: string | null) => {
 // 处理文字颜色面板关闭
 const handleTextColorPanelClose = () => {
   textColorPanelVisible.value = false
+}
+
+// 处理表格填充颜色按钮点击
+const handleTableFillColorButtonClick = (event?: Event) => {
+  if (!props.editor) return
+  
+  // 确保reference已设置后再显示面板
+  if (tableFillColorButtonRef.value) {
+    tableFillColorPanelVisible.value = true
+  }
+}
+
+// 处理表格填充颜色选择
+const handleTableFillColorSelect = (color: string | null) => {
+  if (!props.editor) return
+  
+  if (color) {
+    // 应用表格单元格背景颜色
+    props.editor.chain().focus().setCellAttribute('backgroundColor', color).run()
+  } else {
+    // 取消表格单元格背景颜色
+    props.editor.chain().focus().setCellAttribute('backgroundColor', null).run()
+  }
+}
+
+// 处理表格填充颜色面板关闭
+const handleTableFillColorPanelClose = () => {
+  tableFillColorPanelVisible.value = false
 }
 
 // 处理编辑器中链接点击事件

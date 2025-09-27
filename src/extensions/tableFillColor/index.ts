@@ -1,0 +1,1 @@
+export { default as TableFillColorPanel } from './TableFillColorPanel.vue'

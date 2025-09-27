@@ -426,6 +426,20 @@ const TOOLBAR_BUTTONS: Record<string, ToolbarButtonConfig> = {
     isDisabled: (editor) => !editor.can().chain().focus().splitCell().run(),
     action: (editor) => editor.chain().focus().splitCell().run(),
   },
+  tableFillColor: {
+    name: 'tableFillColor',
+    icon: 'fill-color',
+    title: '填充颜色',
+    command: 'tableFillColor',
+    isActive: (editor) => {
+      const tableCell = editor.getAttributes('tableCell')
+      return !!tableCell?.backgroundColor
+    },
+    isDisabled: (editor) => !editor.isActive('table'),
+    action: () => {
+      // 这里会在工具栏组件中处理
+    }
+  },
 }
 
 // 预定义工具栏配置
@@ -436,14 +450,14 @@ const TOOLBAR_CONFIGS: Record<ToolbarMode, string[]> = {
     'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', '|',
     'list', 'blockquote', '|',
     'image', 'link','|',
-    'table', '|',
+    'table', 'tableFillColor', '|',
     'mergeCells', 'splitCell', '|',
   ],
   simple: [
     'undo', 'redo','bold', 'italic', 'underline', 'textColor',  '|',
     'heading', 'list', '|',
     'alignLeft', 'alignCenter', 'alignRight', '|',
-    'link', 'image', 'table'
+    'link', 'image', 'table', 'tableFillColor'
   ],
   minimal: [
     'bold', 'italic', 'textColor','heading', 'list'

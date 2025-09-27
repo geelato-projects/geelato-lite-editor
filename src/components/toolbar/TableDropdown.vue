@@ -14,14 +14,19 @@
       class="table-dropdown-menu"
       :style="{ top: menuPosition.top + 'px', left: menuPosition.left + 'px' }"
       @click.stop
+      @mouseleave="handleMenuMouseLeave"
     >
       <div class="table-dropdown-section">
         <div 
-          class="table-dropdown-item"
-          @click="executeAction('insertTable')"
+          class="table-dropdown-item insert-table-item"
+          @click="toggleTableSizeSelector"
+          :class="{ 'active': showTableSizeSelector }"
+          @mouseenter="handleInsertTableMouseEnter"
+          @mouseleave="handleInsertTableMouseLeave"
         >
           <SvgIcon name="table" size="14" />
           <span>插入表格</span>
+          <span class="arrow-text">▶</span>
         </div>
       </div>
       
@@ -89,6 +94,30 @@
         </div>
       </div>
     </div>
+    
+    <!-- 表格选择器容器 - 独立定位 -->
+    <div 
+      v-if="showTableSizeSelector" 
+      class="table-size-selector-container"
+      @mouseenter="handleSelectorMouseEnter"
+      @mouseleave="handleSelectorMouseLeave"
+    >
+      <div class="table-size-selector">
+        <div class="grid-container">
+          <div
+            v-for="(cell, index) in 80"
+            :key="index"
+            class="grid-cell"
+            :class="{ active: Math.floor(index / 10) + 1 <= selectedRows && (index % 10) + 1 <= selectedCols }"
+            @mouseenter="onCellHover(Math.floor(index / 10) + 1, (index % 10) + 1)"
+            @click="onCellClick(Math.floor(index / 10) + 1, (index % 10) + 1)"
+          />
+        </div>
+        <div class="size-display">
+          {{ selectedRows }} × {{ selectedCols }} 表格
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -107,7 +136,12 @@ const props = defineProps<Props>()
 const dropdownRef = ref<HTMLElement>()
 const menuRef = ref<HTMLElement>()
 const isOpen = ref(false)
+const showTableSizeSelector = ref(false)
 const menuPosition = ref({ top: 0, left: 0 })
+
+// 表格尺寸选择器的响应式变量
+const selectedRows = ref(3)
+const selectedCols = ref(3)
 
 const updateMenuPosition = async () => {
   if (!dropdownRef.value) return
@@ -120,6 +154,19 @@ const updateMenuPosition = async () => {
   }
 }
 
+const updateSelectorPosition = async () => {
+  await nextTick()
+  const insertTableItem = document.querySelector('.insert-table-item') as HTMLElement
+  if (!insertTableItem) return
+  
+  const rect = insertTableItem.getBoundingClientRect()
+  const selector = document.querySelector('.table-size-selector-container') as HTMLElement
+  if (selector) {
+    selector.style.top = `${rect.top}px`
+    selector.style.left = `${rect.right + 16}px`
+  }
+}
+
 const toggleDropdown = async () => {
   isOpen.value = !isOpen.value
   if (isOpen.value) {
@@ -129,6 +176,95 @@ const toggleDropdown = async () => {
 
 const closeDropdown = () => {
   isOpen.value = false
+  showTableSizeSelector.value = false
+}
+
+const toggleTableSizeSelector = () => {
+  showTableSizeSelector.value = !showTableSizeSelector.value
+}
+
+const handleMouseLeave = () => {
+  setTimeout(() => {
+    if (!isHoveringSelector.value && !isHoveringInsertTable.value) {
+      showTableSizeSelector.value = false
+    }
+  }, 200)
+}
+
+// 新增状态跟踪变量
+const isHoveringSelector = ref(false)
+const isHoveringInsertTable = ref(false)
+let hideTimer: number | null = null
+
+// 处理插入表格项的鼠标进入
+const handleInsertTableMouseEnter = async () => {
+  isHoveringInsertTable.value = true
+  showTableSizeSelector.value = true
+  await updateSelectorPosition()
+  if (hideTimer) {
+    clearTimeout(hideTimer)
+    hideTimer = null
+  }
+}
+
+// 处理插入表格项的鼠标离开
+const handleInsertTableMouseLeave = () => {
+  isHoveringInsertTable.value = false
+  hideTimer = setTimeout(() => {
+    if (!isHoveringSelector.value && !isHoveringInsertTable.value) {
+      showTableSizeSelector.value = false
+    }
+  }, 100)
+}
+
+// 处理选择器的鼠标进入
+const handleSelectorMouseEnter = () => {
+  isHoveringSelector.value = true
+  if (hideTimer) {
+    clearTimeout(hideTimer)
+    hideTimer = null
+  }
+}
+
+// 处理选择器的鼠标离开
+const handleSelectorMouseLeave = () => {
+  isHoveringSelector.value = false
+  hideTimer = setTimeout(() => {
+    if (!isHoveringSelector.value && !isHoveringInsertTable.value) {
+      showTableSizeSelector.value = false
+    }
+  }, 100)
+}
+
+// 处理整个菜单的鼠标离开
+const handleMenuMouseLeave = () => {
+  isHoveringInsertTable.value = false
+  isHoveringSelector.value = false
+  hideTimer = setTimeout(() => {
+    showTableSizeSelector.value = false
+  }, 100)
+}
+
+const onCellHover = (row: number, col: number) => {
+  selectedRows.value = row
+  selectedCols.value = col
+}
+
+const onCellClick = (row: number, col: number) => {
+  handleTableSizeSelect(row, col)
+}
+
+const handleTableSizeSelect = (rows: number, cols: number) => {
+  if (!props.editor) return
+  
+  console.log('插入表格:', rows, 'x', cols)
+  props.editor.chain().focus().insertTable({ 
+    rows, 
+    cols, 
+    withHeaderRow: false 
+  }).run()
+  
+  closeDropdown()
 }
 
 const executeAction = (action: string) => {
@@ -212,11 +348,13 @@ onUnmounted(() => {
 
 .table-dropdown-section {
   padding: 0 12px;
+  position: relative;
 }
 
 .table-dropdown-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 3px;
   cursor: pointer;
   border-radius: 3px;
@@ -224,18 +362,88 @@ onUnmounted(() => {
   transition: background-color 0.2s ease;
   font-size: 13px;
   color: var(--gl-text-color, #333333);
+  position: relative;
 }
 
-.table-dropdown-item:hover {
+.table-dropdown-item:hover,
+.table-dropdown-item.active {
   background-color: var(--gl-hover-color, #f5f5f5);
 }
 
 .table-dropdown-item .gl-svg-icon {
   width: 14px;
   height: 14px;
-  margin-right: 6px;
   opacity: 0.7;
   flex-shrink: 0;
+}
+
+.table-dropdown-item .gl-svg-icon:first-child {
+  margin-right: 6px;
+}
+
+.table-dropdown-item .arrow-text {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--color-text-3);
+}
+
+.table-size-selector-container {
+  position: fixed;
+  top: auto;
+  left: auto;
+  padding: 12px;
+  background: var(--gl-bg-color, #ffffff);
+  border: 1px solid var(--gl-border-color, #e0e0e0);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: var(--gl-z-index-dropdown, 1052);
+  min-width: 200px;
+  white-space: nowrap;
+}
+
+.table-size-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(10, 16px);
+  grid-template-rows: repeat(8, 16px);
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.grid-row {
+  /* 移除，不再需要 */
+}
+
+.grid-cell {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #d9d9d9;
+  background: #f5f5f5;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.1s ease;
+}
+
+.grid-cell:hover {
+  border-color: var(--gl-primary-color, #1890ff);
+  background: #e6f7ff;
+}
+
+.grid-cell.active {
+  background: var(--gl-primary-color, #1890ff);
+  border-color: var(--gl-primary-color, #1890ff);
+}
+
+.size-display {
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-text-2);
+  padding: 4px 0;
 }
 
 .table-dropdown-divider {
@@ -256,8 +464,23 @@ onUnmounted(() => {
     color: var(--gl-text-color, #ffffff);
   }
   
-  .table-dropdown-item:hover {
+  .table-dropdown-item:hover,
+  .table-dropdown-item.active {
     background-color: var(--gl-hover-color, #404040);
+  }
+  
+  .table-size-selector-container {
+    border-color: var(--gl-border-color, #404040);
+    background: var(--gl-bg-color, #2d2d2d);
+  }
+  
+  .grid-cell {
+    border-color: #404040;
+    background: #2d2d2d;
+  }
+  
+  .grid-cell:hover {
+    background: #1a3a5c;
   }
   
   .table-dropdown-divider {

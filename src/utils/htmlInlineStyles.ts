@@ -131,30 +131,24 @@ const STYLE_MAPPINGS = {
   // 表格样式
   'table': {
     borderCollapse: 'collapse',
-    width: '100%',
-    margin: '12px 0',
-    border: '1px solid #e9ecef'
+    width: '100%'
   },
   'thead': {
-    backgroundColor: '#f8f9fa'
+    // 移除背景色
   },
   'tbody': {
-    backgroundColor: '#ffffff'
+    // 移除背景色
   },
   'tr': {
-    borderBottom: '1px solid #e9ecef'
+    // 移除边框
   },
   'th': {
-    padding: '12px',
-    textAlign: 'left',
-    fontWeight: '600',
-    backgroundColor: '#f8f9fa',
-    border: '1px solid #e9ecef'
+    padding: '8px',
+    border: '1px solid #ddd'
   },
   'td': {
-    padding: '12px',
-    border: '1px solid #e9ecef',
-    verticalAlign: 'top'
+    padding: '8px',
+    border: '1px solid #ddd'
   },
   'colgroup': {
     // colgroup 通常不需要特殊样式
@@ -245,23 +239,21 @@ export function convertToInlineStyles(html: string): string {
         const existingStyle = element.getAttribute('style') || ''
         
         if (className.includes('gl-table-header')) {
-          // 表格头部单元格样式
-          const headerStyle = 'padding: 12px; text-align: left; font-weight: 600; background-color: #f8f9fa; border: 1px solid #e9ecef;'
+          // 表格头部单元格样式 - 简洁版本
+          const headerStyle = 'padding: 8px; border: 1px solid #ddd;'
           const newStyle = mergeStyles(existingStyle, headerStyle)
           element.setAttribute('style', newStyle)
         } else if (className.includes('gl-table-cell')) {
-          // 表格数据单元格样式
-          const cellStyle = 'padding: 12px; border: 1px solid #e9ecef; vertical-align: top;'
+          // 表格数据单元格样式 - 简洁版本
+          const cellStyle = 'padding: 8px; border: 1px solid #ddd;'
           const newStyle = mergeStyles(existingStyle, cellStyle)
           element.setAttribute('style', newStyle)
         } else if (className.includes('gl-table-row')) {
-          // 表格行样式
-          const rowStyle = 'border-bottom: 1px solid #e9ecef;'
-          const newStyle = mergeStyles(existingStyle, rowStyle)
-          element.setAttribute('style', newStyle)
+          // 表格行样式 - 移除额外样式
+          // 不添加任何额外样式
         } else if (className === 'gl-table') {
-          // 表格主体样式
-          const tableStyle = 'border-collapse: collapse; width: 100%; margin: 12px 0; border: 1px solid #e9ecef;'
+          // 表格主体样式 - 简洁版本
+          const tableStyle = 'border-collapse: collapse; width: 100%;'
           const newStyle = mergeStyles(existingStyle, tableStyle)
           element.setAttribute('style', newStyle)
         }
