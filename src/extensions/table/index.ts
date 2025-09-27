@@ -185,12 +185,12 @@ export const createTableExtensions = (config: TableConfig = {}): Extension[] => 
       HTMLAttributes: {
         class: 'gl-table',
       },
-    }),
+    }) as Extension,
     TableRow.configure({
       HTMLAttributes: {
         class: 'gl-table-row',
       },
-    }),
+    }) as Extension,
     // 添加自定义的TableCell和TableHeader扩展以支持背景颜色
     CustomTableCell.configure({
       HTMLAttributes: {
