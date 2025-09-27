@@ -122,7 +122,6 @@ const STYLE_MAPPINGS = {
   
   // 图片样式
   'img': {
-    maxWidth: '100%',
     height: 'auto',
     display: 'inline-block',
     margin: '8px 0'
@@ -172,15 +171,49 @@ function styleObjectToString(styleObj: Record<string, string>): string {
 }
 
 /**
- * 合并现有的内联样式和新样式
+ * 合并现有的内联样式和新样式，自动去重
  */
 function mergeStyles(existingStyle: string, newStyle: string): string {
   if (!existingStyle) return newStyle
   if (!newStyle) return existingStyle
   
-  // 确保样式以分号结尾
-  const existing = existingStyle.endsWith(';') ? existingStyle : existingStyle + ';'
-  return `${existing} ${newStyle}`
+  // 解析现有样式为对象
+  const styleMap = new Map<string, string>()
+  
+  // 解析现有样式
+  if (existingStyle) {
+    existingStyle.split(';').forEach(rule => {
+      const trimmed = rule.trim()
+      if (trimmed) {
+        const colonIndex = trimmed.indexOf(':')
+        if (colonIndex > 0) {
+          const property = trimmed.substring(0, colonIndex).trim()
+          const value = trimmed.substring(colonIndex + 1).trim()
+          styleMap.set(property, value)
+        }
+      }
+    })
+  }
+  
+  // 解析新样式并覆盖重复属性
+  if (newStyle) {
+    newStyle.split(';').forEach(rule => {
+      const trimmed = rule.trim()
+      if (trimmed) {
+        const colonIndex = trimmed.indexOf(':')
+        if (colonIndex > 0) {
+          const property = trimmed.substring(0, colonIndex).trim()
+          const value = trimmed.substring(colonIndex + 1).trim()
+          styleMap.set(property, value)
+        }
+      }
+    })
+  }
+  
+  // 重新组合样式字符串
+  return Array.from(styleMap.entries())
+    .map(([property, value]) => `${property}: ${value}`)
+    .join('; ')
 }
 
 /**
@@ -239,25 +272,21 @@ export function convertToInlineStyles(html: string): string {
         const existingStyle = element.getAttribute('style') || ''
         
         if (className.includes('gl-table-header')) {
-          // 表格头部单元格样式 - 简洁版本
-          const headerStyle = 'padding: 8px; border: 1px solid #ddd;'
-          const newStyle = mergeStyles(existingStyle, headerStyle)
-          element.setAttribute('style', newStyle)
+          // 表格头部单元格样式 - 由于th标签已经有基础样式，这里不需要重复添加
+          // 如果需要特殊的头部样式，可以在这里添加
         } else if (className.includes('gl-table-cell')) {
-          // 表格数据单元格样式 - 简洁版本
-          const cellStyle = 'padding: 8px; border: 1px solid #ddd;'
-          const newStyle = mergeStyles(existingStyle, cellStyle)
-          element.setAttribute('style', newStyle)
+          // 表格数据单元格样式 - 由于td标签已经有基础样式，这里不需要重复添加
+          // 如果需要特殊的单元格样式，可以在这里添加
         } else if (className.includes('gl-table-row')) {
-          // 表格行样式 - 移除额外样式
-          // 不添加任何额外样式
+          // 表格行样式 - 不添加任何额外样式
         } else if (className === 'gl-table') {
-          // 表格主体样式 - 简洁版本
-          const tableStyle = 'border-collapse: collapse; width: 100%;'
-          const newStyle = mergeStyles(existingStyle, tableStyle)
-          element.setAttribute('style', newStyle)
+          // 表格主体样式 - 由于table标签已经有基础样式，这里不需要重复添加
+          // 如果需要特殊的表格样式，可以在这里添加
         }
       }
+      
+      // 移除所有CSS类名，只保留内联样式
+      element.removeAttribute('class')
     }
     
     // 递归处理子元素

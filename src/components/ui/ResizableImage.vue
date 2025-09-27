@@ -77,8 +77,8 @@ const props = withDefaults(defineProps<Props>(), {
   equalProportion: false,
   minWidth: 50,
   minHeight: 50,
-  maxWidth: 800,
-  maxHeight: 600
+  maxWidth: 9999,
+  maxHeight: 9999
 })
 
 const emit = defineEmits<Emits>()

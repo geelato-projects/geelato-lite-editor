@@ -18,13 +18,12 @@ const CustomTableCell = TableCell.extend({
       ...this.parent?.(),
       backgroundColor: {
         default: null,
-        parseHTML: element => element.getAttribute('data-background-color'),
+        parseHTML: element => element.style.backgroundColor || element.getAttribute('data-background-color'),
         renderHTML: attributes => {
           if (!attributes.backgroundColor) {
             return {}
           }
           return {
-            'data-background-color': attributes.backgroundColor,
             style: `background-color: ${attributes.backgroundColor}`,
           }
         },
@@ -100,13 +99,12 @@ const CustomTableHeader = TableHeader.extend({
       ...this.parent?.(),
       backgroundColor: {
         default: null,
-        parseHTML: element => element.getAttribute('data-background-color'),
+        parseHTML: element => element.style.backgroundColor || element.getAttribute('data-background-color'),
         renderHTML: attributes => {
           if (!attributes.backgroundColor) {
             return {}
           }
           return {
-            'data-background-color': attributes.backgroundColor,
             style: `background-color: ${attributes.backgroundColor}`,
           }
         },

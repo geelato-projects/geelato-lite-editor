@@ -67,8 +67,6 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import { NodeViewWrapper } from '@tiptap/vue-3'
-import type { Node } from '@tiptap/pm/model'
-import type { Editor } from '@tiptap/vue-3'
 import type { NodeViewProps } from '@tiptap/core'
 import ResizableImage from '../../components/ui/ResizableImage.vue'
 import ImagePreview from './ImagePreview.vue'
@@ -111,7 +109,6 @@ const wrapperStyle = computed(() => {
 
 // 图片样式
 const imageStyle = computed(() => ({
-  maxWidth: '100%',
   height: 'auto',
   display: 'block'
 }))
@@ -159,15 +156,11 @@ const closePreview = () => {
   showPreview.value = false
 }
 
-// 移除气泡菜单相关的事件处理函数
-
-// 移除气泡菜单相关的监听器和清理逻辑
-
 // 处理缩放
 const handleResize = (dragData: any) => {
-  // 确保尺寸在合理范围内
-  const newWidth = Math.max(50, Math.min(800, Math.round(dragData.width)))
-  const newHeight = Math.max(50, Math.min(600, Math.round(dragData.height)))
+  // 确保尺寸在合理范围内，只设置最小尺寸限制，移除最大尺寸限制
+  const newWidth = Math.max(50, Math.round(dragData.width))
+  const newHeight = Math.max(50, Math.round(dragData.height))
   
   imageWidth.value = newWidth
   imageHeight.value = newHeight
@@ -180,8 +173,6 @@ const handleResize = (dragData: any) => {
   
   // 图片尺寸调整完成
 }
-
-
 
 // 处理位置和其他变化
 const handleChange = (dragData: any) => {
@@ -203,23 +194,22 @@ onMounted(() => {
 .gl-image-wrapper {
   display: block;
   position: relative;
-  padding: 4px;
   width: 100%;
-  /* box-sizing: border-box; */
+  padding: 0;
+  transition: padding 0.2s ease;
 }
 
-
+/* 选中状态时添加padding */
+.gl-image-wrapper--selected {
+  padding: 0 2px;
+}
 
 .gl-image-resizable {
   display: inline-block;
 }
 
 .gl-image {
-  max-width: 100%;
   height: auto;
-  /* border-radius: 4px; */
-  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
-  /* transition: box-shadow 0.2s ease; */
 }
 
 .gl-image:hover {
@@ -230,8 +220,4 @@ onMounted(() => {
   cursor: default;
 }
 
-/* 选中状态样式 */
-.ProseMirror-selectednode .gl-image {
-  /* box-shadow: 0 0 0 2px #3a7afe; */
-}
 </style>

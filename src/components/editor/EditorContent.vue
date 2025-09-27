@@ -331,7 +331,6 @@ const handlePlaceholderClick = () => {
     
     // 图片样式
     img {
-      max-width: 100%;
       height: auto;
       border-radius: 0;
     }
