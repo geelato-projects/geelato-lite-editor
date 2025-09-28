@@ -1,6 +1,6 @@
 {
   "name": "@geelato/lite-editor",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A lightweight, extensible rich text editor based on TipTap and Vue 3",
   "type": "module",
   "main": "./dist/geelato-lite-editor.umd.js",
@@ -83,9 +83,7 @@
     "@tiptap/vue-3": "^3.6.1",
     "@vueuse/core": "^13.6.0",
     "file64": "^1.0.5",
-    "prosemirror-model": "^1.25.2",
-    "prosemirror-state": "^1.4.3",
-    "prosemirror-view": "^1.40.1",
+
     "vue": "^3.5.17"
   },
   "devDependencies": {

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发布前测试 - Geelato Lite Editor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        .editor-container {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 300px;
+        }
+        .test-buttons {
+            margin: 20px 0;
+        }
+        .test-buttons button {
+            margin: 5px;
+            padding: 8px 16px;
+            border: 1px solid #007bff;
+            background: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .test-buttons button:hover {
+            background: #0056b3;
+        }
+        .debug {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+    <!-- 加载编辑器样式 -->
+    <link rel="stylesheet" href="./dist/lite-editor.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📝 发布前测试</h1>
+        <p>测试Geelato Lite Editor的完整功能，确保发布版本正常工作</p>
+        
+        <div id="init-status" class="status info">初始化中...</div>
+        
+        <div class="editor-container">
+            <div id="editor"></div>
+        </div>
+        
+        <div class="test-buttons">
+            <button onclick="testGetContent()">获取内容</button>
+            <button onclick="testSetContent()">设置内容</button>
+            <button onclick="testClearContent()">清空内容</button>
+            <button onclick="testInsertText()">插入文本</button>
+        </div>
+        
+        <h3>测试结果</h3>
+        <div id="test-results" class="debug">等待测试...</div>
+        
+        <h3>编辑器内容</h3>
+        <div id="editor-content" class="debug">等待获取...</div>
+    </div>
+
+    <!-- 加载Vue CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- 加载我们的库文件 -->
+    <script src="./dist/geelato-lite-editor.umd.js"></script>
+    
+    <script>
+        let editorApp = null;
+        let editorInstance = null;
+        
+        // 等待所有脚本加载完成
+        window.addEventListener('load', function() {
+            const initStatus = document.getElementById('init-status');
+            
+            try {
+                // 检查依赖
+                if (typeof Vue === 'undefined') {
+                    throw new Error('Vue未加载');
+                }
+                
+                if (typeof GeelatoLiteEditor === 'undefined') {
+                    throw new Error('GeelatoLiteEditor未加载');
+                }
+                
+                console.log('📦 可用的导出:', Object.keys(GeelatoLiteEditor));
+                
+                // 创建Vue应用
+                const { createApp } = Vue;
+                const { GeelatoLiteEditor: EditorComponent } = GeelatoLiteEditor;
+                
+                if (!EditorComponent) {
+                    throw new Error('找不到GeelatoLiteEditor组件');
+                }
+                
+                console.log('🎯 编辑器组件:', EditorComponent);
+                
+                // 创建应用
+                editorApp = createApp({
+                    components: {
+                        GeelatoLiteEditor: EditorComponent
+                    },
+                    data() {
+                        return {
+                            content: '<p>欢迎使用Geelato Lite Editor！</p><p>这是一个功能测试页面。</p>',
+                            editorOptions: {
+                                placeholder: '请输入内容...',
+                                editable: true
+                            }
+                        }
+                    },
+                    methods: {
+                        onEditorCreated(editor) {
+                            editorInstance = editor;
+                            console.log('✅ 编辑器已准备就绪:', editor);
+                            updateContent();
+                        },
+                        onContentChange(content) {
+                            console.log('📝 内容变化:', content);
+                            updateContent();
+                        }
+                    },
+                    template: `
+                        <geelato-lite-editor
+                            v-model:content="content"
+                            :options="editorOptions"
+                            @created="onEditorCreated"
+                            @update:content="onContentChange"
+                        />
+                    `
+                });
+                
+                // 挂载应用
+                editorApp.mount('#editor');
+                
+                initStatus.textContent = '✅ 编辑器初始化成功';
+                initStatus.className = 'status success';
+                
+                // 记录测试结果
+                logTest('编辑器初始化', 'success', '编辑器组件已成功挂载');
+                
+            } catch (error) {
+                console.error('❌ 初始化失败:', error);
+                initStatus.textContent = `❌ 初始化失败: ${error.message}`;
+                initStatus.className = 'status error';
+                
+                logTest('编辑器初始化', 'error', error.message);
+            }
+        });
+        
+        // 测试函数
+        function testGetContent() {
+            try {
+                if (!editorInstance) {
+                    throw new Error('编辑器未初始化');
+                }
+                
+                const content = editorInstance.getHTML();
+                console.log('📄 获取到的内容:', content);
+                logTest('获取内容', 'success', `内容长度: ${content.length} 字符`);
+                updateContent();
+            } catch (error) {
+                console.error('❌ 获取内容失败:', error);
+                logTest('获取内容', 'error', error.message);
+            }
+        }
+        
+        function testSetContent() {
+            try {
+                if (!editorInstance) {
+                    throw new Error('编辑器未初始化');
+                }
+                
+                const newContent = `
+                    <h2>测试内容</h2>
+                    <p>这是通过 <strong>setContent</strong> 方法设置的内容。</p>
+                    <ul>
+                        <li>列表项 1</li>
+                        <li>列表项 2</li>
+                        <li>列表项 3</li>
+                    </ul>
+                    <p>时间戳: ${new Date().toLocaleString()}</p>
+                `;
+                
+                editorInstance.commands.setContent(newContent);
+                console.log('✅ 内容已设置');
+                logTest('设置内容', 'success', '新内容已设置');
+                
+                setTimeout(updateContent, 100);
+            } catch (error) {
+                console.error('❌ 设置内容失败:', error);
+                logTest('设置内容', 'error', error.message);
+            }
+        }
+        
+        function testClearContent() {
+            try {
+                if (!editorInstance) {
+                    throw new Error('编辑器未初始化');
+                }
+                
+                editorInstance.commands.clearContent();
+                console.log('🗑️ 内容已清空');
+                logTest('清空内容', 'success', '编辑器内容已清空');
+                
+                setTimeout(updateContent, 100);
+            } catch (error) {
+                console.error('❌ 清空内容失败:', error);
+                logTest('清空内容', 'error', error.message);
+            }
+        }
+        
+        function testInsertText() {
+            try {
+                if (!editorInstance) {
+                    throw new Error('编辑器未初始化');
+                }
+                
+                const text = `插入的文本 - ${new Date().toLocaleTimeString()}`;
+                editorInstance.commands.insertContent(text);
+                console.log('📝 文本已插入:', text);
+                logTest('插入文本', 'success', `已插入: ${text}`);
+                
+                setTimeout(updateContent, 100);
+            } catch (error) {
+                console.error('❌ 插入文本失败:', error);
+                logTest('插入文本', 'error', error.message);
+            }
+        }
+        
+        // 辅助函数
+        function logTest(testName, status, details) {
+            const results = document.getElementById('test-results');
+            const timestamp = new Date().toLocaleTimeString();
+            const statusIcon = status === 'success' ? '✅' : '❌';
+            const log = `[${timestamp}] ${statusIcon} ${testName}: ${details}\n`;
+            results.textContent += log;
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function updateContent() {
+            try {
+                if (editorInstance) {
+                    const content = editorInstance.getHTML();
+                    document.getElementById('editor-content').textContent = content;
+                }
+            } catch (error) {
+                console.error('更新内容显示失败:', error);
+            }
+        }
+    </script>
+</body>
+</html>

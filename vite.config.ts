@@ -114,12 +114,6 @@ export default defineConfig(({ mode }) => {
                 '@tiptap/extension-text-style',
                 '@tiptap/extension-underline'
               ],
-              // 将ProseMirror相关库分离
-               'prosemirror': [
-                 'prosemirror-model',
-                 'prosemirror-state',
-                 'prosemirror-view'
-               ],
               // 将工具库分离
               'utils': [
                 '@floating-ui/vue',
@@ -184,78 +178,14 @@ export default defineConfig(({ mode }) => {
         },
         rollupOptions: {
           external: [
-            'vue',
-            '@tiptap/core',
-            '@tiptap/vue-3',
-            '@tiptap/starter-kit',
-            '@tiptap/extension-blockquote',
-            '@tiptap/extension-bold',
-            '@tiptap/extension-bullet-list',
-            '@tiptap/extension-code',
-            '@tiptap/extension-code-block',
-            '@tiptap/extension-color',
-            '@tiptap/extension-heading',
-            '@tiptap/extension-highlight',
-            '@tiptap/extension-image',
-            '@tiptap/extension-italic',
-            '@tiptap/extension-link',
-            '@tiptap/extension-list-item',
-            '@tiptap/extension-ordered-list',
-            '@tiptap/extension-strike',
-            '@tiptap/extension-table',
-            '@tiptap/extension-table-cell',
-            '@tiptap/extension-table-header',
-            '@tiptap/extension-table-row',
-            '@tiptap/extension-task-item',
-            '@tiptap/extension-task-list',
-            '@tiptap/extension-text-align',
-            '@tiptap/extension-text-style',
-            '@tiptap/extension-underline',
-            '@tiptap/pm',
-            '@floating-ui/vue',
-            '@vueuse/core',
-            'prosemirror-model',
-            'prosemirror-state',
-            'prosemirror-view'
+            'vue'
           ],
           output: {
             exports: 'named',
             compact: true,
             minifyInternalExports: true,
             globals: {
-              vue: 'Vue',
-              '@tiptap/core': 'TiptapCore',
-              '@tiptap/vue-3': 'TiptapVue3',
-              '@tiptap/starter-kit': 'TiptapStarterKit',
-              '@tiptap/extension-blockquote': 'TiptapBlockquote',
-              '@tiptap/extension-bold': 'TiptapBold',
-              '@tiptap/extension-bullet-list': 'TiptapBulletList',
-              '@tiptap/extension-code': 'TiptapCode',
-              '@tiptap/extension-code-block': 'TiptapCodeBlock',
-              '@tiptap/extension-color': 'TiptapColor',
-              '@tiptap/extension-heading': 'TiptapHeading',
-              '@tiptap/extension-highlight': 'TiptapHighlight',
-              '@tiptap/extension-image': 'TiptapImage',
-              '@tiptap/extension-italic': 'TiptapItalic',
-              '@tiptap/extension-link': 'TiptapLink',
-              '@tiptap/extension-list-item': 'TiptapListItem',
-              '@tiptap/extension-ordered-list': 'TiptapOrderedList',
-              '@tiptap/extension-strike': 'TiptapStrike',
-              '@tiptap/extension-table': 'TiptapTable',
-              '@tiptap/extension-table-cell': 'TiptapTableCell',
-              '@tiptap/extension-table-header': 'TiptapTableHeader',
-              '@tiptap/extension-table-row': 'TiptapTableRow',
-              '@tiptap/extension-task-item': 'TiptapTaskItem',
-              '@tiptap/extension-task-list': 'TiptapTaskList',
-              '@tiptap/extension-text-align': 'TiptapTextAlign',
-              '@tiptap/extension-text-style': 'TiptapTextStyle',
-              '@tiptap/extension-underline': 'TiptapUnderline',
-              '@tiptap/pm': 'TiptapPm',
-              '@floating-ui/vue': 'FloatingUIVue',
-              '@vueuse/core': 'VueUseCore',
-              'prosemirror-model': 'ProseMirrorModel',
-              'prosemirror-state': 'ProseMirrorState',
-              'prosemirror-view': 'ProseMirrorView'
+              vue: 'Vue'
             }
           }
         },
