@@ -342,8 +342,8 @@ const TOOLBAR_BUTTONS: Record<string, ToolbarButtonConfig> = {
     title: '插入表格',
     command: 'insertTable',
     isActive: () => false,
-    isDisabled: (editor) => !editor.can().chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(),
-    action: (editor) => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(),
+    isDisabled: (editor) => !editor.can().chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: false }).run(),
+    action: (editor) => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: false }).run(),
   },
   addColumnBefore: {
     name: 'addColumnBefore',

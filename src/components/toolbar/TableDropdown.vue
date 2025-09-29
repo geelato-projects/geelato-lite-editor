@@ -1,128 +1,98 @@
 <template>
   <div class="table-dropdown" ref="dropdownRef">
-    <ToolbarButton
-      :icon="'table'"
-      :title="'表格操作'"
-      :active="false"
-      :disabled="false"
-      @click="toggleDropdown"
-      class="table-dropdown-trigger"
-    />
-    <div 
-      v-if="isOpen" 
-      ref="menuRef"
-      class="table-dropdown-menu"
-      :style="{ top: menuPosition.top + 'px', left: menuPosition.left + 'px' }"
-      @click.stop
-      @mouseleave="handleMenuMouseLeave"
-    >
+    <ToolbarButton :icon="'table'" :title="'表格操作'" :active="false" :disabled="false" @click="toggleDropdown"
+      class="table-dropdown-trigger" />
+    <div v-if="isOpen" ref="menuRef" class="table-dropdown-menu"
+      :style="{ top: menuPosition.top + 'px', left: menuPosition.left + 'px' }" @click.stop
+      @mouseleave="handleMenuMouseLeave">
       <div class="table-dropdown-section">
-        <div 
-          class="table-dropdown-item insert-table-item"
-          @click="toggleTableSizeSelector"
-          :class="{ 'active': showTableSizeSelector }"
-          @mouseenter="handleInsertTableMouseEnter"
-          @mouseleave="handleInsertTableMouseLeave"
-        >
+        <div class="table-dropdown-item insert-table-item" @click="toggleTableSizeSelector"
+          :class="{ 'active': showTableSizeSelector }" @mouseenter="handleInsertTableMouseEnter"
+          @mouseleave="handleInsertTableMouseLeave">
           <SvgIcon name="table" size="14" />
           <span>插入表格</span>
           <span class="arrow-text">▶</span>
         </div>
       </div>
-      
+
       <div class="table-dropdown-divider"></div>
-      
+
       <div class="table-dropdown-section">
-        <div 
-          class="table-dropdown-item"
-          @click="executeAction('addRowBefore')"
-        >
+        <div class="table-dropdown-item" @click="executeAction('addRowBefore')">
           <SvgIcon name="row-add-before" size="14" />
           <span>在上面插入行</span>
         </div>
-        <div 
-          class="table-dropdown-item"
-          @click="executeAction('addRowAfter')"
-        >
+        <div class="table-dropdown-item" @click="executeAction('addRowAfter')">
           <SvgIcon name="row-add-after" size="14" />
           <span>在下面插入行</span>
         </div>
-        <div 
-          class="table-dropdown-item"
-          @click="executeAction('deleteRow')"
-        >
+        <div class="table-dropdown-item" @click="executeAction('deleteRow')">
           <SvgIcon name="row-delete" size="14" />
           <span>删除行</span>
         </div>
       </div>
-      
+
       <div class="table-dropdown-divider"></div>
-      
+
       <div class="table-dropdown-section">
-        <div 
-          class="table-dropdown-item"
-          @click="executeAction('addColumnBefore')"
-        >
+        <div class="table-dropdown-item" @click="executeAction('addColumnBefore')">
           <SvgIcon name="column-add-before" size="14" />
           <span>在左边插入列</span>
         </div>
-        <div 
-          class="table-dropdown-item"
-          @click="executeAction('addColumnAfter')"
-        >
+        <div class="table-dropdown-item" @click="executeAction('addColumnAfter')">
           <SvgIcon name="column-add-after" size="14" />
           <span>在右边插入列</span>
         </div>
-        <div 
-          class="table-dropdown-item"
-          @click="executeAction('deleteColumn')"
-        >
+        <div class="table-dropdown-item" @click="executeAction('deleteColumn')">
           <SvgIcon name="column-delete" size="14" />
           <span>删除列</span>
         </div>
       </div>
-      
+
       <div class="table-dropdown-divider"></div>
-      
+
       <div class="table-dropdown-section">
-        <div 
-          class="table-dropdown-item"
-          @click="executeAction('deleteTable')"
-        >
+        <div class="table-dropdown-item" @click="executeAction('deleteTable')">
           <SvgIcon name="table-delete" size="14" />
           <span>删除表格</span>
         </div>
       </div>
+
+      <div class="table-dropdown-divider"></div>
+
+      <div class="table-dropdown-section">
+        <div class="table-dropdown-item border-settings-item" @click="toggleBorderPanel"
+          :class="{ 'active': showBorderPanel }" @mouseenter="handleBorderSettingsMouseEnter"
+          @mouseleave="handleBorderSettingsMouseLeave">
+          <SvgIcon name="border-all" size="14" />
+          <span>边框设置</span>
+          <span class="arrow-text">▶</span>
+        </div>
+      </div>
+
     </div>
-    
+
     <!-- 表格选择器容器 - 独立定位 -->
-    <div 
-      v-if="showTableSizeSelector" 
-      class="table-size-selector-container"
-      @mouseenter="handleSelectorMouseEnter"
-      @mouseleave="handleSelectorMouseLeave"
-    >
+    <div v-if="showTableSizeSelector" class="table-size-selector-container" @mouseenter="handleSelectorMouseEnter"
+      @mouseleave="handleSelectorMouseLeave">
       <div class="table-size-selector">
         <div class="grid-container">
-          <div
-            v-for="row in 8"
-            :key="`row-${row}`"
-            class="grid-row"
-          >
-            <div
-              v-for="col in 10"
-              :key="`cell-${row}-${col}`"
-              class="grid-cell"
-              :class="{ active: row <= selectedRows && col <= selectedCols }"
-              @mouseenter="onCellHover(row, col)"
-              @click="onCellClick(row, col)"
-            />
+          <div v-for="row in 8" :key="`row-${row}`" class="grid-row">
+            <div v-for="col in 10" :key="`cell-${row}-${col}`" class="grid-cell"
+              :class="{ active: row <= selectedRows && col <= selectedCols }" @mouseenter="onCellHover(row, col)"
+              @click="onCellClick(row, col)" />
           </div>
         </div>
         <div class="size-display">
           {{ selectedRows }} × {{ selectedCols }} 表格
         </div>
       </div>
+    </div>
+
+    <!-- 边框设置面板容器 - 独立定位 -->
+    <div v-if="showBorderPanel" class="table-border-panel-container" @mouseenter="handleBorderPanelMouseEnter"
+      @mouseleave="handleBorderPanelMouseLeave">
+      <TableBorderPanel :editor="editor" />
     </div>
   </div>
 </template>
@@ -132,6 +102,7 @@ import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
 import ToolbarButton from '../ui/ToolbarButton.vue'
 import SvgIcon from '../ui/SvgIcon.vue'
+import TableBorderPanel from '../../extensions/tableBorder/TableBorderPanel.vue'
 
 interface Props {
   editor: Editor | null
@@ -143,6 +114,7 @@ const dropdownRef = ref<HTMLElement>()
 const menuRef = ref<HTMLElement>()
 const isOpen = ref(false)
 const showTableSizeSelector = ref(false)
+const showBorderPanel = ref(false)
 const menuPosition = ref({ top: 0, left: 0 })
 
 // 表格尺寸选择器的响应式变量
@@ -151,7 +123,7 @@ const selectedCols = ref(3)
 
 const updateMenuPosition = async () => {
   if (!dropdownRef.value) return
-  
+
   await nextTick()
   const rect = dropdownRef.value.getBoundingClientRect()
   menuPosition.value = {
@@ -164,20 +136,20 @@ const updateSelectorPosition = async () => {
   await nextTick()
   const insertTableItem = document.querySelector('.insert-table-item') as HTMLElement
   if (!insertTableItem) return
-  
+
   const rect = insertTableItem.getBoundingClientRect()
   const selector = document.querySelector('.table-size-selector-container') as HTMLElement
   if (selector) {
     // 确保选择器显示在插入表格项的右侧，并考虑视口边界
     const viewportWidth = window.innerWidth
     const selectorWidth = 220 // 预估选择器宽度
-    
+
     let left = rect.right + 8
     // 如果右侧空间不够，显示在左侧
     if (left + selectorWidth > viewportWidth) {
       left = rect.left - selectorWidth - 8
     }
-    
+
     selector.style.top = `${rect.top}px`
     selector.style.left = `${left}px`
     selector.style.zIndex = '1060' // 确保在菜单之上
@@ -194,6 +166,7 @@ const toggleDropdown = async () => {
 const closeDropdown = () => {
   isOpen.value = false
   showTableSizeSelector.value = false
+  showBorderPanel.value = false
 }
 
 const toggleTableSizeSelector = () => {
@@ -257,9 +230,91 @@ const handleSelectorMouseLeave = () => {
 const handleMenuMouseLeave = () => {
   isHoveringInsertTable.value = false
   isHoveringSelector.value = false
+  isHoveringBorderSettings.value = false
+  isHoveringBorderPanel.value = false
   hideTimer = setTimeout(() => {
     showTableSizeSelector.value = false
+    showBorderPanel.value = false
   }, 100)
+}
+
+// 边框设置相关的鼠标悬停状态
+const isHoveringBorderSettings = ref(false)
+const isHoveringBorderPanel = ref(false)
+
+// 切换边框面板显示
+const toggleBorderPanel = () => {
+  showBorderPanel.value = !showBorderPanel.value
+  if (showBorderPanel.value) {
+    showTableSizeSelector.value = false
+    updateBorderPanelPosition()
+  }
+}
+
+// 处理边框设置项的鼠标进入
+const handleBorderSettingsMouseEnter = () => {
+  isHoveringBorderSettings.value = true
+  showBorderPanel.value = true
+  showTableSizeSelector.value = false
+  updateBorderPanelPosition()
+
+  if (hideTimer) {
+    clearTimeout(hideTimer)
+    hideTimer = null
+  }
+}
+
+// 处理边框设置项的鼠标离开
+const handleBorderSettingsMouseLeave = () => {
+  isHoveringBorderSettings.value = false
+  hideTimer = setTimeout(() => {
+    if (!isHoveringBorderPanel.value && !isHoveringBorderSettings.value) {
+      showBorderPanel.value = false
+    }
+  }, 100)
+}
+
+// 处理边框面板的鼠标进入
+const handleBorderPanelMouseEnter = () => {
+  isHoveringBorderPanel.value = true
+  if (hideTimer) {
+    clearTimeout(hideTimer)
+    hideTimer = null
+  }
+}
+
+// 处理边框面板的鼠标离开
+const handleBorderPanelMouseLeave = () => {
+  isHoveringBorderPanel.value = false
+  hideTimer = setTimeout(() => {
+    if (!isHoveringBorderPanel.value && !isHoveringBorderSettings.value) {
+      showBorderPanel.value = false
+    }
+  }, 100)
+}
+
+// 更新边框面板位置
+const updateBorderPanelPosition = async () => {
+  await nextTick()
+  const borderSettingsItem = document.querySelector('.border-settings-item') as HTMLElement
+  if (!borderSettingsItem) return
+
+  const rect = borderSettingsItem.getBoundingClientRect()
+  const panel = document.querySelector('.table-border-panel-container') as HTMLElement
+  if (panel) {
+    const viewportWidth = window.innerWidth
+    const panelWidth = 300 // 预估面板宽度
+
+    let left = rect.right + 8
+    if (left + panelWidth > viewportWidth) {
+      left = rect.left - panelWidth - 8
+    }
+
+    panel.style.position = 'fixed'
+    panel.style.top = rect.top + 'px'
+    panel.style.left = left + 'px'
+    panel.style.zIndex = '1060'
+  }
 }
 
 const onCellHover = (row: number, col: number) => {
@@ -273,23 +328,23 @@ const onCellClick = (row: number, col: number) => {
 
 const handleTableSizeSelect = (rows: number, cols: number) => {
   if (!props.editor) return
-  
+
   console.log('插入表格:', rows, 'x', cols)
-  props.editor.chain().focus().insertTable({ 
-    rows, 
-    cols, 
-    withHeaderRow: false 
+  props.editor.chain().focus().insertTable({
+    rows,
+    cols,
+    withHeaderRow: false
   }).run()
-  
+
   closeDropdown()
 }
 
 const executeAction = (action: string) => {
   if (!props.editor) return
-  
+
   switch (action) {
     case 'insertTable':
-      props.editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
+      props.editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: false }).run()
       break
     case 'addRowBefore':
       props.editor.chain().focus().addRowBefore().run()
@@ -313,7 +368,7 @@ const executeAction = (action: string) => {
       props.editor.chain().focus().deleteTable().run()
       break
   }
-  
+
   closeDropdown()
 }
 
@@ -413,10 +468,26 @@ onUnmounted(() => {
   border: 1px solid var(--gl-border-color, #e0e0e0);
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 1060; /* 确保在菜单之上 */
+  z-index: 1060;
+  /* 确保在菜单之上 */
   min-width: 200px;
   white-space: nowrap;
-  pointer-events: auto; /* 确保可以接收鼠标事件 */
+  pointer-events: auto;
+  /* 确保可以接收鼠标事件 */
+}
+
+.table-border-panel-container {
+  position: fixed;
+  top: auto;
+  left: auto;
+  background: var(--gl-bg-color, #ffffff);
+  border: 1px solid var(--gl-border-color, #e0e0e0);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1060;
+  /* 确保在菜单之上 */
+  pointer-events: auto;
+  /* 确保可以接收鼠标事件 */
 }
 
 .table-size-selector {
@@ -477,30 +548,35 @@ onUnmounted(() => {
     border-color: var(--gl-border-color, #404040);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
-  
+
   .table-dropdown-item {
     color: var(--gl-text-color, #ffffff);
   }
-  
+
   .table-dropdown-item:hover,
   .table-dropdown-item.active {
     background-color: var(--gl-hover-color, #404040);
   }
-  
+
   .table-size-selector-container {
     border-color: var(--gl-border-color, #404040);
     background: var(--gl-bg-color, #2d2d2d);
   }
-  
+
+  .table-border-panel-container {
+    border-color: var(--gl-border-color, #404040);
+    background: var(--gl-bg-color, #2d2d2d);
+  }
+
   .grid-cell {
     border-color: #404040;
     background: #2d2d2d;
   }
-  
+
   .grid-cell:hover {
     background: #1a3a5c;
   }
-  
+
   .table-dropdown-divider {
     background-color: var(--gl-border-color, #404040);
   }

@@ -118,7 +118,7 @@ const editorRef = ref()
 // 暴露编辑器到全局变量
 onMounted(() => {
   if (editorRef.value) {
-    ;(window as any).editor = editorRef.value.editor
+    ; (window as any).editor = editorRef.value.editor
   }
 })
 
@@ -211,14 +211,16 @@ const adjustMaxHeight = (delta: number) => {
           <button @click="switchView('demo')" :class="['control-btn', { 'view-switch': currentView === 'demo' }]">
             基础演示
           </button>
-          <button @click="switchView('height-test')" :class="['control-btn', { 'view-switch': currentView === 'height-test' }]">
+          <button @click="switchView('height-test')"
+            :class="['control-btn', { 'view-switch': currentView === 'height-test' }]">
             高度测试
           </button>
-          <button @click="switchView('preview-test')" :class="['control-btn', { 'view-switch': currentView === 'preview-test' }]">
+          <button @click="switchView('preview-test')"
+            :class="['control-btn', { 'view-switch': currentView === 'preview-test' }]">
             预览测试
           </button>
         </div>
-        
+
         <!-- 通用控制 -->
         <button @click="toggleTheme" class="control-btn">
           主题: {{ theme }}
@@ -229,7 +231,7 @@ const adjustMaxHeight = (delta: number) => {
         <button @click="toggleToolbar" class="control-btn">
           工具栏: {{ toolbarMode }}
         </button>
-         <button @click="toggleShowStatusBar" class="control-btn">
+        <button @click="toggleShowStatusBar" class="control-btn">
           状态栏: {{ showStatusBar }}
         </button>
         <button @click="editable = !editable" class="control-btn">
@@ -243,30 +245,17 @@ const adjustMaxHeight = (delta: number) => {
         </button>
       </div>
     </header>
-    
+
     <main class="app-main">
       <!-- 基础演示视图 -->
       <div class="demo-view" v-if="currentView === 'demo'">
         <div class="editor-container">
-          <GeelatoLiteEditor
-            ref="editorRef"
-            v-model="content"
-            :theme="theme"
-            :size="size"
-            :toolbar="toolbarMode"
-            :showStatusBar="showStatusBar"
-            :editable="editable"
-            :bordered="bordered"
-            :primary-color="primaryColor"
-            :min-height="'300px'"
-            :auto-focus="false"
-            placeholder="请输入内容..."
-            @update="handleUpdate"
-            @focus="handleFocus"
-            @blur="handleBlur"
-          />
+          <GeelatoLiteEditor ref="editorRef" v-model="content" :theme="theme" :size="size" :toolbar="toolbarMode"
+            :showStatusBar="showStatusBar" :editable="editable" :bordered="bordered" :primary-color="primaryColor"
+            :min-height="'300px'" :auto-focus="false" placeholder="请输入内容..." @update="handleUpdate" @focus="handleFocus"
+            @blur="handleBlur" />
         </div>
-        
+
         <div class="content-preview">
           <h3>内容预览 (HTML)</h3>
           <pre><code>{{ content }}</code></pre>
@@ -291,37 +280,22 @@ const adjustMaxHeight = (delta: number) => {
             </div>
           </div>
         </div>
-        
+
         <div class="test-editor-container">
           <h3>高度限制测试编辑器</h3>
           <p class="test-description">
             当前设置：最小高度 {{ testMinHeight }}，最大高度 {{ testMaxHeight }}。
             内容超出最大高度时应该出现滚动条。
           </p>
-          <GeelatoLiteEditor
-             v-model="heightTestContent"
-             :theme="theme"
-             :size="size"
-             :toolbar-mode="toolbarMode"
-             :show-status-bar="showStatusBar"
-             :editable="editable"
-             :bordered="bordered"
-             :primary-color="primaryColor"
-             :min-height="testMinHeight"
-             :max-height="testMaxHeight"
-             @focus="handleFocus"
-             @blur="handleBlur"
-           />
+          <GeelatoLiteEditor v-model="heightTestContent" :theme="theme" :size="size" :toolbar-mode="toolbarMode"
+            :show-status-bar="showStatusBar" :editable="editable" :bordered="bordered" :primary-color="primaryColor"
+            :min-height="testMinHeight" :max-height="testMaxHeight" @focus="handleFocus" @blur="handleBlur" />
         </div>
       </div>
-      
+
       <!-- 预览测试视图 -->
       <div class="preview-test-view" v-if="currentView === 'preview-test'">
         <div class="preview-controls">
-          <h3>HTML预览测试</h3>
-          <p class="test-description">
-            将编辑器内容以HTML形式在iframe中渲染，测试最终展示效果和样式兼容性。
-          </p>
           <div class="preview-options">
             <label class="option-item">
               <input type="checkbox" v-model="bordered" />
@@ -334,11 +308,11 @@ const adjustMaxHeight = (delta: number) => {
             <div class="preview-mode-switch">
               <label class="mode-option">
                 <input type="radio" value="normal" v-model="previewMode" @change="switchPreviewMode('normal')" />
-                普通HTML预览
+                IFRAME-普通HTML预览
               </label>
               <label class="mode-option">
                 <input type="radio" value="email" v-model="previewMode" @change="switchPreviewMode('email')" />
-                邮件HTML预览（内联样式）
+                IFRAME-邮件HTML预览（内联样式）
               </label>
             </div>
             <button @click="refreshPreview" class="refresh-btn">
@@ -346,50 +320,31 @@ const adjustMaxHeight = (delta: number) => {
             </button>
           </div>
         </div>
-        
+
         <div class="preview-container">
           <div class="preview-editor">
             <h4>编辑器</h4>
-            <GeelatoLiteEditor
-              v-model="previewTestContent"
-              :theme="theme"
-              :size="size"
-              :toolbar-mode="'simple'"
-              :show-status-bar="showStatusBar"
-              :editable="true"
-              :bordered="bordered"
-              :primary-color="primaryColor"
-              :min-height="'300px'"
-              :max-height="'500px'"
-              @update:modelValue="onPreviewContentChange"
-            />
+            <GeelatoLiteEditor v-model="previewTestContent" :theme="theme" :size="size" :toolbar-mode="'simple'"
+              :show-status-bar="showStatusBar" :editable="true" :bordered="bordered" :primary-color="primaryColor"
+              :min-height="'300px'" :max-height="'500px'" @update:modelValue="onPreviewContentChange" />
           </div>
-          
+
           <div class="preview-iframe-container">
             <h4>{{ previewMode === 'email' ? '邮件HTML预览效果（内联样式）' : 'HTML预览效果（无外部样式）' }}</h4>
-            <iframe 
-               v-if="previewMode === 'normal'"
-               ref="previewIframe"
-               class="preview-iframe"
-               :srcdoc="previewHtmlContent"
-               sandbox="allow-same-origin allow-scripts"
-             ></iframe>
-            <iframe 
-               v-if="previewMode === 'email'"
-               ref="emailPreviewIframe"
-               class="preview-iframe"
-               :srcdoc="emailHtmlContent"
-               sandbox="allow-same-origin allow-scripts"
-             ></iframe>
+            <iframe v-if="previewMode === 'normal'" ref="previewIframe" class="preview-iframe"
+              :srcdoc="previewHtmlContent" sandbox="allow-same-origin allow-scripts"></iframe>
+            <iframe v-if="previewMode === 'email'" ref="emailPreviewIframe" class="preview-iframe"
+              :srcdoc="emailHtmlContent" sandbox="allow-same-origin allow-scripts"></iframe>
           </div>
         </div>
-        
+
         <div class="preview-content-display">
           <h4>{{ previewMode === 'email' ? '邮件HTML源码（包含内联样式）' : '原始HTML源码' }}</h4>
-          <pre class="content-code"><code>{{ previewMode === 'email' ? emailHtmlContent : previewTestContent }}</code></pre>
+          <pre
+            class="content-code"><code>{{ previewMode === 'email' ? emailHtmlContent : previewTestContent }}</code></pre>
         </div>
       </div>
-      
+
     </main>
   </div>
 </template>
@@ -436,6 +391,11 @@ const adjustMaxHeight = (delta: number) => {
 .view-switch {
   background-color: #3b82f6 !important;
   color: white !important;
+}
+
+.demo-view {
+  min-width: 1240px;
+  max-width: 1240px;
 }
 
 .height-test-view,
@@ -588,18 +548,18 @@ const adjustMaxHeight = (delta: number) => {
   .app {
     padding: 16px;
   }
-  
+
   .app-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
   }
-  
+
   .controls {
     width: 100%;
     justify-content: flex-start;
   }
-  
+
   .control-btn {
     flex: 1;
     min-width: 80px;
@@ -611,17 +571,17 @@ const adjustMaxHeight = (delta: number) => {
   .app {
     padding: 12px;
   }
-  
+
   .app-header h1 {
     font-size: 24px;
   }
-  
+
   .controls {
     grid-template-columns: repeat(2, 1fr);
     display: grid;
     gap: 8px;
   }
-  
+
   .control-btn {
     padding: 6px 12px;
     font-size: 13px;
@@ -758,12 +718,12 @@ const adjustMaxHeight = (delta: number) => {
   .preview-container {
     grid-template-columns: 1fr;
   }
-  
+
   .preview-options {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .preview-mode-switch {
     flex-direction: column;
     gap: 8px;

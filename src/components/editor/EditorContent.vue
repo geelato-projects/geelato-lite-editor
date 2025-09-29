@@ -41,12 +41,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { EditorContent as TiptapEditorContent, type Editor } from '@tiptap/vue-3'
 import type {
   ComponentSize,
   ContentStats
 } from '../../types'
+import { initBorderStyleApplier } from '../../utils/borderStyleApplier'
 
 interface Props {
   /** 编辑器实例 */
@@ -148,6 +149,26 @@ const handlePlaceholderClick = () => {
     props.editor.commands.focus()
   }
 }
+
+// 边框样式应用器
+const borderStyleObserver = ref<MutationObserver | null>(null)
+
+// 初始化边框样式应用器
+onMounted(() => {
+  if (props.editor) {
+    const editorElement = document.querySelector('.gl-editor-content__editor .ProseMirror')
+    if (editorElement) {
+      borderStyleObserver.value = initBorderStyleApplier(editorElement)
+    }
+  }
+})
+
+// 清理边框样式应用器
+onUnmounted(() => {
+  if (borderStyleObserver.value) {
+    borderStyleObserver.value.disconnect()
+  }
+})
 </script>
 
 <style lang="less">
@@ -357,28 +378,38 @@ const handlePlaceholderClick = () => {
         > * {
           margin-bottom: 0;
         }
-      }
-
-      // 统一边框处理，确保所有行高度一致
-      // 所有单元格都保持相同的边框配置
-      th,
-      td {
-        border-top: 0.8px solid var(--gl-border-color);
-        border-left: 0.8px solid var(--gl-border-color);
-      }
-
-      // 最后一行添加下边框
-      tr:last-child {
-        th,
-        td {
-          border-bottom: 0.8px solid var(--gl-border-color);
+        
+        // 支持通过内联样式设置的边框
+        // data-border属性通过JavaScript动态转换为内联样式
+        &[style*="border"] {
+          // 内联样式会自动覆盖默认样式
         }
       }
 
-      // 最后一列添加右边框
-      th:last-child,
-      td:last-child {
-        border-right: 0.8px solid var(--gl-border-color);
+      // 统一边框处理，确保所有行高度一致
+      // 所有单元格都保持相同的边框配置（仅在没有自定义边框时生效）
+      th:not([data-border]):not([data-border-top]):not([style*="border"]),
+      td:not([data-border]):not([data-border-top]):not([style*="border"]) {
+        border-top: 0.8px solid var(--gl-border-color, #ccc);
+      }
+      
+      th:not([data-border]):not([data-border-left]):not([style*="border"]),
+      td:not([data-border]):not([data-border-left]):not([style*="border"]) {
+        border-left: 0.8px solid var(--gl-border-color, #ccc);
+      }
+
+      // 最后一行添加下边框（仅在没有自定义边框时生效）
+      tr:last-child {
+        th:not([data-border]):not([data-border-bottom]):not([style*="border"]),
+        td:not([data-border]):not([data-border-bottom]):not([style*="border"]) {
+          border-bottom: 0.8px solid var(--gl-border-color, #ccc);
+        }
+      }
+
+      // 最后一列添加右边框（仅在没有自定义边框时生效）
+      th:last-child:not([data-border]):not([data-border-right]):not([style*="border"]),
+      td:last-child:not([data-border]):not([data-border-right]):not([style*="border"]) {
+        border-right: 0.8px solid var(--gl-border-color, #ccc);
       }
 
       th {

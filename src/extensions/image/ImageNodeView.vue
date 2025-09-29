@@ -212,7 +212,8 @@ onMounted(() => {
   height: auto;
 }
 
-.gl-image:hover {
+/* 只有在选中状态下才显示hover阴影效果 */
+.gl-image-wrapper--selected .gl-image:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 

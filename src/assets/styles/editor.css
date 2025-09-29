@@ -155,6 +155,9 @@
   background-color: transparent;
   cursor: col-resize;
   pointer-events: auto;
+  /* 确保不影响文本流和光标位置 */
+  float: none !important;
+  display: block !important;
 }
 
 .ProseMirror .column-resize-handle:hover {
@@ -175,7 +178,7 @@
 .ProseMirror.resize-cursor * {
   cursor: col-resize !important;
 }
-
+ 
 /* 链接样式 */
 .ProseMirror a {
   color: #007bff;
@@ -204,14 +207,13 @@
 .ProseMirror .gl-image {
   height: auto;
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: block;
   transition: box-shadow 0.2s ease, transform 0.2s ease;
   cursor: pointer;
 }
 
-/* 图片悬停效果 */
-.ProseMirror .gl-image:hover {
+/* 图片悬停效果 - 只有在选中状态下才显示 */
+.ProseMirror .gl-image-wrapper--selected .gl-image:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 

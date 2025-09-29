@@ -121,10 +121,10 @@ const STYLE_MAPPINGS = {
   },
   
   // 图片样式
-  'img': {
+  img: {
     height: 'auto',
     display: 'inline-block',
-    margin: '8px 0'
+    verticalAlign: 'middle'
   },
   
   // 表格样式
@@ -133,21 +133,20 @@ const STYLE_MAPPINGS = {
     width: '100%'
   },
   'thead': {
-    // 移除背景色
+    // 表头样式
   },
   'tbody': {
-    // 移除背景色
+    // 表体样式
   },
   'tr': {
-    // 移除边框
+    // 表行样式
   },
   'th': {
-    padding: '8px',
-    border: '1px solid #ddd'
+    border: '1px solid #ddd',
+    verticalAlign: 'middle'
   },
   'td': {
-    padding: '8px',
-    border: '1px solid #ddd'
+    border: '1px solid #ddd',
   },
   'colgroup': {
     // colgroup 通常不需要特殊样式
@@ -210,6 +209,21 @@ function mergeStyles(existingStyle: string, newStyle: string): string {
     })
   }
   
+  // 处理边框样式冲突
+  const specificBorderProps = ['border-top', 'border-bottom', 'border-left', 'border-right']
+  const hasSpecificBorder = specificBorderProps.some(prop => styleMap.has(prop))
+  const hasBorderNone = styleMap.get('border') === 'none'
+  
+  // 如果设置了border: none，移除所有具体的边框属性
+  if (hasBorderNone) {
+    specificBorderProps.forEach(prop => {
+      styleMap.delete(prop)
+    })
+  } else if (hasSpecificBorder && styleMap.has('border')) {
+    // 如果有具体的边框属性，删除通用的border属性
+    styleMap.delete('border')
+  }
+  
   // 重新组合样式字符串
   return Array.from(styleMap.entries())
     .map(([property, value]) => `${property}: ${value}`)
@@ -228,14 +242,165 @@ export function convertToInlineStyles(html: string): string {
   function processElement(element: Element) {
     const tagName = element.tagName.toLowerCase()
     
-    // 获取对应的样式映射
+    // 先处理data-border*属性，收集自定义边框样式
+    const customBorderStyles: Record<string, string> = {}
+    const borderAttributes = [
+      'data-border',
+      'data-border-top', 
+      'data-border-bottom',
+      'data-border-left',
+      'data-border-right'
+    ]
+    
+    borderAttributes.forEach(attr => {
+      const borderValue = element.getAttribute(attr)
+      if (borderValue) {
+        if (attr === 'data-border') {
+          if (borderValue === 'none') {
+            customBorderStyles.border = 'none'
+          } else if (borderValue.includes(':')) {
+            // 处理复合边框样式，如 "top: 2px solid blue; bottom: 2px solid blue"
+            const borderParts = borderValue.split(';').map(part => part.trim()).filter(part => part)
+            borderParts.forEach(part => {
+              const [side, value] = part.split(':').map(s => s.trim())
+              if (side && value) {
+                if (side === 'top') {
+                  customBorderStyles['border-top'] = value
+                } else if (side === 'bottom') {
+                  customBorderStyles['border-bottom'] = value
+                } else if (side === 'left') {
+                  customBorderStyles['border-left'] = value
+                } else if (side === 'right') {
+                  customBorderStyles['border-right'] = value
+                }
+              }
+            })
+          } else {
+            // 简单的边框样式，如 "1px solid red"
+            customBorderStyles.border = borderValue
+          }
+        } else {
+          // 处理单独的边框属性
+          const cssProp = attr.replace('data-', '')
+          if (borderValue === 'none') {
+            customBorderStyles[cssProp] = 'none'
+          } else {
+            customBorderStyles[cssProp] = borderValue
+          }
+        }
+        
+        // 移除data属性
+        element.removeAttribute(attr)
+      }
+    })
+    
+    // 获取元素现有的内联样式
+    const existingStyle = element.getAttribute('style') || ''
+    const existingStyleMap: Record<string, string> = {}
+    
+    // 解析现有样式
+    if (existingStyle) {
+      existingStyle.split(';').forEach(rule => {
+        const [property, value] = rule.split(':').map(s => s.trim())
+        if (property && value) {
+          existingStyleMap[property] = value
+        }
+      })
+    }
+    
+    // 获取对应的样式映射，但排除被现有样式覆盖的属性
     const styles = STYLE_MAPPINGS[tagName as keyof typeof STYLE_MAPPINGS]
+    let finalStyles: Record<string, string> = {}
     
     if (styles) {
-      const inlineStyle = styleObjectToString(styles)
-      const existingStyle = element.getAttribute('style') || ''
-      const mergedStyle = mergeStyles(existingStyle, inlineStyle)
-      element.setAttribute('style', mergedStyle)
+      finalStyles = { ...styles }
+      
+      // 检查是否有border: none样式（包括data-border="none"）
+      const hasBorderNone = existingStyleMap['border'] === 'none' || customBorderStyles['border'] === 'none'
+      
+      // 如果有border: none，完全不应用任何默认边框样式
+      if (hasBorderNone) {
+        // 移除所有边框相关的默认样式
+        Object.keys(finalStyles).forEach(key => {
+          if (key.startsWith('border') || key === 'border') {
+            delete finalStyles[key]
+          }
+        })
+      } else {
+        // 如果元素已有边框相关的内联样式，移除默认的border样式
+        const hasBorderStyles = Object.keys(existingStyleMap).some(prop => 
+          prop.startsWith('border')
+        ) || Object.keys(customBorderStyles).some(prop => 
+          prop.startsWith('border') && customBorderStyles[prop] !== 'none'
+        )
+        
+        if (hasBorderStyles) {
+          // 移除可能被覆盖的默认边框样式
+          delete finalStyles.border
+          delete finalStyles.borderTop
+          delete finalStyles.borderBottom
+          delete finalStyles.borderLeft
+          delete finalStyles.borderRight
+        }
+      }
+    }
+    
+    // 合并所有样式：现有样式 + 默认样式 + 自定义边框样式
+    let allStyles: Record<string, string> = {}
+    
+    // 1. 先添加现有的内联样式
+    Object.assign(allStyles, existingStyleMap)
+    
+    // 2. 再添加默认样式（不会覆盖现有样式）
+    if (Object.keys(finalStyles).length > 0) {
+      Object.keys(finalStyles).forEach(prop => {
+        if (!allStyles[prop]) {
+          allStyles[prop] = finalStyles[prop]
+        }
+      })
+    }
+    
+    // 3. 最后添加自定义边框样式（会覆盖默认样式和内联样式）
+    Object.keys(customBorderStyles).forEach(prop => {
+      const value = customBorderStyles[prop]
+      
+      if (value === 'none') {
+        if (prop === 'border') {
+          // 如果是border: none，删除所有边框相关样式（包括现有的内联样式）
+          const borderProps = ['border', 'border-top', 'border-bottom', 'border-left', 'border-right', 
+                               'borderTop', 'borderBottom', 'borderLeft', 'borderRight',
+                               'border-top-width', 'border-bottom-width', 'border-left-width', 'border-right-width',
+                               'border-top-style', 'border-bottom-style', 'border-left-style', 'border-right-style',
+                               'border-top-color', 'border-bottom-color', 'border-left-color', 'border-right-color',
+                               'borderTopWidth', 'borderBottomWidth', 'borderLeftWidth', 'borderRightWidth',
+                               'borderTopStyle', 'borderBottomStyle', 'borderLeftStyle', 'borderRightStyle',
+                               'borderTopColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor']
+          borderProps.forEach(borderProp => {
+            delete allStyles[borderProp]
+          })
+        } else {
+          // 如果是单独的边框属性为none，删除对应的样式
+          delete allStyles[prop]
+          // 同时删除驼峰命名的版本
+          const camelCaseProp = prop.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase())
+          delete allStyles[camelCaseProp]
+        }
+      } else {
+        // 否则正常设置样式，这会覆盖之前的样式（包括内联样式）
+        allStyles[prop] = value
+        
+        // 如果设置了具体的边框样式，同时删除可能存在的驼峰命名版本
+        if (prop.startsWith('border-')) {
+          const camelCaseProp = prop.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase())
+          delete allStyles[camelCaseProp]
+        }
+      }
+    })
+    
+    // 应用合并后的样式
+    if (Object.keys(allStyles).length > 0) {
+      const finalStyleString = styleObjectToString(allStyles)
+      element.setAttribute('style', finalStyleString)
     }
     
     // 处理特殊的类样式

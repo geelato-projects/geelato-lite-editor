@@ -77,6 +77,19 @@
         />
       </div>
     </div>
+
+    <!-- 更多颜色 -->
+    <div class="color-palette__section">
+      <div class="color-palette__more-colors">
+        <span class="color-palette__more-colors-label">更多颜色</span>
+        <input
+          type="color"
+          v-model="customColor"
+          @change="handleCustomColorChange"
+          class="color-palette__color-picker"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -105,6 +118,16 @@ const emit = defineEmits<{
 
 // 最近使用的颜色
 const recentColors = ref<string[]>([])
+
+// 自定义颜色选择器的值
+const customColor = ref('#000000')
+
+// 处理自定义颜色变化
+const handleCustomColorChange = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const color = target.value
+  selectColor(color)
+}
 
 // 标准颜色 - 完全参考截图配置
 const standardColors = [
@@ -304,6 +327,47 @@ const selectColor = (color: string | null) => {
     transparent 60%
   );
   color: #ff6666;
+}
+
+/* 更多颜色选择器样式 */
+.color-palette__more-colors {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.color-palette__more-colors-label {
+  font-size: 12px;
+  color: var(--color-text-secondary, #6b7280);
+  white-space: nowrap;
+}
+
+.color-palette__color-picker {
+  width: 28px;
+  height: 20px;
+  border: 1px solid var(--color-border, #d1d5db);
+  border-radius: 3px;
+  cursor: pointer;
+  background: none;
+  padding: 0;
+}
+
+.color-palette__color-picker:hover {
+  border-color: var(--gl-primary-color, #1890ff);
+}
+
+/* 暗色主题支持 */
+.color-palette__more-colors-label--dark {
+  color: var(--color-text-secondary-dark, #9ca3af);
+}
+
+.color-palette__color-picker--dark {
+  border-color: var(--color-border-dark, #4b5563);
+}
+
+.color-palette__color-picker--dark:hover {
+  border-color: var(--gl-primary-color, #66b3ff);
 }
 
 /* 暗色主题 */
