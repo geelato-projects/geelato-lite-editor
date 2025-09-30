@@ -9,6 +9,7 @@ import { TaskItem } from '@tiptap/extension-task-item'
 import ImageExtension from './image'
 import LinkExtension from './link'
 import { createTableExtensions } from './table'
+import FontSizeExtension from './fontSize'
 // import SelectionExtension from './selection'
 
 import type {
@@ -60,6 +61,7 @@ export { createTableExtensions } from './table'
 export const createStyleExtensions = (): Extension[] => {
   return [
     TextStyle as any,
+    FontSizeExtension as any,
     (Color as any).configure({
       types: ['textStyle'],
     }),

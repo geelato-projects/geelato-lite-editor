@@ -377,105 +377,134 @@ onBeforeUnmount(() => {
   }
 }
 
-// CSS 变量定义
-:root {
-  // 主色调
-  --gl-primary-color: #1890ff;
-  --gl-primary-color-light: rgba(24, 144, 255, 0.2);
-  --gl-primary-color-dark: #096dd9;
-
-  // 文本颜色
-  --gl-text-color: #333333;
-  --gl-text-color-secondary: #666666;
-  --gl-text-color-placeholder: #999999;
-
-  // 背景颜色
-  --gl-bg-color: #ffffff;
-  --gl-editor-bg: #ffffff;
-  --gl-editor-readonly-bg: #f8f9fa;
-  --gl-toolbar-bg: #fafafa;
-  --gl-word-count-bg: #f8f9fa;
-  --gl-blockquote-bg: #f8f9fa;
-  --gl-code-bg: #f1f3f4;
-  --gl-code-block-bg: #f8f9fa;
-  --gl-table-header-bg: #f8f9fa;
-  --gl-highlight-bg: #fff3cd;
-  --gl-highlight-color: #856404;
-
-  // 边框颜色
-  --gl-border-color: #e0e0e0;
-  --gl-border-color-light: #f0f0f0;
-  --gray-3: #d9d9d9;
-
-  // 阴影
-  --gl-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --gl-box-shadow-light: 0 1px 4px rgba(0, 0, 0, 0.05);
-
-  // 圆角
-  --gl-border-radius: 6px;
-  --gl-border-radius-small: 3px;
-
-  // 间距
-  --gl-spacing-xs: 4px;
-  --gl-spacing-sm: 8px;
-  --gl-spacing-md: 12px;
-  --gl-spacing-lg: 16px;
-  --gl-spacing-xl: 20px;
-
-  // 字体
-  --gl-font-size-xs: 11px;
-  --gl-font-size-sm: 12px;
-  --gl-font-size-md: 14px;
-  --gl-font-size-lg: 16px;
-  --gl-font-size-xl: 18px;
-
-  // 行高
-  --gl-line-height-tight: 1.3;
-  --gl-line-height-normal: 1.5;
-  --gl-line-height-loose: 1.7;
-
-  // 过渡
-  --gl-transition-fast: 0.15s ease;
-  --gl-transition-normal: 0.3s ease;
-  --gl-transition-slow: 0.5s ease;
+/* 编辑器容器样式 */
+.geelato-lite-editor {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--gl-text-color, #333);
+  background: var(--gl-bg-color, #fff);
+  border-radius: var(--gl-border-radius, 6px);
+  overflow: hidden;
 }
 
-// 暗色主题变量
-.gl-theme-dark {
-  // 文本颜色
-  --gl-text-color: #ffffff;
-  --gl-text-color-secondary: #cccccc;
-  --gl-text-color-placeholder: #666666;
-
-  // 背景颜色
-  --gl-bg-color: #1e1e1e;
-  --gl-editor-bg: #1e1e1e;
-  --gl-editor-readonly-bg: #2d2d2d;
-  --gl-toolbar-bg: #2d2d2d;
-  --gl-word-count-bg: #2d2d2d;
-  --gl-blockquote-bg: #2d2d2d;
-  --gl-code-bg: #404040;
-  --gl-code-block-bg: #2d2d2d;
-  --gl-table-header-bg: #404040;
-  --gl-highlight-bg: #4a4a00;
-  --gl-highlight-color: #ffff99;
-
-  // 边框颜色
-  --gl-border-color: #404040;
-  --gl-border-color-light: #333333;
-  --gray-3: #595959;
-
-  // 阴影
-  --gl-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --gl-box-shadow-light: 0 1px 4px rgba(0, 0, 0, 0.2);
+/* 编辑器聚焦状态 */
+.geelato-lite-editor:focus-within {
+  // border-color: var(--gl-primary-color, #1890ff);
+  // box-shadow: 0 0 0 2px var(--gl-primary-color-light, rgba(24, 144, 255, 0.2));
 }
 
-// 全局样式重置
+/* 编辑器禁用状态 */
+.geelato-lite-editor.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* 编辑器只读状态 */
+.geelato-lite-editor.readonly {
+  background: var(--gl-editor-readonly-bg, #f8f9fa);
+}
+
+/* 编辑器内容区域 */
+.geelato-lite-editor__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 编辑器工具栏 */
+.geelato-lite-editor__toolbar {
+  flex-shrink: 0;
+}
+
+/* 编辑器主体 */
+.geelato-lite-editor__editor {
+  flex: 1;
+  min-height: 0;
+}
+
+/* 编辑器底部 */
+.geelato-lite-editor__footer {
+  flex-shrink: 0;
+}
+
+/* 编辑器加载状态 */
+.geelato-lite-editor__loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 1000;
+}
+
+/* 编辑器错误状态 */
+.geelato-lite-editor__error {
+  padding: 16px;
+  color: #ff4d4f;
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  border-radius: 6px;
+  margin: 8px;
+}
+
+/* 编辑器占位符 */
+.geelato-lite-editor__placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gl-text-color-placeholder, #999);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 编辑器分割线 */
+.geelato-lite-editor__divider {
+  height: 1px;
+  background: var(--gl-border-color, #e0e0e0);
+  margin: 0;
+}
+
+/* 编辑器按钮 */
+.geelato-lite-editor__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--gl-text-color-secondary, #666666);
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.geelato-lite-editor__button:hover {
+  background: var(--gl-primary-color-light, rgba(24, 144, 255, 0.2));
+}
+
+/* 全局样式重置 */
 .gl-lite-editor * {
   box-sizing: border-box;
 }
 
-// 滚动条样式
+/* 滚动条样式 */
 .gl-lite-editor ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -494,12 +523,12 @@ onBeforeUnmount(() => {
   }
 }
 
-// 选中文本样式
+/* 选中文本样式 */
 .gl-lite-editor ::selection {
   background: var(--gl-primary-color-light, rgba(24, 144, 255, 0.2));
 }
 
-// 响应式设计
+/* 响应式设计 */
 @media (max-width: 768px) {
   .gl-lite-editor {
     font-size: 14px;
@@ -537,7 +566,7 @@ onBeforeUnmount(() => {
   }
 }
 
-// 打印样式
+/* 打印样式 */
 @media print {
   .gl-lite-editor {
 

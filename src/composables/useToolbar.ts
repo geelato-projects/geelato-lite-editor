@@ -440,13 +440,27 @@ const TOOLBAR_BUTTONS: Record<string, ToolbarButtonConfig> = {
       // 这里会在工具栏组件中处理
     }
   },
+  fontSize: {
+    name: 'fontSize',
+    icon: 'font-color',
+    title: '字体大小',
+    command: 'fontSize',
+    isActive: (editor) => {
+      const textStyle = editor.getAttributes('textStyle')
+      return !!textStyle?.fontSize
+    },
+    isDisabled: () => false,
+    action: () => {
+      // 这里会在下拉组件中处理
+    }
+  },
 }
 
 // 预定义工具栏配置
 const TOOLBAR_CONFIGS: Record<ToolbarMode, string[]> = {
   full: [
     'undo', 'redo','bold', 'italic', 'underline', 'strike',    'textColor', 'highlight','|',
-    'heading', 'paragraph', '|',
+    'fontSize', 'heading', '|',
     'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', '|',
     'list', 'blockquote', '|',
     'image', 'link','|',
@@ -455,7 +469,7 @@ const TOOLBAR_CONFIGS: Record<ToolbarMode, string[]> = {
   ],
   simple: [
     'undo', 'redo','bold', 'italic', 'underline', 'textColor',  '|',
-    'heading', 'list', '|',
+    'fontSize', 'heading', 'list', '|',
     'alignLeft', 'alignCenter', 'alignRight', '|',
     'link', 'image', 'table', 'tableFillColor'
   ],

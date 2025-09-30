@@ -1,6 +1,155 @@
 /* 引入 z-index 层级管理 */
 @import './z-index.css';
 
+/* CSS 变量定义 */
+:root {
+  /* 主色调 */
+  --gl-primary-color: #1890ff;
+  --gl-primary-color-light: rgba(24, 144, 255, 0.2);
+  --gl-primary-color-dark: #096dd9;
+
+  /* 文本颜色 */
+  --gl-text-color: #333333;
+  --gl-text-color-secondary: #666666;
+  --gl-text-color-placeholder: #999999;
+
+  /* 背景颜色 */
+  --gl-bg-color: #ffffff;
+  --gl-editor-bg: #ffffff;
+  --gl-editor-readonly-bg: #f8f9fa;
+  --gl-toolbar-bg: #fafafa;
+  --gl-word-count-bg: #f8f9fa;
+  --gl-blockquote-bg: #f8f9fa;
+  --gl-code-bg: #f1f3f4;
+  --gl-code-block-bg: #f8f9fa;
+  --gl-table-header-bg: #f8f9fa;
+  --gl-highlight-bg: #fff3cd;
+  --gl-highlight-color: #856404;
+
+  /* 边框颜色 */
+  --gl-border-color: #e0e0e0;
+  --gl-border-color-light: #f0f0f0;
+  --gray-3: #d9d9d9;
+
+  /* 交互状态颜色 */
+  --gl-hover-bg: #f5f5f5;
+  --gl-active-bg: #e8e8e8;
+  --gl-selection-bg: #b3d4fc;
+  --gl-hover-color: #f5f5f5;
+  --gl-hover-bg-color: #f5f5f5;
+
+  /* 主色调变体 */
+  --gl-primary-hover-color: #40a9ff;
+  --gl-primary-active-color: #096dd9;
+  --gl-primary-color-hover: #40a9ff;
+
+  /* 功能性颜色 */
+  --gl-danger-color: #ff4d4f;
+
+  /* 输入和按钮背景 */
+  --gl-input-bg: #ffffff;
+  --gl-button-bg: #ffffff;
+  --gl-bg-secondary: #f8f9fa;
+
+  /* Arco Design 兼容变量 */
+  --gl-color-bg-popup: #ffffff;
+  --gl-color-border: #e5e6eb;
+  --gl-color-text-1: #1d2129;
+  --gl-color-fill-2: #f7f8fa;
+  --gl-color-primary-light-1: #e8f3ff;
+  --gl-color-primary-6: #165dff;
+
+  /* 阴影 */
+  --gl-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --gl-box-shadow-light: 0 1px 4px rgba(0, 0, 0, 0.05);
+
+  /* 圆角 */
+  --gl-border-radius: 6px;
+  --gl-border-radius-small: 3px;
+
+  /* 间距 */
+  --gl-spacing-xs: 4px;
+  --gl-spacing-sm: 8px;
+  --gl-spacing-md: 12px;
+  --gl-spacing-lg: 16px;
+  --gl-spacing-xl: 20px;
+
+  /* 字体 */
+  --gl-font-size-xs: 11px;
+  --gl-font-size-sm: 12px;
+  --gl-font-size-md: 14px;
+  --gl-font-size-lg: 16px;
+  --gl-font-size-xl: 18px;
+
+  /* 行高 */
+  --gl-line-height-tight: 1.3;
+  --gl-line-height-normal: 1.5;
+  --gl-line-height-loose: 1.7;
+
+  /* 过渡 */
+  --gl-transition-fast: 0.15s ease;
+  --gl-transition-normal: 0.3s ease;
+  --gl-transition-slow: 0.5s ease;
+}
+
+/* 暗色主题变量 */
+.gl-theme-dark {
+  /* 文本颜色 */
+  --gl-text-color: #ffffff;
+  --gl-text-color-secondary: #cccccc;
+  --gl-text-color-placeholder: #666666;
+
+  /* 背景颜色 */
+  --gl-bg-color: #1e1e1e;
+  --gl-editor-bg: #1e1e1e;
+  --gl-editor-readonly-bg: #2d2d2d;
+  --gl-toolbar-bg: #2d2d2d;
+  --gl-word-count-bg: #2d2d2d;
+  --gl-blockquote-bg: #2d2d2d;
+  --gl-code-bg: #404040;
+  --gl-code-block-bg: #2d2d2d;
+  --gl-table-header-bg: #404040;
+  --gl-highlight-bg: #4a4a00;
+  --gl-highlight-color: #ffff99;
+
+  /* 边框颜色 */
+  --gl-border-color: #404040;
+  --gl-border-color-light: #333333;
+  --gray-3: #595959;
+
+  /* 交互状态颜色 */
+  --gl-hover-bg: #2a2a2a;
+  --gl-active-bg: #3a3a3a;
+  --gl-selection-bg: #264f78;
+  --gl-hover-color: #404040;
+  --gl-hover-bg-color: #2a2a2a;
+
+  /* 主色调变体 */
+  --gl-primary-hover-color: #40a9ff;
+  --gl-primary-active-color: #096dd9;
+  --gl-primary-color-hover: #40a9ff;
+
+  /* 功能性颜色 */
+  --gl-danger-color: #ff4d4f;
+
+  /* 输入和按钮背景 */
+  --gl-input-bg: #2d2d2d;
+  --gl-button-bg: #2d2d2d;
+  --gl-bg-secondary: #2d2d2d;
+
+  /* Arco Design 兼容变量 */
+  --gl-color-bg-popup: #2d2d2d;
+  --gl-color-border: #404040;
+  --gl-color-text-1: #ffffff;
+  --gl-color-fill-2: #404040;
+  --gl-color-primary-light-1: #1a3a5c;
+  --gl-color-primary-6: #165dff;
+
+  /* 阴影 */
+  --gl-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --gl-box-shadow-light: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
 /* 任务列表样式 */
 .gl-task-list {
   list-style: none;

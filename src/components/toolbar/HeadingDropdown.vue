@@ -129,6 +129,10 @@ onUnmounted(() => {
   position: relative;
 }
 
+.heading-dropdown-trigger {
+  color: var(--gl-text-color, #333333);
+}
+
 .heading-dropdown-trigger::after {
   content: '';
   position: absolute;
@@ -148,7 +152,7 @@ onUnmounted(() => {
   top: 100%;
   left: 0;
   z-index: var(--gl-z-index-dropdown, 1050);
-  min-width: 100px;
+  min-width: 80px;
   background: var(--gl-color-bg-popup, #ffffff);
   border: 1px solid var(--gl-color-border, #e5e6eb);
   border-radius: 6px;
@@ -165,7 +169,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 4px;
+  padding: 2px;
   cursor: pointer;
   font-size: 14px;
   color: var(--gl-color-text-1, #1d2129);

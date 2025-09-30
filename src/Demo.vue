@@ -78,6 +78,11 @@ const emailHtmlContent = computed(() => {
   return createEmailHtml(previewTestContent.value, 'HTML邮件预览')
 })
 
+// 基础演示的HTML预览（使用内联样式转换）
+const demoHtmlPreview = computed(() => {
+  return convertToInlineStyles(content.value)
+})
+
 const onPreviewContentChange = () => {
   // 内容变化时自动更新预览
   nextTick(() => {
@@ -257,9 +262,9 @@ const adjustMaxHeight = (delta: number) => {
         </div>
 
         <div class="content-preview">
-          <h3>内容预览 (HTML)</h3>
-          <pre><code>{{ content }}</code></pre>
-        </div>
+           <h3>内容预览 (HTML)</h3>
+           <pre><code>{{ demoHtmlPreview }}</code></pre>
+         </div>
       </div>
 
       <!-- 高度测试视图 -->

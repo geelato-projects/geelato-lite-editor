@@ -467,6 +467,20 @@ export function convertToInlineStyles(html: string): string {
       processElement(child)
     })
     
+    // 处理空段落，将其转换为br标签
+    const emptyParagraphs = body.querySelectorAll('p')
+    emptyParagraphs.forEach(p => {
+      // 检查段落是否为空（没有文本内容且没有子元素，或者只包含空白字符）
+      const textContent = p.textContent?.trim() || ''
+      const hasChildElements = p.children.length > 0
+      
+      if (!textContent && !hasChildElements) {
+        // 创建br标签替换空段落
+        const br = doc.createElement('br')
+        p.parentNode?.replaceChild(br, p)
+      }
+    })
+    
     // 返回body的innerHTML
     return body.innerHTML
   }

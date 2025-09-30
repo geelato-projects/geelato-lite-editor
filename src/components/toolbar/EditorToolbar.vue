@@ -25,9 +25,15 @@
         :editor="editor"
       />
       
+      <!-- 字体大小下拉菜单 -->
+      <FontSizeDropdown
+        v-else-if="item === 'fontSize'"
+        :editor="editor"
+      />
+      
       <!-- 工具栏按钮 -->
       <ToolbarButton
-        v-else-if="item !== '|' && !isTableOperation(item) && !isListOperation(item) && !isHeadingOperation(item)"
+        v-else-if="item !== '|' && !isTableOperation(item) && !isListOperation(item) && !isHeadingOperation(item) && !isFontSizeOperation(item)"
         :ref="item === 'highlight' ? (el) => { if (el) highlightButtonRef = (el as any).buttonRef } : item === 'textColor' ? (el) => { if (el) textColorButtonRef = (el as any).buttonRef } : item === 'tableFillColor' ? (el) => { if (el) tableFillColorButtonRef = (el as any).buttonRef } : item === 'link' ? (el) => { if (el) linkButtonRef = (el as any).buttonRef } : undefined"
         :icon="getButtonConfig(item)?.icon"
         :title="getButtonConfig(item)?.title"
@@ -92,6 +98,7 @@ import { TableFillColorPanel } from '../../extensions/tableFillColor'
 import TableDropdown from './TableDropdown.vue'
 import ListDropdown from './ListDropdown.vue'
 import HeadingDropdown from './HeadingDropdown.vue'
+import FontSizeDropdown from './FontSizeDropdown.vue'
 import type {
   ToolbarMode,
   ToolbarConfig,
@@ -203,9 +210,14 @@ const toolbarClass = computed(() => {
   return classes.join(' ')
 })
 
-// 检查是否为标题操作
+// 判断是否为标题操作按钮
 const isHeadingOperation = (item: string) => {
   return item === 'heading'
+}
+
+// 判断是否为字体大小操作按钮
+const isFontSizeOperation = (item: string) => {
+  return item === 'fontSize'
 }
 
 // 处理按钮点击
