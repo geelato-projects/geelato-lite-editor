@@ -1,305 +1,553 @@
 /* 引入 z-index 层级管理 */
 @import './z-index.css';
 
-/* CSS 变量定义 */
-:root {
-  /* 主色调 */
-  --gl-primary-color: #1890ff;
-  --gl-primary-color-light: rgba(24, 144, 255, 0.2);
-  --gl-primary-color-dark: #096dd9;
+/* Geelato Lite Editor - 作用域限制样式 */
+/* 所有样式都限制在 .gl-lite-editor 范围内，防止样式污染 */
 
-  /* 文本颜色 */
+.gl-lite-editor {
+  /* ===== CSS 变量定义 - 限制在编辑器范围内 ===== */
+  
+  /* 主题色系统 - 支持动态主题色 */
+  --gl-primary-color: #007bff;
+  --gl-primary-color-light: rgba(0, 123, 255, 0.2);
+  --gl-primary-color-dark: #0056b3;
+  
+  /* 基础色彩系统 */
+  --gl-color-primary: var(--gl-primary-color);
+  --gl-color-primary-light-1: #339aff;
+  --gl-color-primary-light-2: #66b3ff;
+  --gl-color-primary-light-3: #99ccff;
+  --gl-color-primary-light-4: #cce6ff;
+  --gl-color-primary-light-5: #e6f3ff;
+  --gl-color-primary-light-6: #f0f8ff;
+  --gl-color-primary-6: var(--gl-primary-color-dark);
+  --gl-color-primary-7: #004085;
+  --gl-color-primary-8: #002952;
+  --gl-color-primary-9: #001a33;
+
+  /* 语义化颜色 */
+  --gl-color-success: #28a745;
+  --gl-color-success-light-1: #5cb85c;
+  --gl-color-success-light-2: #7bc97b;
+  --gl-color-success-light-3: #9bd99b;
+  --gl-color-success-light-4: #bae8ba;
+  --gl-color-success-light-5: #d9f7d9;
+  --gl-color-success-light-6: #ecfbec;
+
+  --gl-color-warning: #ffc107;
+  --gl-color-warning-light-1: #ffcd39;
+  --gl-color-warning-light-2: #ffd96b;
+  --gl-color-warning-light-3: #ffe49d;
+  --gl-color-warning-light-4: #fff0cf;
+  --gl-color-warning-light-5: #fffbf1;
+  --gl-color-warning-light-6: #fffdf8;
+
+  --gl-color-danger: #dc3545;
+  --gl-color-danger-light-1: #e25563;
+  --gl-color-danger-light-2: #e87681;
+  --gl-color-danger-light-3: #ee979f;
+  --gl-color-danger-light-4: #f4b8bd;
+  --gl-color-danger-light-5: #fad9db;
+  --gl-color-danger-light-6: #fdecec;
+
+  --gl-color-info: #17a2b8;
+  --gl-color-info-light-1: #46b5c6;
+  --gl-color-info-light-2: #75c8d4;
+  --gl-color-info-light-3: #a4dbe2;
+  --gl-color-info-light-4: #d3eef0;
+  --gl-color-info-light-5: #e9f6f8;
+  --gl-color-info-light-6: #f4fbfc;
+
+  /* 文本颜色系统 */
+  --gl-color-text-1: #1d2129;
+  --gl-color-text-2: #4e5969;
+  --gl-color-text-3: #86909c;
+  --gl-color-text-4: #c9cdd4;
   --gl-text-color: #333333;
   --gl-text-color-secondary: #666666;
-  --gl-text-color-placeholder: #999999;
 
-  /* 背景颜色 */
-  --gl-bg-color: #ffffff;
-  --gl-editor-bg: #ffffff;
-  --gl-editor-readonly-bg: #f8f9fa;
-  --gl-toolbar-bg: #fafafa;
-  --gl-word-count-bg: #f8f9fa;
-  --gl-blockquote-bg: #f8f9fa;
-  --gl-code-bg: #f1f3f4;
-  --gl-code-block-bg: #f8f9fa;
-  --gl-table-header-bg: #f8f9fa;
-  --gl-highlight-bg: #fff3cd;
-  --gl-highlight-color: #856404;
-
-  /* 边框颜色 */
-  --gl-border-color: #e0e0e0;
-  --gl-border-color-light: #f0f0f0;
-  --gray-3: #d9d9d9;
-
-  /* 交互状态颜色 */
-  --gl-hover-bg: #f5f5f5;
-  --gl-active-bg: #e8e8e8;
-  --gl-selection-bg: #b3d4fc;
-  --gl-hover-color: #f5f5f5;
-  --gl-hover-bg-color: #f5f5f5;
-
-  /* 主色调变体 */
-  --gl-primary-hover-color: #40a9ff;
-  --gl-primary-active-color: #096dd9;
-  --gl-primary-color-hover: #40a9ff;
-
-  /* 功能性颜色 */
-  --gl-danger-color: #ff4d4f;
-
-  /* 输入和按钮背景 */
-  --gl-input-bg: #ffffff;
-  --gl-button-bg: #ffffff;
-  --gl-bg-secondary: #f8f9fa;
-
-  /* Arco Design 兼容变量 */
+  /* 背景颜色系统 */
+  --gl-color-bg-1: #ffffff;
+  --gl-color-bg-2: #f7f8fa;
+  --gl-color-bg-3: #f2f3f5;
+  --gl-color-bg-4: #e5e6eb;
+  --gl-color-bg-5: #c9cdd4;
   --gl-color-bg-popup: #ffffff;
+
+  /* 填充颜色系统 */
+  --gl-color-fill-1: #f7f8fa;
+  --gl-color-fill-2: #f2f3f5;
+  --gl-color-fill-3: #e5e6eb;
+  --gl-color-fill-4: #c9cdd4;
+
+  /* 边框颜色系统 */
   --gl-color-border: #e5e6eb;
-  --gl-color-text-1: #1d2129;
-  --gl-color-fill-2: #f7f8fa;
-  --gl-color-primary-light-1: #e8f3ff;
-  --gl-color-primary-6: #165dff;
+  --gl-color-border-1: #f2f3f5;
+  --gl-color-border-2: #e5e6eb;
+  --gl-color-border-3: #c9cdd4;
+  --gl-color-border-4: #86909c;
+  --gl-border-color: var(--gl-color-border);
 
-  /* 阴影 */
-  --gl-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --gl-box-shadow-light: 0 1px 4px rgba(0, 0, 0, 0.05);
+  /* Z-index 层级系统 - 继承自 z-index.css */
+  /* 所有 z-index 变量已在 z-index.css 中统一定义 */
 
-  /* 圆角 */
-  --gl-border-radius: 6px;
-  --gl-border-radius-small: 3px;
+  /* 字体系统 */
+  --gl-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  
+  /* ===== 基础样式设置 ===== */
+  font-family: var(--gl-font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--gl-color-text-1);
+  background-color: var(--gl-color-bg-1);
+  
+  /* 全局样式重置 */
+  * {
+    box-sizing: border-box;
+  }
+  
+  /* ===== 滚动条样式 ===== */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
 
-  /* 间距 */
-  --gl-spacing-xs: 4px;
-  --gl-spacing-sm: 8px;
-  --gl-spacing-md: 12px;
-  --gl-spacing-lg: 16px;
-  --gl-spacing-xl: 20px;
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-  /* 字体 */
-  --gl-font-size-xs: 11px;
-  --gl-font-size-sm: 12px;
-  --gl-font-size-md: 14px;
-  --gl-font-size-lg: 16px;
-  --gl-font-size-xl: 18px;
+  ::-webkit-scrollbar-thumb {
+    background: var(--gl-border-color);
+    border-radius: 3px;
+  }
 
-  /* 行高 */
-  --gl-line-height-tight: 1.3;
-  --gl-line-height-normal: 1.5;
-  --gl-line-height-loose: 1.7;
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gl-text-color-secondary);
+  }
 
-  /* 过渡 */
-  --gl-transition-fast: 0.15s ease;
-  --gl-transition-normal: 0.3s ease;
-  --gl-transition-slow: 0.5s ease;
+  /* ===== 选中文本样式 ===== */
+  ::selection {
+    background: var(--gl-primary-color-light);
+  }
 }
 
-/* 暗色主题变量 */
-.gl-theme-dark {
-  /* 文本颜色 */
-  --gl-text-color: #ffffff;
-  --gl-text-color-secondary: #cccccc;
-  --gl-text-color-placeholder: #666666;
+/* ===== 暗色主题 - 限制在编辑器范围内 ===== */
+.gl-lite-editor.gl-theme-dark {
+  --gl-color-text-1: #f8f9fa;
+  --gl-color-text-2: #e9ecef;
+  --gl-color-text-3: #adb5bd;
+  --gl-color-text-4: #6c757d;
+  --gl-text-color: #f8f9fa;
+  --gl-text-color-secondary: #adb5bd;
 
-  /* 背景颜色 */
-  --gl-bg-color: #1e1e1e;
-  --gl-editor-bg: #1e1e1e;
-  --gl-editor-readonly-bg: #2d2d2d;
-  --gl-toolbar-bg: #2d2d2d;
-  --gl-word-count-bg: #2d2d2d;
-  --gl-blockquote-bg: #2d2d2d;
-  --gl-code-bg: #404040;
-  --gl-code-block-bg: #2d2d2d;
-  --gl-table-header-bg: #404040;
-  --gl-highlight-bg: #4a4a00;
-  --gl-highlight-color: #ffff99;
+  --gl-color-bg-1: #212529;
+  --gl-color-bg-2: #343a40;
+  --gl-color-bg-3: #495057;
+  --gl-color-bg-4: #6c757d;
+  --gl-color-bg-5: #adb5bd;
+  --gl-color-bg-popup: #343a40;
 
-  /* 边框颜色 */
-  --gl-border-color: #404040;
-  --gl-border-color-light: #333333;
-  --gray-3: #595959;
+  --gl-color-fill-1: #343a40;
+  --gl-color-fill-2: #495057;
+  --gl-color-fill-3: #6c757d;
+  --gl-color-fill-4: #adb5bd;
 
-  /* 交互状态颜色 */
-  --gl-hover-bg: #2a2a2a;
-  --gl-active-bg: #3a3a3a;
-  --gl-selection-bg: #264f78;
-  --gl-hover-color: #404040;
-  --gl-hover-bg-color: #2a2a2a;
+  --gl-color-border: #495057;
+  --gl-color-border-1: #343a40;
+  --gl-color-border-2: #495057;
+  --gl-color-border-3: #6c757d;
+  --gl-color-border-4: #adb5bd;
+  --gl-border-color: var(--gl-color-border);
 
-  /* 主色调变体 */
-  --gl-primary-hover-color: #40a9ff;
-  --gl-primary-active-color: #096dd9;
-  --gl-primary-color-hover: #40a9ff;
+  /* 主题色在暗色模式下的调整 */
+  --gl-primary-color-light: rgba(0, 123, 255, 0.3);
 
-  /* 功能性颜色 */
-  --gl-danger-color: #ff4d4f;
-
-  /* 输入和按钮背景 */
-  --gl-input-bg: #2d2d2d;
-  --gl-button-bg: #2d2d2d;
-  --gl-bg-secondary: #2d2d2d;
-
-  /* Arco Design 兼容变量 */
-  --gl-color-bg-popup: #2d2d2d;
-  --gl-color-border: #404040;
-  --gl-color-text-1: #ffffff;
-  --gl-color-fill-2: #404040;
-  --gl-color-primary-light-1: #1a3a5c;
-  --gl-color-primary-6: #165dff;
-
-  /* 阴影 */
-  --gl-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --gl-box-shadow-light: 0 1px 4px rgba(0, 0, 0, 0.2);
+  color: var(--gl-color-text-1);
+  background-color: var(--gl-color-bg-1);
 }
 
-/* 任务列表样式 */
-.gl-task-list {
+/* ===== ProseMirror 编辑器样式 - 限制在编辑器范围内 ===== */
+.gl-lite-editor .ProseMirror {
+  outline: none;
+  padding: 16px;
+  min-height: 200px;
+  font-family: var(--gl-font-family);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--gl-color-text-1);
+  background-color: transparent;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  -webkit-font-variant-ligatures: none;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0;
+}
+
+/* ===== 段落和标题样式 ===== */
+.gl-lite-editor .ProseMirror p {
+  margin: 0 0 12px 0;
+}
+
+.gl-lite-editor .ProseMirror p:last-child {
+  margin-bottom: 0;
+}
+
+.gl-lite-editor .ProseMirror h1,
+.gl-lite-editor .ProseMirror h2,
+.gl-lite-editor .ProseMirror h3,
+.gl-lite-editor .ProseMirror h4,
+.gl-lite-editor .ProseMirror h5,
+.gl-lite-editor .ProseMirror h6 {
+  margin: 24px 0 12px 0;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--gl-color-text-1);
+}
+
+.gl-lite-editor .ProseMirror h1:first-child,
+.gl-lite-editor .ProseMirror h2:first-child,
+.gl-lite-editor .ProseMirror h3:first-child,
+.gl-lite-editor .ProseMirror h4:first-child,
+.gl-lite-editor .ProseMirror h5:first-child,
+.gl-lite-editor .ProseMirror h6:first-child {
+  margin-top: 0;
+}
+
+.gl-lite-editor .ProseMirror h1 { font-size: 2em; }
+.gl-lite-editor .ProseMirror h2 { font-size: 1.5em; }
+.gl-lite-editor .ProseMirror h3 { font-size: 1.25em; }
+.gl-lite-editor .ProseMirror h4 { font-size: 1.1em; }
+.gl-lite-editor .ProseMirror h5 { font-size: 1em; }
+.gl-lite-editor .ProseMirror h6 { font-size: 0.9em; }
+
+/* 列表样式 */
+.gl-lite-editor .ProseMirror ul,
+.gl-lite-editor .ProseMirror ol {
+  margin: 12px 0;
+  padding-left: 24px;
+}
+
+.gl-lite-editor .ProseMirror li {
+  margin: 4px 0;
+}
+
+.gl-lite-editor .ProseMirror li p {
+  margin: 0;
+}
+
+/* 引用样式 */
+.gl-lite-editor .ProseMirror blockquote {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-left: 4px solid var(--gl-color-primary);
+  background-color: var(--gl-color-fill-1);
+  color: var(--gl-color-text-2);
+  font-style: italic;
+}
+
+.gl-lite-editor .ProseMirror blockquote p {
+  margin: 0;
+}
+
+/* 代码样式 */
+.gl-lite-editor .ProseMirror code {
+  padding: 2px 6px;
+  background-color: var(--gl-color-fill-2);
+  border: 1px solid var(--gl-color-border-2);
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+  color: var(--gl-color-text-1);
+}
+
+.gl-lite-editor .ProseMirror pre {
+  margin: 16px 0;
+  padding: 16px;
+  background-color: var(--gl-color-fill-2);
+  border: 1px solid var(--gl-color-border-2);
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.gl-lite-editor .ProseMirror pre code {
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+/* 表格样式 */
+.gl-lite-editor .ProseMirror table {
+  border-collapse: collapse;
+  margin: 16px 0;
+  overflow: hidden;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.gl-lite-editor .ProseMirror table td,
+.gl-lite-editor .ProseMirror table th {
+  border: 1px solid var(--gl-color-border-2);
+  box-sizing: border-box;
+  min-width: 1em;
+  padding: 8px 12px;
+  position: relative;
+  vertical-align: top;
+}
+
+.gl-lite-editor .ProseMirror table th {
+  background-color: var(--gl-color-fill-1);
+  font-weight: 600;
+  text-align: left;
+}
+
+.gl-lite-editor .ProseMirror table .selectedCell:after {
+  background: rgba(200, 200, 255, 0.4);
+  content: "";
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+}
+
+/* 链接样式 */
+.gl-lite-editor .ProseMirror a {
+  color: var(--gl-color-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.gl-lite-editor .ProseMirror a:hover {
+  color: var(--gl-color-primary-6);
+  text-decoration: underline;
+}
+
+/* 图片样式 */
+.gl-lite-editor .ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 高亮样式 */
+.gl-lite-editor .ProseMirror mark {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+
+/* 选择样式 */
+.gl-lite-editor .gl-text-selection {
+  background-color: rgba(0, 123, 255, 0.2);
+}
+
+.gl-lite-editor .gl-node-selected {
+  background-color: rgba(0, 123, 255, 0.1);
+  outline: 2px solid var(--gl-color-primary-light-2);
+  outline-offset: 1px;
+  border-radius: 4px;
+}
+
+.gl-lite-editor .gl-node-highlighted {
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+/* 拖拽手柄样式 */
+.gl-lite-editor .gl-node-drag-handle {
+  width: 20px;
+  height: 20px;
+  background: var(--gl-color-bg-1);
+  border: 1px solid var(--gl-color-border-2);
+  border-radius: 4px;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gl-color-text-3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.gl-lite-editor .gl-node-drag-handle:hover {
+  background: var(--gl-color-fill-1);
+  border-color: var(--gl-color-primary);
+  color: var(--gl-color-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.gl-lite-editor .gl-node-drag-handle:active {
+  cursor: grabbing;
+  transform: scale(0.95);
+}
+
+.gl-lite-editor .gl-node-drag-handle svg {
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+}
+
+/* 暗色主题下的 ProseMirror 样式 */
+.gl-lite-editor.gl-theme-dark .ProseMirror {
+  color: var(--gl-color-text-1);
+}
+
+.gl-lite-editor.gl-theme-dark .ProseMirror blockquote {
+  border-left-color: var(--gl-color-border-3);
+  color: var(--gl-color-text-3);
+}
+
+.gl-lite-editor.gl-theme-dark .ProseMirror code {
+  background-color: var(--gl-color-fill-2);
+  color: var(--gl-color-text-1);
+}
+
+.gl-lite-editor.gl-theme-dark .ProseMirror pre {
+  background-color: var(--gl-color-fill-2);
+}
+
+.gl-lite-editor.gl-theme-dark .ProseMirror table th {
+  background-color: var(--gl-color-fill-2);
+  color: var(--gl-color-text-1);
+}
+
+.gl-lite-editor.gl-theme-dark .ProseMirror table td,
+.gl-lite-editor.gl-theme-dark .ProseMirror table th {
+  border-color: var(--gl-color-border-2);
+}
+
+.gl-lite-editor.gl-theme-dark .ProseMirror mark {
+  background-color: #856404;
+  color: #fff3cd;
+}
+
+.gl-lite-editor.gl-theme-dark .ProseMirror a {
+  color: var(--gl-color-primary-light-2);
+}
+
+.gl-lite-editor.gl-theme-dark .ProseMirror a:hover {
+  color: var(--gl-color-primary-light-1);
+}
+
+/* 暗色主题选择样式 */
+.gl-lite-editor.gl-theme-dark .gl-text-selection {
+  background-color: rgba(102, 179, 255, 0.3);
+}
+
+.gl-lite-editor.gl-theme-dark .gl-node-selected {
+  background-color: rgba(255, 255, 255, 0.08);
+  outline-color: var(--gl-color-primary-light-2);
+}
+
+.gl-lite-editor.gl-theme-dark .gl-node-highlighted {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.gl-lite-editor.gl-theme-dark .gl-node-drag-handle {
+  background: var(--gl-color-bg-2);
+  border-color: var(--gl-color-border-2);
+  color: var(--gl-color-text-3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.gl-lite-editor.gl-theme-dark .gl-node-drag-handle:hover {
+  background: var(--gl-color-bg-3);
+  border-color: var(--gl-color-primary-light-2);
+  color: var(--gl-color-primary-light-2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* 任务列表样式 - 限制在编辑器范围内 */
+.gl-lite-editor .gl-task-list {
   list-style: none;
   padding: 0;
   margin: 1rem 0;
 }
 
-.gl-task-item {
+.gl-lite-editor .gl-task-item {
   display: flex;
-  align-items: flex-start;
+  align-items: start;
   margin: 0.5rem 0;
   padding: 0;
 }
 
-.gl-task-item input[type="checkbox"] {
+.gl-lite-editor .gl-task-item input[type="checkbox"] {
   margin-right: 0.5rem;
-  margin-top: 0.25rem;
+  margin-top: -0.1rem;
   cursor: pointer;
   flex-shrink: 0;
 }
 
-.gl-task-item p {
-  margin: 0;
+.gl-lite-editor .gl-task-item p {
+  margin: 0.25rem 0 0 0 !important;
   flex: 1;
 }
 
-.gl-task-item[data-checked="true"] p {
+.gl-lite-editor .gl-task-item[data-checked="true"] p {
   text-decoration: line-through;
   opacity: 0.6;
 }
 
 /* 嵌套任务列表 */
-.gl-task-item .gl-task-list {
+.gl-lite-editor .gl-task-item .gl-task-list {
   margin-left: 1.5rem;
   margin-top: 0.5rem;
 }
 
-/* 编辑器内容区域 */
-.ProseMirror {
-  outline: none;
-  padding: 1rem;
-  min-height: 200px;
-}
-
-.ProseMirror p.is-editor-empty:first-child::before {
+/* 占位符样式 */
+.gl-lite-editor .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
-  color: #adb5bd;
+  color: var(--gl-color-text-3);
   pointer-events: none;
   height: 0;
 }
 
 /* 文本对齐样式 */
-.ProseMirror [data-text-align="left"] {
+.gl-lite-editor .ProseMirror [data-text-align="left"] {
   text-align: left;
 }
 
-.ProseMirror [data-text-align="center"] {
+.gl-lite-editor .ProseMirror [data-text-align="center"] {
   text-align: center;
 }
 
-.ProseMirror [data-text-align="right"] {
+.gl-lite-editor .ProseMirror [data-text-align="right"] {
   text-align: right;
 }
 
-.ProseMirror [data-text-align="justify"] {
+.gl-lite-editor .ProseMirror [data-text-align="justify"] {
   text-align: justify;
 }
 
-/* 列表样式 */
-.ProseMirror ul, .ProseMirror ol {
-  padding-left: 1.5rem;
-}
-
-.ProseMirror li {
-  margin: 0.25rem 0;
-}
-
-/* 引用块样式 */
-.ProseMirror blockquote {
-  border-left: 4px solid #e9ecef;
-  margin: 1rem 0;
-  padding-left: 1rem;
-  font-style: italic;
-  color: #6c757d;
-}
-
-/* 代码样式 */
-.ProseMirror code {
-  background-color: #f8f9fa;
-  padding: 0.125rem 0.25rem;
-  border-radius: 0.25rem;
-  font-family: 'Courier New', monospace;
-}
-
-.ProseMirror pre {
-  background-color: #f8f9fa;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  overflow-x: auto;
-}
-
-.ProseMirror pre code {
-  background: none;
-  padding: 0;
-}
-
-/* 表格样式 */
-.ProseMirror table {
-  border-collapse: collapse;
-  table-layout: fixed;
-  width: 100%;
-  margin: 1rem 0;
-  overflow: hidden;
-}
-
-.ProseMirror table td,
-.ProseMirror table th {
-  min-width: 1em;
-  border: 2px solid #ced4da;
-  padding: 3px 5px;
-  vertical-align: top;
-  box-sizing: border-box;
-  position: relative;
-  height: auto; /* 确保单元格高度自适应内容 */
-}
-
-.ProseMirror table th {
-  font-weight: bold;
-  text-align: left;
-  background-color: #f8f9fa;
-}
-
 /* 表格列调整大小样式 */
-.ProseMirror .tableWrapper {
+.gl-lite-editor .ProseMirror .tableWrapper {
   overflow-x: auto;
-  margin: 1rem 0;
+  margin: 0;
 }
 
-.ProseMirror .resize-cursor {
+.gl-lite-editor .ProseMirror .resize-cursor {
   cursor: col-resize;
 }
 
 /* 表格列分隔线样式 */
-.ProseMirror .column-resize-handle {
+.gl-lite-editor .ProseMirror .column-resize-handle {
   position: absolute;
   right: -2px;
   top: 0;
   bottom: 0;
   width: 4px;
+  background-color: var(--gl-color-primary);
+  pointer-events: none;
   z-index: 20;
   background-color: transparent;
   cursor: col-resize;
@@ -309,37 +557,37 @@
   display: block !important;
 }
 
-.ProseMirror .column-resize-handle:hover {
+.gl-lite-editor .ProseMirror .column-resize-handle:hover {
   background-color: #4a90e2;
   opacity: 0.8;
 }
 
 /* 表格列调整时的高亮效果 */
-.ProseMirror .selectedCell {
+.gl-lite-editor .ProseMirror .selectedCell {
   background-color: rgba(74, 144, 226, 0.1);
 }
 
 /* 表格列调整时的鼠标样式 */
-.ProseMirror.resize-cursor {
+.gl-lite-editor .ProseMirror.resize-cursor {
   cursor: col-resize !important;
 }
 
-.ProseMirror.resize-cursor * {
+.gl-lite-editor .ProseMirror.resize-cursor * {
   cursor: col-resize !important;
 }
  
 /* 链接样式 */
-.ProseMirror a {
+.gl-lite-editor .ProseMirror a {
   color: #007bff;
   text-decoration: underline;
 }
 
-.ProseMirror a:hover {
+.gl-lite-editor .ProseMirror a:hover {
   color: #0056b3;
 }
 
 /* 图片容器样式 */
-.gl-image-wrapper {
+.gl-lite-editor .gl-image-wrapper {
   display: inline-block;
   position: relative;
   margin: 8px 0;
@@ -347,13 +595,13 @@
 }
 
 /* es-drager 容器样式 */
-.gl-image-drager {
+.gl-lite-editor .gl-image-drager {
   display: inline-block;
   position: relative;
 }
 
 /* 图片基础样式 */
-.ProseMirror .gl-image {
+.gl-lite-editor .ProseMirror .gl-image {
   height: auto;
   border-radius: 4px;
   display: block;
@@ -362,22 +610,22 @@
 }
 
 /* 图片悬停效果 - 只有在选中状态下才显示 */
-.ProseMirror .gl-image-wrapper--selected .gl-image:hover {
+.gl-lite-editor .ProseMirror .gl-image-wrapper--selected .gl-image:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 /* 只读模式图片样式 */
-.ProseMirror .gl-image--readonly {
+.gl-lite-editor .ProseMirror .gl-image--readonly {
   cursor: default;
 }
 
 /* 图片选中状态 */
-.ProseMirror .ProseMirror-selectednode .gl-image {
+.gl-lite-editor .ProseMirror .ProseMirror-selectednode .gl-image {
   box-shadow: 0 0 0 2px #3a7afe, 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 /* es-drager 控制点样式优化 */
-.gl-image-wrapper .es-drager-handle {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle {
   background: #3a7afe;
   border: 2px solid #ffffff;
   border-radius: 50%;
@@ -389,51 +637,51 @@
 }
 
 /* 修复把柄位置对齐 */
-.gl-image-wrapper .es-drager-handle.es-drager-handle-tl {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-tl {
   top: 0;
   left: 0;
 }
 
-.gl-image-wrapper .es-drager-handle.es-drager-handle-tm {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-tm {
   top: 0;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-.gl-image-wrapper .es-drager-handle.es-drager-handle-tr {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-tr {
   top: 0;
   right: 0;
   left: auto;
   transform: translate(50%, -50%);
 }
 
-.gl-image-wrapper .es-drager-handle.es-drager-handle-ml {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-ml {
   top: 50%;
   left: 0;
 }
 
-.gl-image-wrapper .es-drager-handle.es-drager-handle-mr {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-mr {
   top: 50%;
   right: 0;
   left: auto;
   transform: translate(50%, -50%);
 }
 
-.gl-image-wrapper .es-drager-handle.es-drager-handle-bl {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-bl {
   bottom: 0;
   left: 0;
   top: auto;
   transform: translate(-50%, 50%);
 }
 
-.gl-image-wrapper .es-drager-handle.es-drager-handle-bm {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-bm {
   bottom: 0;
   left: 50%;
   top: auto;
   transform: translate(-50%, 50%);
 }
 
-.gl-image-wrapper .es-drager-handle.es-drager-handle-br {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-br {
   bottom: 0;
   right: 0;
   left: auto;
@@ -441,45 +689,45 @@
   transform: translate(50%, 50%);
 }
 
-.gl-image-wrapper .es-drager-handle:hover {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle:hover {
   background: #2563eb;
 }
 
-.gl-image-wrapper .es-drager-handle.es-drager-handle-tl:hover,
-.gl-image-wrapper .es-drager-handle.es-drager-handle-tm:hover,
-.gl-image-wrapper .es-drager-handle.es-drager-handle-ml:hover {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-tl:hover,
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-tm:hover,
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-ml:hover {
   transform: translate(-50%, -50%) scale(1.2);
 }
 
-.gl-image-wrapper .es-drager-handle.es-drager-handle-tr:hover,
-.gl-image-wrapper .es-drager-handle.es-drager-handle-mr:hover {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-tr:hover,
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-mr:hover {
   transform: translate(50%, -50%) scale(1.2);
 }
 
-.gl-image-wrapper .es-drager-handle.es-drager-handle-bl:hover,
-.gl-image-wrapper .es-drager-handle.es-drager-handle-bm:hover {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-bl:hover,
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-bm:hover {
   transform: translate(-50%, 50%) scale(1.2);
 }
 
-.gl-image-wrapper .es-drager-handle.es-drager-handle-br:hover {
+.gl-lite-editor .gl-image-wrapper .es-drager-handle.es-drager-handle-br:hover {
   transform: translate(50%, 50%) scale(1.2);
 }
 
 /* 旋转控制点样式 */
-.gl-image-wrapper .es-drager-rotate {
+.gl-lite-editor .gl-image-wrapper .es-drager-rotate {
   background: #10b981;
   border: 2px solid #ffffff;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.gl-image-wrapper .es-drager-rotate:hover {
+.gl-lite-editor .gl-image-wrapper .es-drager-rotate:hover {
   background: #059669;
   transform: scale(1.2);
 }
 
 /* 拖拽边框样式 */
-.gl-image-wrapper .es-drager-border {
+.gl-lite-editor .gl-image-wrapper .es-drager-border {
   border: 1px dashed #3a7afe;
   background: rgba(58, 122, 254, 0.05);
   /* 确保边框完全覆盖图片 */
@@ -493,43 +741,43 @@
 }
 
 /* 修复拖拽容器稳定性 */
-.gl-image-wrapper .gl-image-drager {
+.gl-lite-editor .gl-image-wrapper .gl-image-drager {
   position: relative;
   display: inline-block;
   z-index: 1;
 }
 
 /* 确保图片在拖拽容器内正确定位 */
-.gl-image-wrapper .gl-image-drager .gl-image {
+.gl-lite-editor .gl-image-wrapper .gl-image-drager .gl-image {
   position: relative;
   z-index: 2;
 }
 
 /* 图片对齐样式 */
-.gl-image-wrapper {
+.gl-lite-editor .gl-image-wrapper {
   display: block;
   margin: 8px 0;
 }
 
-.gl-image-wrapper--align-left {
+.gl-lite-editor .gl-image-wrapper--align-left {
   text-align: left;
 }
 
-.gl-image-wrapper--align-center {
+.gl-lite-editor .gl-image-wrapper--align-center {
   text-align: center;
 }
 
-.gl-image-wrapper--align-right {
+.gl-lite-editor .gl-image-wrapper--align-right {
   text-align: right;
 }
 
 /* 选中状态样式 */
-.gl-image-wrapper--selected {
+.gl-lite-editor .gl-image-wrapper--selected {
   position: relative;
 }
 
 /* BubbleMenu定位 */
-.image-bubble-menu-wrapper {
+.gl-lite-editor .image-bubble-menu-wrapper {
   position: absolute;
   top: -50px;
   left: 50%;
@@ -538,36 +786,40 @@
 }
 
 /* 拖拽时的样式 */
-.gl-image-wrapper .es-drager.es-drager-dragging {
+.gl-lite-editor .gl-image-wrapper .es-drager.es-drager-dragging {
   z-index: var(--gl-z-index-floating-panel, 1080);
 }
 
 /* 调整时的样式 */
-.gl-image-wrapper .es-drager.es-drager-resizing {
+.gl-lite-editor .gl-image-wrapper .es-drager.es-drager-resizing {
   z-index: var(--gl-z-index-floating-panel, 1080);
 }
 
 /* 响应式图片处理 */
 @media (max-width: 768px) {
-  .gl-image-wrapper {
+  .gl-lite-editor .gl-image-wrapper {
     max-width: 100%;
   }
   
-  .ProseMirror .gl-image {
+  .gl-lite-editor .ProseMirror .gl-image {
     height: auto;
   }
 }
 
+/* ========================================
+   编辑器交互样式
+   ======================================== */
+
 /* 高亮样式 */
-.ProseMirror mark {
-  background-color: #fff3cd;
+.gl-lite-editor .ProseMirror mark {
+  background-color: var(--gl-color-warning-light, #fff3cd);
   padding: 0.125rem 0.25rem;
   border-radius: 0.125rem;
 }
 
-/* 选中状态 */
-.ProseMirror .selectedCell:after {
-  z-index: 2;
+/* 表格选中状态 */
+.gl-lite-editor .ProseMirror .selectedCell:after {
+  z-index: var(--gl-z-index-overlay, 2);
   position: absolute;
   content: "";
   left: 0; right: 0; top: 0; bottom: 0;
@@ -576,128 +828,132 @@
 }
 
 /* 文本选择样式 */
-.gl-text-selection {
-  background-color: rgba(24, 144, 255, 0.2);
+.gl-lite-editor .gl-text-selection {
+  background-color: var(--gl-color-primary-light, rgba(24, 144, 255, 0.2));
   border-radius: 2px;
 }
 
 /* 节点选中样式 */
-.gl-node-selected {
-  background-color: rgba(0, 0, 0, 0.05);
+.gl-lite-editor .gl-node-selected {
+  background-color: var(--gl-color-bg-selected, rgba(0, 0, 0, 0.05));
   border-radius: 4px;
-  outline: 2px solid #007bff;
+  outline: 2px solid var(--gl-color-primary, #007bff);
   outline-offset: 2px;
 }
 
 /* 节点高亮样式 */
-.gl-node-highlighted {
-  background-color: rgba(0, 0, 0, 0.05);
+.gl-lite-editor .gl-node-highlighted {
+  background-color: var(--gl-color-bg-hover, rgba(0, 0, 0, 0.05));
   border-radius: 4px;
   transition: background-color 0.2s ease;
   position: relative;
 }
 
 /* 拖拽手柄样式 */
-.gl-node-drag-handle {
+.gl-lite-editor .gl-node-drag-handle {
   width: 20px;
   height: 20px;
-  background: #ffffff;
-  border: 1px solid #d9d9d9;
+  background: var(--gl-color-bg-container, #ffffff);
+  border: 1px solid var(--gl-color-border, #d9d9d9);
   border-radius: 4px;
   cursor: grab;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #666666;
+  color: var(--gl-color-text-secondary, #666666);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
   user-select: none;
 }
 
-.gl-node-drag-handle:hover {
-  background: #f5f5f5;
-  border-color: #007bff;
-  color: #007bff;
+.gl-lite-editor .gl-node-drag-handle:hover {
+  background: var(--gl-color-bg-hover, #f5f5f5);
+  border-color: var(--gl-color-primary, #007bff);
+  color: var(--gl-color-primary, #007bff);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.gl-node-drag-handle:active {
+.gl-lite-editor .gl-node-drag-handle:active {
   cursor: grabbing;
   transform: scale(0.95);
 }
 
-.gl-node-drag-handle svg {
+.gl-lite-editor .gl-node-drag-handle svg {
   width: 12px;
   height: 12px;
   pointer-events: none;
 }
 
-/* 暗色主题适配 */
-.dark .ProseMirror {
-  color: #f8f9fa;
+/* ========================================
+   暗色主题适配
+   ======================================== */
+
+/* 暗色主题基础样式 */
+.gl-lite-editor.gl-theme-dark .ProseMirror {
+  color: var(--gl-color-text-primary, #f8f9fa);
 }
 
-.dark .ProseMirror blockquote {
-  border-left-color: #495057;
-  color: #adb5bd;
+.gl-lite-editor.gl-theme-dark .ProseMirror blockquote {
+  border-left-color: var(--gl-color-border-secondary, #495057);
+  color: var(--gl-color-text-secondary, #adb5bd);
 }
 
-.dark .ProseMirror code {
-  background-color: #343a40;
-  color: #f8f9fa;
+.gl-lite-editor.gl-theme-dark .ProseMirror code {
+  background-color: var(--gl-color-bg-elevated, #343a40);
+  color: var(--gl-color-text-primary, #f8f9fa);
 }
 
-.dark .ProseMirror pre {
-  background-color: #343a40;
+.gl-lite-editor.gl-theme-dark .ProseMirror pre {
+  background-color: var(--gl-color-bg-elevated, #343a40);
 }
 
-.dark .ProseMirror table th {
-  background-color: #495057;
-  color: #f8f9fa;
+.gl-lite-editor.gl-theme-dark .ProseMirror table th {
+  background-color: var(--gl-color-bg-elevated, #495057);
+  color: var(--gl-color-text-primary, #f8f9fa);
 }
 
-.dark .ProseMirror table td,
-.dark .ProseMirror table th {
-  border-color: #495057;
+.gl-lite-editor.gl-theme-dark .ProseMirror table td,
+.gl-lite-editor.gl-theme-dark .ProseMirror table th {
+  border-color: var(--gl-color-border-secondary, #495057);
 }
 
-.dark .ProseMirror mark {
-  background-color: #856404;
-  color: #fff3cd;
+.gl-lite-editor.gl-theme-dark .ProseMirror mark {
+  background-color: var(--gl-color-warning-dark, #856404);
+  color: var(--gl-color-warning-light, #fff3cd);
 }
 
-.dark .ProseMirror a {
-  color: #66b3ff;
+.gl-lite-editor.gl-theme-dark .ProseMirror a {
+  color: var(--gl-color-primary-light, #66b3ff);
 }
 
-.dark .ProseMirror a:hover {
-  color: #4da6ff;
+.gl-lite-editor.gl-theme-dark .ProseMirror a:hover {
+  color: var(--gl-color-primary-lighter, #4da6ff);
 }
 
-/* 暗色主题选择样式 */
-.dark .gl-text-selection {
-  background-color: rgba(66, 179, 255, 0.3);
+/* 暗色主题交互样式 */
+.gl-lite-editor.gl-theme-dark .gl-text-selection {
+  background-color: var(--gl-color-primary-light-alpha, rgba(66, 179, 255, 0.3));
 }
 
-.dark .gl-node-selected {
-  background-color: rgba(255, 255, 255, 0.08);
-  outline-color: #66b3ff;
+.gl-lite-editor.gl-theme-dark .gl-node-selected {
+  background-color: var(--gl-color-bg-selected-dark, rgba(255, 255, 255, 0.08));
+  outline-color: var(--gl-color-primary-light, #66b3ff);
 }
 
-.dark .gl-node-highlighted {
-  background-color: rgba(255, 255, 255, 0.08);
+.gl-lite-editor.gl-theme-dark .gl-node-highlighted {
+  background-color: var(--gl-color-bg-hover-dark, rgba(255, 255, 255, 0.08));
 }
 
-.dark .gl-node-drag-handle {
-  background: #2d2d2d;
-  border-color: #404040;
-  color: #cccccc;
+.gl-lite-editor.gl-theme-dark .gl-node-drag-handle {
+  background: var(--gl-color-bg-container-dark, #2d2d2d);
+  border-color: var(--gl-color-border-dark, #404040);
+  color: var(--gl-color-text-secondary-dark, #cccccc);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.dark .gl-node-drag-handle:hover {
-  background: #3a3a3a;
-  border-color: #66b3ff;
-  color: #66b3ff;
+.gl-lite-editor.gl-theme-dark .gl-node-drag-handle:hover {
+  background: var(--gl-color-bg-hover-dark, #3a3a3a);
+  border-color: var(--gl-color-primary-light, #66b3ff);
+  color: var(--gl-color-primary-light, #66b3ff);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }

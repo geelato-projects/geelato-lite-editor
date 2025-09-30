@@ -1,14 +1,14 @@
 <template>
   <div ref="editorContainer" :class="editorClass" :style="themeColorVars">
-    <!-- 工具栏 -->
-    <EditorToolbar v-if="computedToolbarConfig !== 'none' && editor" :editor="editor"
-      :config="computedToolbarConfig" :size="size" :show-separator="showToolbarSeparator" :class="toolbarClass" />
+    <div class="editor-container">
+      <EditorToolbar v-if="computedToolbarConfig !== 'none' && editor" :editor="editor"
+        :config="computedToolbarConfig" :size="size" :show-separator="showToolbarSeparator" :class="toolbarClass" />
 
-    <!-- 编辑器内容 -->
-    <EditorContent v-if="editor" :editor="editor" :size="size" :showStatusBar="_showStatusBar"
-      :placeholder="placeholder" :min-height="minHeight" :max-height="maxHeight" :content-stats="contentStats"
-      :readonly="!editable"
-      :class="contentClass + (computedToolbarConfig === 'none' ? ' gl-editor-content--no-toolbar' : '')" />
+      <EditorContent v-if="editor" :editor="editor" :size="size" :showStatusBar="_showStatusBar"
+        :placeholder="placeholder" :min-height="minHeight" :max-height="maxHeight" :content-stats="contentStats"
+        :readonly="!editable"
+        :class="contentClass + (computedToolbarConfig === 'none' ? ' gl-editor-content--no-toolbar' : '')" />
+    </div>
   </div>
 </template>
 
@@ -316,9 +316,6 @@ onBeforeUnmount(() => {
   flex-direction: column;
   border-radius: 0;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
 
   // 尺寸变体
   &--small {
@@ -333,15 +330,6 @@ onBeforeUnmount(() => {
     font-size: 15px;
   }
 
-  // 模式变体
-  &--wysiwyg {
-    // 所见即所得模式的特殊样式
-  }
-
-  &--markdown {
-    // Markdown 模式的特殊样式（如果支持）
-  }
-
   // 状态变体
   &--readonly {
     .gl-editor-toolbar {
@@ -351,11 +339,7 @@ onBeforeUnmount(() => {
   }
 
   &--focused {
-    .gl-editor-content {
-      // 移除聚焦时的蓝色边框和阴影
-      // border-color: var(--gl-primary-color, #1890ff);
-      // box-shadow: 0 0 0 2px var(--gl-primary-color-light, rgba(24, 144, 255, 0.2));
-    }
+    // 聚焦状态样式由 editor.css 统一管理
   }
 
   &--empty {
@@ -377,162 +361,9 @@ onBeforeUnmount(() => {
   }
 }
 
-/* 编辑器容器样式 */
-.geelato-lite-editor {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--gl-text-color, #333);
-  background: var(--gl-bg-color, #fff);
-  border-radius: var(--gl-border-radius, 6px);
-  overflow: hidden;
-}
-
-/* 编辑器聚焦状态 */
-.geelato-lite-editor:focus-within {
-  // border-color: var(--gl-primary-color, #1890ff);
-  // box-shadow: 0 0 0 2px var(--gl-primary-color-light, rgba(24, 144, 255, 0.2));
-}
-
-/* 编辑器禁用状态 */
-.geelato-lite-editor.disabled {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-/* 编辑器只读状态 */
-.geelato-lite-editor.readonly {
-  background: var(--gl-editor-readonly-bg, #f8f9fa);
-}
-
-/* 编辑器内容区域 */
-.geelato-lite-editor__content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-/* 编辑器工具栏 */
-.geelato-lite-editor__toolbar {
-  flex-shrink: 0;
-}
-
-/* 编辑器主体 */
-.geelato-lite-editor__editor {
-  flex: 1;
-  min-height: 0;
-}
-
-/* 编辑器底部 */
-.geelato-lite-editor__footer {
-  flex-shrink: 0;
-}
-
-/* 编辑器加载状态 */
-.geelato-lite-editor__loading {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.8);
-  z-index: 1000;
-}
-
-/* 编辑器错误状态 */
-.geelato-lite-editor__error {
-  padding: 16px;
-  color: #ff4d4f;
-  background: #fff2f0;
-  border: 1px solid #ffccc7;
-  border-radius: 6px;
-  margin: 8px;
-}
-
-/* 编辑器占位符 */
-.geelato-lite-editor__placeholder {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--gl-text-color-placeholder, #999);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* 编辑器分割线 */
-.geelato-lite-editor__divider {
-  height: 1px;
-  background: var(--gl-border-color, #e0e0e0);
-  margin: 0;
-}
-
-/* 编辑器按钮 */
-.geelato-lite-editor__button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--gl-text-color-secondary, #666666);
-  cursor: pointer;
-  transition: all 0.2s;
-  user-select: none;
-}
-
-.geelato-lite-editor__button:hover {
-  background: var(--gl-primary-color-light, rgba(24, 144, 255, 0.2));
-}
-
-/* 全局样式重置 */
-.gl-lite-editor * {
-  box-sizing: border-box;
-}
-
-/* 滚动条样式 */
-.gl-lite-editor ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.gl-lite-editor ::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.gl-lite-editor ::-webkit-scrollbar-thumb {
-  background: var(--gl-border-color, #e0e0e0);
-  border-radius: 3px;
-
-  &:hover {
-    background: var(--gl-text-color-secondary, #666666);
-  }
-}
-
-/* 选中文本样式 */
-.gl-lite-editor ::selection {
-  background: var(--gl-primary-color-light, rgba(24, 144, 255, 0.2));
-}
-
-/* 响应式设计 */
+/* 组件级别的响应式调整 */
 @media (max-width: 768px) {
   .gl-lite-editor {
-    font-size: 14px;
-
     &--small {
       font-size: 13px;
     }
@@ -549,7 +380,6 @@ onBeforeUnmount(() => {
 
 @media (max-width: 480px) {
   .gl-lite-editor {
-    font-size: 14px;
     border-radius: 4px;
 
     &--small {
@@ -562,22 +392,6 @@ onBeforeUnmount(() => {
 
     &--large {
       font-size: 14px;
-    }
-  }
-}
-
-/* 打印样式 */
-@media print {
-  .gl-lite-editor {
-
-    .gl-editor-toolbar,
-    .gl-word-count {
-      display: none;
-    }
-
-    .gl-editor-content {
-      border: none;
-      box-shadow: none;
     }
   }
 }

@@ -8,6 +8,7 @@
   --gl-z-index-base: 1;
   --gl-z-index-affix: 10;
   --gl-z-index-back-top: 15;
+  --gl-z-index-overlay: 2;
   
   /* 导航层级 */
   --gl-z-index-sticky: 100;
@@ -38,6 +39,7 @@
  * 2000+: 全局消息和加载层
  * 
  * 具体分配：
+ * - overlay: 2 (覆盖层，如表格选中状态)
  * - dropdown: 1050 (下拉菜单)
  * - tooltip: 1060 (工具提示)
  * - popover: 1070 (气泡卡片)

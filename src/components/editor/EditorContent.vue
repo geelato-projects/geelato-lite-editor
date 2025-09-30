@@ -236,7 +236,7 @@ onUnmounted(() => {
     // 基础文本样式
     p {
       margin: 0;
-      line-height: 1;
+      line-height: 1.5;
       
       &:not(:last-child) {
         margin-bottom: 12px;
@@ -446,7 +446,7 @@ onUnmounted(() => {
 
     .tableWrapper {
       overflow-x: auto;
-      margin: 1.5rem 0;
+      margin: 0;
     }
 
     // 表格拖拽样式
