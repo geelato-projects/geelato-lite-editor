@@ -174,7 +174,7 @@ onUnmounted(() => {
 <style lang="less">
 .gl-editor-content {
   position: relative;
-  background: var(--gl-editor-bg, #ffffff);
+  background: var(--gl-color-bg-1, #ffffff);
   border: 1px solid var(--gl-border-color, #e0e0e0);
   border-top: none;
   overflow-y: auto;
@@ -204,7 +204,7 @@ onUnmounted(() => {
   }
   
   &--readonly {
-    background: var(--gl-editor-bg, #ffffff);
+    background: var(--gl-color-bg-2, #f7f8fa);
     
     .gl-editor-content__editor {
       cursor: default;
@@ -261,28 +261,18 @@ onUnmounted(() => {
       }
     }
     
-    // 标题样式
+    // 标题样式 - 组件特定的margin设置
     h1, h2, h3, h4, h5, h6 {
       margin: 20px 0 12px 0;
-      font-weight: 600;
-      line-height: 1.3;
       
       &:first-child {
         margin-top: 0;
       }
     }
     
-    h1 { font-size: 2em; }
-    h2 { font-size: 1.5em; }
-    h3 { font-size: 1.25em; }
-    h4 { font-size: 1.1em; }
-    h5 { font-size: 1em; }
-    h6 { font-size: 0.9em; }
-    
-    // 列表样式
+    // 列表样式 - 组件特定的margin设置
     ul, ol {
       margin: 12px 0;
-      padding-left: 24px;
       
       li {
         margin: 4px 0;
@@ -293,80 +283,89 @@ onUnmounted(() => {
       }
     }
     
-    // 引用块样式
+    // 引用块样式 - 组件特定的margin和padding设置
     blockquote {
-      border-left: 3px solid #4a4a4a;
       margin: 1.5rem 0;
       padding: 1rem;
       background: var(--gl-blockquote-bg, #f8f9fa);
+      border-left: 4px solid var(--gl-color-primary, #007bff);
       color: var(--gl-text-color-secondary, #666666);
+      font-style: italic;
       
       p {
         margin: 0;
       }
     }
     
-    // 代码样式
+    // 代码样式 - 组件特定的padding和font-size设置
     code {
       padding: 2px 6px;
       background: var(--gl-code-bg, #f1f3f4);
+      border: 1px solid var(--gl-color-border-2, #e0e0e0);
       border-radius: 3px;
       font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
       font-size: 0.9em;
+      color: var(--gl-color-text-1, #333333);
     }
     
-    // 代码块样式
+    // 代码块样式 - 组件特定的margin和padding设置
     pre {
       margin: 16px 0;
       padding: 16px;
       background: var(--gl-code-block-bg, #f8f9fa);
+      border: 1px solid var(--gl-color-border-2, #e0e0e0);
       border-radius: 6px;
       overflow-x: auto;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
       
       code {
         padding: 0;
         background: none;
+        border: none;
         font-size: 13px;
         line-height: 1.4;
       }
     }
     
-    // 链接样式
+    // 链接样式 - 组件特定的颜色和交互设置
     a {
-      color: var(--gl-primary-color, #1890ff);
+      color: var(--gl-color-primary, #007bff);
       text-decoration: none;
       
       &:hover {
         text-decoration: underline;
+        color: var(--gl-color-primary-6, #0056b3);
       }
     }
     
-    // 高亮样式
+    // 高亮样式 - 组件特定的样式
     mark,
     .gl-highlight {
-      background: var(--gl-highlight-bg, #fff3cd);
-      color: var(--gl-highlight-color, #856404);
-      padding: 1px 2px;
+      background: var(--gl-color-warning-light, #fff3cd);
+      color: var(--gl-color-warning-dark, #856404);
+      padding: 2px 4px;
       border-radius: 2px;
     }
     
-    // 图片样式
+    // 图片样式 - 组件特定的样式
     img {
+      max-width: 100%;
       height: auto;
-      border-radius: 0;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
     
     table {
       width: 100%;
       border-collapse: collapse;
-      border: 1px solid #ccc;
+      border: none;
       table-layout: fixed;
       overflow: hidden;
       margin: 0;
 
       th,
       td {
-        border: 1px solid #ccc;
+        border: none;
         padding: 6px 8px;
         text-align: left;
         height: auto;
@@ -467,34 +466,16 @@ onUnmounted(() => {
       cursor: col-resize;
     }
     
-    // 水平分割线
+    // 水平分割线 - 组件特定的margin设置
     hr {
       margin: 24px 0;
-      border: none;
-      border-top: 1px solid var(--gl-border-color, #e0e0e0);
-    }
-    
-    // 文本样式
-    strong {
-      font-weight: 600;
-    }
-    
-    em {
-      font-style: italic;
-    }
-    
-    u {
-      text-decoration: underline;
-    }
-    
-    s {
-      text-decoration: line-through;
+      // 基础样式由全局样式控制
     }
     
     // 高亮样式
     mark {
-      background: var(--gl-highlight-bg, #fff3cd);
-      padding: 1px 2px;
+      background: var(--gl-color-warning-light, #fff3cd);
+      padding: 2px 4px;
       border-radius: 2px;
     }
   }
@@ -547,46 +528,49 @@ onUnmounted(() => {
 // 暗色主题
 .gl-theme-dark {
   .gl-editor-content {
-    background: var(--gl-editor-bg, #1e1e1e);
-    border-color: var(--gl-border-color, #404040);
+    background: var(--gl-color-bg-1, #212529);
+    border-color: var(--gl-color-border, #495057);
     
     &--readonly {
-      background: var(--gl-editor-readonly-bg, #2d2d2d);
+      background: var(--gl-color-bg-2, #343a40);
     }
   }
   
   .gl-editor-content__editor .ProseMirror {
-    color: var(--gl-text-color, #ffffff);
+    color: var(--gl-color-text-1);
     
     blockquote {
       background: var(--gl-blockquote-bg, #2d2d2d);
+      border-left-color: var(--gl-color-border-3, #666666);
       color: var(--gl-text-color-secondary, #cccccc);
     }
     
     code {
       background: var(--gl-code-bg, #404040);
+      border-color: var(--gl-color-border-2, #666666);
       color: var(--gl-text-color, #ffffff);
     }
     
     pre {
       background: var(--gl-code-block-bg, #2d2d2d);
+      border-color: var(--gl-color-border-2, #666666);
     }
     
-    table {
-      border-color: var(--gl-border-color, #404040);
+    a {
+      color: var(--gl-color-primary-light-2, #66b3ff);
       
-      th, td {
-        border-color: var(--gl-border-color, #404040);
-      }
-      
-      th {
-        background: var(--gl-table-header-bg, #404040);
+      &:hover {
+        color: var(--gl-color-primary-light-1, #339aff);
       }
     }
     
     mark {
-      background: var(--gl-highlight-bg, #4a4a00);
-      color: var(--gl-text-color, #ffffff);
+      background: var(--gl-color-warning-dark, #856404);
+      color: var(--gl-color-warning-light, #fff3cd);
+    }
+    
+    img {
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
     }
   }
   

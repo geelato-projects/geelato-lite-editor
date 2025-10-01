@@ -465,21 +465,37 @@ watch(() => props.editor?.state.selection, () => {
   color: var(--gl-text-color-secondary, #666666);
 }
 
-/* 暗色主题支持 */
-@media (prefers-color-scheme: dark) {
-  .table-border-panel {
-    background: var(--gl-bg-color, #2d2d2d);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-  
-  .border-style-item,
-  .border-width-item {
-    border-color: var(--gl-border-color, #404040);
-    background: var(--gl-bg-color, #2d2d2d);
-  }
-  
-  .color-preset {
-    border-color: var(--gl-border-color, #404040);
-  }
+.gl-lite-editor.gl-theme-dark .table-border-panel {
+  background: var(--gl-color-bg-popup, #343a40);
+  border-color: var(--gl-color-border, #495057);
+}
+
+.gl-lite-editor.gl-theme-dark .border-section h4 {
+  color: var(--gl-color-text-1, #f8f9fa);
+}
+
+.gl-lite-editor.gl-theme-dark .border-style-item,
+.gl-lite-editor.gl-theme-dark .border-width-item,
+.gl-lite-editor.gl-theme-dark .border-position-item {
+  background: var(--gl-color-bg-popup, #343a40);
+  border-color: var(--gl-color-border, #495057);
+  color: var(--gl-color-text-1, #f8f9fa);
+}
+
+.gl-lite-editor.gl-theme-dark .border-style-item:hover,
+.gl-lite-editor.gl-theme-dark .border-width-item:hover,
+.gl-lite-editor.gl-theme-dark .border-position-item:hover {
+  background: var(--gl-color-fill-2, #495057);
+}
+
+.gl-lite-editor.gl-theme-dark .border-style-item.active,
+.gl-lite-editor.gl-theme-dark .border-width-item.active,
+.gl-lite-editor.gl-theme-dark .border-position-item.active {
+  background: var(--gl-color-fill-3, #6c757d);
+  border-color: var(--gl-color-border, #495057);
+}
+
+.gl-lite-editor.gl-theme-dark .color-preset {
+  border-color: var(--gl-color-border, #495057);
 }
 </style>

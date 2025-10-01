@@ -114,7 +114,7 @@ const {
 })
 
 // 使用主题组合式函数
-const { currentTheme, setTheme, applyThemeVariables } = useTheme()
+const { currentTheme, actualTheme, setTheme, applyThemeVariables } = useTheme()
 
 // 计算主题色CSS变量
 const themeColorVars = computed(() => {
@@ -210,7 +210,7 @@ const editorClass = computed(() => {
   const classes = [
     'gl-lite-editor',
     `gl-lite-editor--${props.size}`,
-    `gl-theme-${currentTheme.value}`,
+    `gl-theme-${actualTheme.value}`,
   ]
 
   if (!props.editable) {

@@ -197,7 +197,7 @@ const selectColor = (color: string | null) => {
 
 .color-palette__section-title {
   font-size: 12px;
-  color: var(--color-text-secondary, #6b7280);
+  color: var(--gl-color-text-1, #6b7280);
   margin: 0;
   padding: 0 4px;
 }
@@ -231,7 +231,7 @@ const selectColor = (color: string | null) => {
   min-width: 16px;
   min-height: 16px;
   padding: 0;
-  border: 1px solid var(--color-border, #e5e7eb);
+  border: 1px solid var(--gl-color-border, #e5e7eb);
   border-radius: 3px;
   cursor: pointer;
   display: flex;
@@ -262,10 +262,10 @@ const selectColor = (color: string | null) => {
 .color-palette__no-color-btn {
   width: 100%;
   height: 24px;
-  border: 1px solid var(--color-border, #d1d5db);
+  border: 1px solid var(--gl-color-border, #d1d5db);
   border-radius: 4px;
   background: #fff;
-  color: var(--color-text-secondary, #6b7280);
+  color: var(--gl-color-text-1, #6b7280);
   font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -281,28 +281,29 @@ const selectColor = (color: string | null) => {
 
 .color-palette__no-color-btn:hover {
   border-color: var(--gl-primary-color, #1890ff);
-  background: var(--color-bg-hover, #f3f4f6);
+  background: var(--gl-color-fill-2, #f3f4f6);
 }
 
 .color-palette__no-color-btn--active {
   border-color: var(--gl-primary-color, #1890ff);
-  background: var(--color-bg-active, #e6f7ff);
+  background: var(--gl-color-fill-3, #e6f7ff);
   color: var(--gl-primary-color, #1890ff);
 }
 
-.color-palette__no-color-btn--dark {
-  background: var(--color-bg-dark, #374151);
-  border-color: var(--color-border-dark, #4b5563);
-  color: var(--color-text-secondary-dark, #9ca3af);
+/* 暗色主题样式 */
+.gl-lite-editor.gl-theme-dark .color-palette__no-color-btn {
+  background: var(--gl-color-bg-popup, #343a40);
+  border-color: var(--gl-color-border, #495057);
+  color: var(--gl-color-text-1, #9ca3af);
 }
 
-.color-palette__no-color-btn--dark:hover {
-  background: var(--color-bg-hover-dark, #4b5563);
+.gl-lite-editor.gl-theme-dark .color-palette__no-color-btn:hover {
+  background: var(--gl-color-fill-2, #495057);
   border-color: var(--gl-primary-color, #66b3ff);
 }
 
-.color-palette__no-color-btn--dark.color-palette__no-color-btn--active {
-  background: var(--color-bg-active-dark, #1e3a8a);
+.gl-lite-editor.gl-theme-dark .color-palette__no-color-btn--active {
+  background: var(--gl-color-fill-3, #1e3a8a);
   border-color: var(--gl-primary-color, #66b3ff);
   color: var(--gl-primary-color, #66b3ff);
 }
@@ -339,14 +340,14 @@ const selectColor = (color: string | null) => {
 
 .color-palette__more-colors-label {
   font-size: 12px;
-  color: var(--color-text-secondary, #6b7280);
+  color: var(--gl-color-text-1, #6b7280);
   white-space: nowrap;
 }
 
 .color-palette__color-picker {
   width: 28px;
   height: 20px;
-  border: 1px solid var(--color-border, #d1d5db);
+  border: 1px solid var(--gl-color-border, #d1d5db);
   border-radius: 3px;
   cursor: pointer;
   background: none;
@@ -357,38 +358,32 @@ const selectColor = (color: string | null) => {
   border-color: var(--gl-primary-color, #1890ff);
 }
 
-/* 暗色主题支持 */
-.color-palette__more-colors-label--dark {
-  color: var(--color-text-secondary-dark, #9ca3af);
+/* 暗色主题样式 */
+.gl-lite-editor.gl-theme-dark .color-palette__more-colors-label {
+  color: var(--gl-color-text-1, #9ca3af);
 }
 
-.color-palette__color-picker--dark {
-  border-color: var(--color-border-dark, #4b5563);
+.gl-lite-editor.gl-theme-dark .color-palette__color-picker {
+  border-color: var(--gl-color-border, #495057);
 }
 
-.color-palette__color-picker--dark:hover {
+.gl-lite-editor.gl-theme-dark .color-palette__color-picker:hover {
   border-color: var(--gl-primary-color, #66b3ff);
 }
 
-/* 暗色主题 */
-.color-palette__color--dark {
-  border-color: var(--color-border-dark, #4b5563);
+.gl-lite-editor.gl-theme-dark .color-palette__color {
+  border-color: var(--gl-color-border, #495057);
 }
 
-.color-palette__color--dark:hover {
+.gl-lite-editor.gl-theme-dark .color-palette__color:hover {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.color-palette__color--dark.color-palette__color--active {
+.gl-lite-editor.gl-theme-dark .color-palette__color--active {
   box-shadow: 0 0 0 2px var(--gl-primary-color, #66b3ff);
 }
 
-/* 深色主题下的标题和文字 */
-.gl-theme-dark .color-palette__title {
-  color: var(--color-text-primary-dark, #f9fafb);
-}
-
-.gl-theme-dark .color-palette__section-title {
-  color: var(--color-text-secondary-dark, #9ca3af);
+.gl-lite-editor.gl-theme-dark .color-palette__section-title {
+  color: var(--gl-color-text-1, #9ca3af);
 }
 </style>

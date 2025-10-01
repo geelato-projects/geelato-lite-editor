@@ -52,6 +52,44 @@ export function useTheme(initialTheme: ThemeType = 'light') {
     }
   }
 
+  // 获取主题相关的 CSS 变量
+  const getThemeVariables = () => {
+    const variables: Record<string, string> = {}
+    
+    if (actualTheme.value === 'dark') {
+      variables['--gl-bg-color'] = '#1a1a1a'
+      variables['--gl-text-color'] = '#ffffff'
+      variables['--gl-border-color'] = '#404040'
+      variables['--gl-hover-bg'] = '#2a2a2a'
+      variables['--gl-active-bg'] = '#3a3a3a'
+      variables['--gl-toolbar-bg'] = '#2d2d2d'
+      variables['--gl-editor-bg'] = '#1e1e1e'
+      variables['--gl-selection-bg'] = '#264f78'
+    } else {
+      variables['--gl-bg-color'] = '#ffffff'
+      variables['--gl-text-color'] = '#333333'
+      variables['--gl-border-color'] = '#e0e0e0'
+      variables['--gl-hover-bg'] = '#f5f5f5'
+      variables['--gl-active-bg'] = '#e8e8e8'
+      variables['--gl-toolbar-bg'] = '#fafafa'
+      variables['--gl-editor-bg'] = '#ffffff'
+      variables['--gl-selection-bg'] = '#b3d4fc'
+    }
+    
+    return variables
+  }
+
+  // 应用主题变量到根元素
+  const applyThemeToRoot = () => {
+    if (typeof document !== 'undefined') {
+      const root = document.documentElement
+      const variables = getThemeVariables()
+      Object.entries(variables).forEach(([key, value]) => {
+        root.style.setProperty(key, value)
+      })
+    }
+  }
+
   // 更新文档主题
   const updateDocumentTheme = () => {
     if (typeof document !== 'undefined') {
@@ -69,6 +107,9 @@ export function useTheme(initialTheme: ThemeType = 'light') {
       } else {
         root.style.setProperty('--gl-color-scheme', 'light')
       }
+      
+      // 应用主题变量
+      applyThemeToRoot()
     }
   }
 
@@ -110,33 +151,6 @@ export function useTheme(initialTheme: ThemeType = 'light') {
     // 返回清理函数
     return cleanup
   })
-
-  // 获取主题相关的 CSS 变量
-  const getThemeVariables = () => {
-    const variables: Record<string, string> = {}
-    
-    if (actualTheme.value === 'dark') {
-      variables['--gl-bg-color'] = '#1a1a1a'
-      variables['--gl-text-color'] = '#ffffff'
-      variables['--gl-border-color'] = '#404040'
-      variables['--gl-hover-bg'] = '#2a2a2a'
-      variables['--gl-active-bg'] = '#3a3a3a'
-      variables['--gl-toolbar-bg'] = '#2d2d2d'
-      variables['--gl-editor-bg'] = '#1e1e1e'
-      variables['--gl-selection-bg'] = '#264f78'
-    } else {
-      variables['--gl-bg-color'] = '#ffffff'
-      variables['--gl-text-color'] = '#333333'
-      variables['--gl-border-color'] = '#e0e0e0'
-      variables['--gl-hover-bg'] = '#f5f5f5'
-      variables['--gl-active-bg'] = '#e8e8e8'
-      variables['--gl-toolbar-bg'] = '#fafafa'
-      variables['--gl-editor-bg'] = '#ffffff'
-      variables['--gl-selection-bg'] = '#b3d4fc'
-    }
-    
-    return variables
-  }
 
   // 应用主题变量到元素
   const applyThemeVariables = (element: HTMLElement) => {

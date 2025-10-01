@@ -240,22 +240,23 @@ const handleClick = (event: MouseEvent) => {
 }
 
 // 暗色主题
-.gl-theme-dark {
+.gl-lite-editor.gl-theme-dark {
   .gl-toolbar-button {
-    color: var(--gl-text-color, #fff);
+    color: var(--gl-color-text-1, #f8f9fa);
     
     &:hover:not(&--disabled) {
-      background: var(--gl-hover-bg, #2a2a2a);
-      border-color: var(--gl-border-color, #404040);
+      background: var(--gl-color-fill-2, #495057);
+      border-color: var(--gl-color-border, #6c757d);
     }
     
     &:active:not(&--disabled) {
-      background: var(--gl-active-bg, #3a3a3a);
+      background: var(--gl-color-fill-3, #6c757d);
     }
     
     &--active {
-      background: var(--gl-active-bg, #3a3a3a);
-      border-color: var(--gl-border-color, #404040);
+      background: var(--gl-color-fill-2, #495057);
+      border-color: var(--gl-color-border, #6c757d);
+      color: var(--gl-color-primary, #66b3ff);
     }
   }
 }

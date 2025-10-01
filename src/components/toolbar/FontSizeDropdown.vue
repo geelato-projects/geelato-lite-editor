@@ -3,7 +3,7 @@
     <div class="font-size-control-group">
       <!-- 字体大小显示和下拉按钮 -->
       <div class="font-size-display" @click="toggleDropdown">
-        <span class="font-size-current">{{ currentDisplayValue }}</span>
+        <span>{{ currentDisplayValue }}</span>
         <svg class="dropdown-arrow" :class="{ open: isOpen }" width="12" height="12" viewBox="0 0 12 12">
           <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -219,13 +219,15 @@ onUnmounted(() => {
   border-color: var(--gl-border-color, #e0e0e0);
 }
 
-.font-size-current {
-  font-weight: 500;
-}
-
 .dropdown-arrow {
   transition: transform 0.2s;
   color: var(--gl-text-color-secondary, #86909c);
+}
+
+/* Dark mode support for dropdown arrow */
+.gl-lite-editor.gl-theme-dark .dropdown-arrow {
+  color: var(--gl-text-color-secondary, #86909c);
+  stroke: var(--gl-text-color-secondary, #86909c);
 }
 
 .dropdown-arrow.open {

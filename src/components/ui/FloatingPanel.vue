@@ -100,8 +100,8 @@ const panelClasses = computed(() => [
 
 /* 内层面板，包含实际样式和动画 */
 .floating-panel {
-  background: var(--color-bg-popup, #ffffff);
-  border: 1px solid var(--color-border, #e5e7eb);
+  background: var(--gl-color-bg-popup, #ffffff);
+  border: 1px solid var(--gl-color-border, #e5e7eb);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 8px;
@@ -110,9 +110,18 @@ const panelClasses = computed(() => [
   animation: fadeInScale 0.15s ease-out;
 }
 
-.floating-panel--dark {
-  background: var(--color-bg-popup-dark, #374151);
-  border-color: var(--color-border-dark, #4b5563);
+/* 暗色主题样式 - 提高优先级 */
+.floating-panel.floating-panel--dark {
+  background: #343a40 !important;
+  border-color: #495057 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  color: #f8f9fa !important;
+}
+
+/* 为了兼容性，保留原有选择器，但优先级低于theme prop */
+.gl-lite-editor.gl-theme-dark .floating-panel:not(.floating-panel--dark) {
+  background: var(--gl-color-bg-popup, #343a40);
+  border-color: var(--gl-color-border, #495057);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 

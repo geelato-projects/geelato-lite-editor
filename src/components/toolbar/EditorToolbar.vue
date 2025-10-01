@@ -61,6 +61,7 @@
       :visible="highlightPanelVisible"
       :reference="highlightButtonRef"
       :current-color="currentHighlightColor"
+      :is-dark="isDark"
       @color-select="handleHighlightColorSelect"
       @close="handleHighlightPanelClose"
     />
@@ -70,6 +71,7 @@
       :visible="textColorPanelVisible"
       :reference="textColorButtonRef"
       :current-color="currentTextColor"
+      :is-dark="isDark"
       @color-select="handleTextColorSelect"
       @close="handleTextColorPanelClose"
     />
@@ -79,6 +81,7 @@
       :visible="tableFillColorPanelVisible"
       :reference="tableFillColorButtonRef"
       :current-color="currentTableFillColor"
+      :is-dark="isDark"
       @color-select="handleTableFillColorSelect"
       @close="handleTableFillColorPanelClose"
     />
@@ -86,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, nextTick, inject } from 'vue'
 import { useToolbar } from '../../composables/useToolbar'
 import ToolbarButton from '../ui/ToolbarButton.vue'
 import ToolbarSeparator from '../ui/ToolbarSeparator.vue'
@@ -134,6 +137,16 @@ const {
   isButtonDisabled,
   executeButtonAction,
 } = useToolbar(computed(() => props.editor), computed(() => props.config))
+
+// 获取主题状态
+const isDark = computed(() => {
+  // 从编辑器容器元素获取主题状态
+  if (props.editor?.view?.dom) {
+    const editorElement = props.editor.view.dom.closest('.gl-lite-editor')
+    return editorElement?.classList.contains('gl-theme-dark') || false
+  }
+  return false
+})
 
 // 判断是否为表格操作按钮
 const isTableOperation = (item: string) => {
@@ -681,10 +694,10 @@ onUnmounted(() => {
 }
 
 // 暗色主题
-.gl-theme-dark {
+.gl-lite-editor.gl-theme-dark {
   .gl-editor-toolbar {
-    background: var(--gl-toolbar-bg, #2d2d2d);
-    border-bottom-color: var(--gl-border-color, #404040);
+    background: var(--gl-color-bg-2, #343a40);
+    border-color: var(--gl-color-border, #495057);
   }
 }
 

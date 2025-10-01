@@ -541,7 +541,46 @@ onUnmounted(() => {
   margin: 4px 0;
 }
 
-/* 暗色主题支持 */
+/* 暗色主题支持 - 基于CSS类选择器，限制在.gl-lite-editor作用域内 */
+.gl-lite-editor.gl-theme-dark .table-dropdown-menu {
+  background: var(--gl-color-bg-popup, #343a40);
+  border-color: var(--gl-color-border, #495057);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.gl-lite-editor.gl-theme-dark .table-dropdown-item {
+  color: var(--gl-color-text-1, #f8f9fa);
+}
+
+.gl-lite-editor.gl-theme-dark .table-dropdown-item:hover,
+.gl-lite-editor.gl-theme-dark .table-dropdown-item.active {
+  background-color: var(--gl-color-fill-2, #495057);
+}
+
+.gl-lite-editor.gl-theme-dark .table-size-selector-container {
+  border-color: var(--gl-color-border, #495057);
+  background: var(--gl-color-bg-popup, #343a40);
+}
+
+.gl-lite-editor.gl-theme-dark .table-border-panel-container {
+  border-color: var(--gl-color-border, #495057);
+  background: var(--gl-color-bg-popup, #343a40);
+}
+
+.gl-lite-editor.gl-theme-dark .grid-cell {
+  border-color: var(--gl-color-border-2, #495057);
+  background: var(--gl-color-bg-popup, #343a40);
+}
+
+.gl-lite-editor.gl-theme-dark .grid-cell:hover {
+  background: var(--gl-color-fill-2, #495057);
+}
+
+.gl-lite-editor.gl-theme-dark .table-dropdown-divider {
+  background-color: var(--gl-color-border, #495057);
+}
+
+/* 兼容系统主题偏好的媒体查询 */
 @media (prefers-color-scheme: dark) {
   .table-dropdown-menu {
     background: var(--gl-bg-color, #2d2d2d);
