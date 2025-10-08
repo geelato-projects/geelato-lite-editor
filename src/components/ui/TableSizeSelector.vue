@@ -114,6 +114,53 @@ const handleCellClick = (row: number, col: number) => {
 }
 
 /* 暗色主题支持 */
+.gl-lite-editor.gl-theme-dark .table-size-cell {
+  border-color: var(--gl-color-border, #495057);
+  background-color: var(--gl-color-bg-popup, #343a40);
+}
+
+.gl-lite-editor.gl-theme-dark .table-size-cell:hover {
+  border-color: var(--gl-color-primary, #66b3ff);
+}
+
+.gl-lite-editor.gl-theme-dark .table-size-cell.hover {
+  background-color: var(--gl-color-primary, #66b3ff);
+  border-color: var(--gl-color-primary, #66b3ff);
+}
+
+.gl-lite-editor.gl-theme-dark .table-size-cell.active {
+  background-color: var(--gl-color-primary, #66b3ff);
+  border-color: var(--gl-color-primary, #66b3ff);
+}
+
+.gl-lite-editor.gl-theme-dark .table-size-info {
+  color: var(--gl-color-text-1, #f8f9fa);
+}
+
+/* 支持 FloatingPanel 暗色主题类 */
+:global(.floating-panel--dark) .table-size-cell {
+  border-color: var(--gl-color-border, #495057);
+  background-color: var(--gl-color-bg-popup, #343a40);
+}
+
+:global(.floating-panel--dark) .table-size-cell:hover {
+  border-color: var(--gl-color-primary, #66b3ff);
+}
+
+:global(.floating-panel--dark) .table-size-cell.hover {
+  background-color: var(--gl-color-primary, #66b3ff);
+  border-color: var(--gl-color-primary, #66b3ff);
+}
+
+:global(.floating-panel--dark) .table-size-cell.active {
+  background-color: var(--gl-color-primary, #66b3ff);
+  border-color: var(--gl-color-primary, #66b3ff);
+}
+
+:global(.floating-panel--dark) .table-size-info {
+  color: var(--gl-color-text-1, #f8f9fa);
+}
+
 @media (prefers-color-scheme: dark) {
   .table-size-cell {
     border-color: var(--gl-border-color, #404040);
@@ -121,7 +168,13 @@ const handleCellClick = (row: number, col: number) => {
   }
   
   .table-size-cell.hover {
-    background-color: var(--gl-primary-color-light, #1a3a5c);
+    background-color: var(--gl-color-primary, #66b3ff);
+    border-color: var(--gl-color-primary, #66b3ff);
+  }
+  
+  .table-size-cell.active {
+    background-color: var(--gl-color-primary, #66b3ff);
+    border-color: var(--gl-color-primary, #66b3ff);
   }
   
   .table-size-info {

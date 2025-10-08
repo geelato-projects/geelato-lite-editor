@@ -106,9 +106,12 @@ import TableBorderPanel from '../../extensions/tableBorder/TableBorderPanel.vue'
 
 interface Props {
   editor: Editor | null
+  isDark?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  isDark: false
+})
 
 const dropdownRef = ref<HTMLElement>()
 const menuRef = ref<HTMLElement>()
@@ -573,7 +576,17 @@ onUnmounted(() => {
 }
 
 .gl-lite-editor.gl-theme-dark .grid-cell:hover {
-  background: var(--gl-color-fill-2, #495057);
+  background: var(--gl-color-primary, #66b3ff);
+  border-color: var(--gl-color-primary, #66b3ff);
+}
+
+.gl-lite-editor.gl-theme-dark .grid-cell.active {
+  background: var(--gl-color-primary, #66b3ff);
+  border-color: var(--gl-color-primary, #66b3ff);
+}
+
+.gl-lite-editor.gl-theme-dark .size-display {
+  color: var(--gl-color-text-1, #f8f9fa);
 }
 
 .gl-lite-editor.gl-theme-dark .table-dropdown-divider {
@@ -613,7 +626,17 @@ onUnmounted(() => {
   }
 
   .grid-cell:hover {
-    background: #1a3a5c;
+    background: var(--gl-color-primary, #66b3ff);
+    border-color: var(--gl-color-primary, #66b3ff);
+  }
+
+  .grid-cell.active {
+    background: var(--gl-color-primary, #66b3ff);
+    border-color: var(--gl-color-primary, #66b3ff);
+  }
+
+  .size-display {
+    color: #f8f9fa;
   }
 
   .table-dropdown-divider {

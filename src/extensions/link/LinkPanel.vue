@@ -5,7 +5,7 @@
     :placement="placement"
     :offset="offset"
     :size="size"
-    :theme="isDark ? 'dark' : 'light'"
+    :theme="themeValue"
     @click-outside="handleClickOutside"
   >
     <div class="link-panel">
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, computed } from 'vue'
 import FloatingPanel from '../../components/ui/FloatingPanel.vue'
 import SvgIcon from '../../components/ui/SvgIcon.vue'
 
@@ -81,6 +81,18 @@ const emit = defineEmits<{
   delete: []
   close: []
 }>()
+
+// 调试信息
+watch(() => props.isDark, (newValue) => {
+  console.log('LinkPanel isDark changed:', newValue)
+})
+
+// 计算 theme 属性
+const themeValue = computed(() => {
+  const theme = props.isDark ? 'dark' : 'light'
+  console.log('LinkPanel theme computed:', theme, 'isDark:', props.isDark)
+  return theme
+})
 
 const urlInputRef = ref<HTMLInputElement | null>(null)
 const linkData = ref({
@@ -215,29 +227,30 @@ const handleClickOutside = () => {
   }
 }
 
-/* 暗色主题 */
-.gl-theme-dark .link-panel {
+/* 暗色主题 - 支持多种暗色模式选择器 */
+.gl-theme-dark .link-panel,
+:global(.floating-panel--dark) .link-panel {
   &__input-wrapper {
-    background: var(--gl-input-bg, #2d2d2d);
-    border-color: var(--gl-border-color, #404040);
+    background: var(--gl-color-bg-2, #343a40);
+    border-color: var(--gl-color-border, #495057);
   }
   
   &__input {
-    color: var(--gl-text-color, #fff);
+    color: var(--gl-color-text-1, #f8f9fa);
     
     &::placeholder {
-      color: var(--gl-text-color-placeholder, #666);
+      color: var(--gl-color-text-3, #86909c);
     }
   }
   
   &__button {
-    background: var(--gl-button-bg, #2d2d2d);
-    color: var(--gl-text-color, #ccc);
-    border-color: var(--gl-border-color, #404040);
+    background: var(--gl-color-bg-2, #343a40);
+    color: var(--gl-color-text-2, #e9ecef);
+    border-color: var(--gl-color-border, #495057);
     
     &:hover:not(:disabled) {
-      background: var(--gl-hover-bg, #3a3a3a);
-      color: var(--gl-text-color, #fff);
+      background: var(--gl-color-fill-2, #495057);
+      color: var(--gl-color-text-1, #f8f9fa);
     }
   }
 }

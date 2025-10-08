@@ -11,6 +11,7 @@
       <TableDropdown
         v-else-if="item === 'table'"
         :editor="editor"
+        :is-dark="isDark"
       />
       
       <!-- 列表下拉菜单 -->
@@ -49,6 +50,7 @@
       :visible="linkPanelVisible"
       :reference="linkElementRef || linkButtonRef"
       :default-url="linkData.url"
+      :is-dark="isDark"
       @confirm="handleLinkConfirm"
       @delete="handleLinkDelete"
       @close="handleLinkPanelClose"
@@ -91,6 +93,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted, nextTick, inject } from 'vue'
 import { useToolbar } from '../../composables/useToolbar'
+import { useTheme } from '../../composables/useTheme'
 import ToolbarButton from '../ui/ToolbarButton.vue'
 import ToolbarSeparator from '../ui/ToolbarSeparator.vue'
 import InputModal from '../ui/InputModal.vue'
@@ -121,12 +124,15 @@ interface Props {
   showSeparator?: boolean
   /** 自定义类名 */
   class?: string
+  /** 是否为暗色主题 */
+  isDark?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   config: 'simple',
   size: 'medium',
   showSeparator: true,
+  isDark: false,
 })
 
 // 使用工具栏组合式函数
@@ -138,12 +144,37 @@ const {
   executeButtonAction,
 } = useToolbar(computed(() => props.editor), computed(() => props.config))
 
-// 获取主题状态
+// 使用主题组合式函数
+const { isDark: globalIsDark } = useTheme()
+
+// 获取主题状态 - 优先使用父组件传递的值
 const isDark = computed(() => {
-  // 从编辑器容器元素获取主题状态
+  // 最高优先级：使用父组件传递的 isDark prop
+  if (props.isDark !== undefined) {
+    console.log('EditorToolbar using prop isDark:', props.isDark)
+    return props.isDark
+  }
+  
+  // 次优先级：使用组合式函数的结果
+  if (globalIsDark.value !== undefined) {
+    console.log('EditorToolbar using globalIsDark:', globalIsDark.value)
+    return globalIsDark.value
+  }
+  
+  // 备用方案：从编辑器容器元素获取主题状态
   if (props.editor?.view?.dom) {
     const editorElement = props.editor.view.dom.closest('.gl-lite-editor')
-    return editorElement?.classList.contains('gl-theme-dark') || false
+    const isDarkMode = editorElement?.classList.contains('gl-theme-dark') || false
+    
+    // 调试信息
+    console.log('EditorToolbar using DOM detection:', {
+      editorElement: !!editorElement,
+      className: editorElement?.className,
+      isDarkMode,
+      domElement: props.editor.view.dom
+    })
+    
+    return isDarkMode
   }
   return false
 })

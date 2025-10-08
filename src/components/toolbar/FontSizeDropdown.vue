@@ -86,9 +86,33 @@ const fontSizeOptions = [
 const currentFontSize = computed(() => {
   if (!props.editor) return '14px'
   
-  const { from, to } = props.editor.state.selection
-  let fontSize = '14px'
+  const { from, to, empty } = props.editor.state.selection
   
+  // 如果选区为空（光标位置）或编辑器内容为空，检查当前活跃样式
+  if (empty || props.editor.isEmpty) {
+    // 检查当前存储的 textStyle 标记
+    const storedMarks = props.editor.getAttributes('textStyle')
+    if (storedMarks && storedMarks.fontSize) {
+      return storedMarks.fontSize
+    }
+    
+    // 检查当前光标位置的样式
+    const { $from } = props.editor.state.selection
+    const marks = $from.marks()
+    const textStyleMark = marks.find(mark => mark.type.name === 'textStyle')
+    if (textStyleMark && textStyleMark.attrs.fontSize) {
+      return textStyleMark.attrs.fontSize
+    }
+    
+    // 检查当前节点的样式
+    const currentNodeAttrs = props.editor.getAttributes('textStyle')
+    if (currentNodeAttrs && currentNodeAttrs.fontSize) {
+      return currentNodeAttrs.fontSize
+    }
+  }
+  
+  // 对于有选区的情况，遍历选区内的节点
+  let fontSize = '14px'
   props.editor.state.doc.nodesBetween(from, to, (node) => {
     if (node.marks) {
       const textStyleMark = node.marks.find(mark => mark.type.name === 'textStyle')
@@ -294,5 +318,47 @@ onUnmounted(() => {
 
 .font-size-dropdown-item.active .font-size-value {
   color: var(--gl-color-primary-6, #165dff);
+}
+
+/* 暗色主题支持 */
+.gl-lite-editor.gl-theme-dark .font-size-display {
+  color: var(--gl-color-text-1, #f8f9fa);
+}
+
+.gl-lite-editor.gl-theme-dark .font-size-display:hover {
+  background: var(--gl-color-fill-2, #495057) !important;
+  border-color: var(--gl-color-border, #495057) !important;
+  color: var(--gl-color-text-1, #f8f9fa) !important;
+}
+
+.gl-lite-editor.gl-theme-dark .font-size-dropdown-menu {
+  background: var(--gl-color-bg-popup, #343a40);
+  border-color: var(--gl-color-border, #495057);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.gl-lite-editor.gl-theme-dark .font-size-dropdown-item {
+  color: var(--gl-color-text-1, #f8f9fa);
+}
+
+.gl-lite-editor.gl-theme-dark .font-size-dropdown-item:hover {
+  background-color: var(--gl-color-fill-2, #495057);
+}
+
+.gl-lite-editor.gl-theme-dark .font-size-dropdown-item.active {
+  background-color: var(--gl-color-primary, #66b3ff);
+  color: #ffffff;
+}
+
+.gl-lite-editor.gl-theme-dark .font-size-dropdown-item.active:hover {
+  background-color: var(--gl-color-primary-hover, #4da3ff);
+}
+
+.gl-lite-editor.gl-theme-dark .font-size-value {
+  color: var(--gl-color-text-3, #adb5bd);
+}
+
+.gl-lite-editor.gl-theme-dark .font-size-dropdown-item.active .font-size-value {
+  color: #ffffff;
 }
 </style>

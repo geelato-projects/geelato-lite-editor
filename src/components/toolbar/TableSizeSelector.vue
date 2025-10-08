@@ -89,4 +89,65 @@ const onCellClick = (row: number, col: number) => {
   color: var(--color-text-2);
   padding: 4px 0;
 }
+
+/* 暗色主题支持 */
+.gl-lite-editor.gl-theme-dark .grid-cell {
+  border-color: var(--gl-color-border, #495057);
+  background-color: var(--gl-color-bg-popup, #343a40);
+}
+
+.gl-lite-editor.gl-theme-dark .grid-cell:hover {
+  border-color: var(--gl-color-primary, #66b3ff);
+  background-color: var(--gl-color-primary, #66b3ff);
+}
+
+.gl-lite-editor.gl-theme-dark .grid-cell.active {
+  background-color: var(--gl-color-primary, #66b3ff);
+  border-color: var(--gl-color-primary, #66b3ff);
+}
+
+.gl-lite-editor.gl-theme-dark .size-display {
+  color: var(--gl-color-text-1, #f8f9fa);
+}
+
+/* 支持 FloatingPanel 暗色主题类 */
+:global(.floating-panel--dark) .grid-cell {
+  border-color: var(--gl-color-border, #495057);
+  background-color: var(--gl-color-bg-popup, #343a40);
+}
+
+:global(.floating-panel--dark) .grid-cell:hover {
+  border-color: var(--gl-color-primary, #66b3ff);
+  background-color: var(--gl-color-primary, #66b3ff);
+}
+
+:global(.floating-panel--dark) .grid-cell.active {
+  background-color: var(--gl-color-primary, #66b3ff);
+  border-color: var(--gl-color-primary, #66b3ff);
+}
+
+:global(.floating-panel--dark) .size-display {
+  color: var(--gl-color-text-1, #f8f9fa);
+}
+
+@media (prefers-color-scheme: dark) {
+  .grid-cell {
+    border-color: var(--gl-border-color, #404040);
+    background-color: var(--gl-bg-color, #2d2d2d);
+  }
+  
+  .grid-cell:hover {
+    background-color: var(--gl-color-primary, #66b3ff);
+    border-color: var(--gl-color-primary, #66b3ff);
+  }
+  
+  .grid-cell.active {
+    background-color: var(--gl-color-primary, #66b3ff);
+    border-color: var(--gl-color-primary, #66b3ff);
+  }
+  
+  .size-display {
+    color: var(--gl-text-color-secondary, #cccccc);
+  }
+}
 </style>

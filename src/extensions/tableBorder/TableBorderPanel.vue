@@ -470,8 +470,12 @@ watch(() => props.editor?.state.selection, () => {
   border-color: var(--gl-color-border, #495057);
 }
 
-.gl-lite-editor.gl-theme-dark .border-section h4 {
+.gl-lite-editor.gl-theme-dark .section-title {
   color: var(--gl-color-text-1, #f8f9fa);
+}
+
+.gl-lite-editor.gl-theme-dark .more-colors-label {
+  color: var(--gl-color-text-2, #e9ecef);
 }
 
 .gl-lite-editor.gl-theme-dark .border-style-item,
@@ -497,5 +501,52 @@ watch(() => props.editor?.state.selection, () => {
 
 .gl-lite-editor.gl-theme-dark .color-preset {
   border-color: var(--gl-color-border, #495057);
+}
+
+/* 支持 FloatingPanel 暗色主题类 */
+:global(.floating-panel--dark) .table-border-panel {
+  background: var(--gl-color-bg-popup, #343a40);
+  border-color: var(--gl-color-border, #495057);
+}
+
+:global(.floating-panel--dark) .section-title {
+  color: var(--gl-color-text-1, #f8f9fa);
+}
+
+:global(.floating-panel--dark) .more-colors-label {
+  color: var(--gl-color-text-2, #e9ecef);
+}
+
+:global(.floating-panel--dark) .border-style-item,
+:global(.floating-panel--dark) .border-width-item,
+:global(.floating-panel--dark) .border-position-item {
+  background: var(--gl-color-bg-popup, #343a40);
+  border-color: var(--gl-color-border, #495057);
+  color: var(--gl-color-text-1, #f8f9fa);
+}
+
+:global(.floating-panel--dark) .border-style-item:hover,
+:global(.floating-panel--dark) .border-width-item:hover,
+:global(.floating-panel--dark) .border-position-item:hover {
+  background: var(--gl-color-fill-2, #495057);
+}
+
+:global(.floating-panel--dark) .border-style-item.active,
+:global(.floating-panel--dark) .border-width-item.active,
+:global(.floating-panel--dark) .border-position-item.active {
+  background: var(--gl-color-fill-3, #6c757d);
+  border-color: var(--gl-color-border, #495057);
+}
+
+:global(.floating-panel--dark) .color-preset {
+  border-color: var(--gl-color-border, #495057);
+}
+
+/* 修复图标在暗色模式下的显示问题 */
+.gl-lite-editor.gl-theme-dark .border-position-item .gl-svg-icon,
+:global(.floating-panel--dark) .border-position-item .gl-svg-icon {
+  color: var(--gl-color-text-1, #f8f9fa) !important;
+  fill: var(--gl-color-text-1, #f8f9fa) !important;
+  stroke: var(--gl-color-text-1, #f8f9fa) !important;
 }
 </style>

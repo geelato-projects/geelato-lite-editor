@@ -2,7 +2,8 @@
   <div ref="editorContainer" :class="editorClass" :style="themeColorVars">
     <div class="editor-container">
       <EditorToolbar v-if="computedToolbarConfig !== 'none' && editor" :editor="editor"
-        :config="computedToolbarConfig" :size="size" :show-separator="showToolbarSeparator" :class="toolbarClass" />
+        :config="computedToolbarConfig" :size="size" :show-separator="showToolbarSeparator" :class="toolbarClass" 
+        :is-dark="actualTheme === 'dark'" />
 
       <EditorContent v-if="editor" :editor="editor" :size="size" :showStatusBar="_showStatusBar"
         :placeholder="placeholder" :min-height="minHeight" :max-height="maxHeight" :content-stats="contentStats"

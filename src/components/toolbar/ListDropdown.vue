@@ -179,19 +179,71 @@ onUnmounted(() => {
 }
 
 /* 暗色主题支持 */
+.gl-lite-editor.gl-theme-dark .list-dropdown-menu {
+  background: var(--gl-color-bg-popup, #2d2d2d);
+  border-color: var(--gl-color-border, #404040);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.gl-lite-editor.gl-theme-dark .list-dropdown-item {
+  color: var(--gl-color-text-1, #f8f9fa);
+}
+
+.gl-lite-editor.gl-theme-dark .list-dropdown-item:hover {
+  background-color: var(--gl-color-bg-3, #404040);
+}
+
+.gl-lite-editor.gl-theme-dark .list-dropdown-item.active {
+  background-color: var(--gl-color-primary, #66b3ff);
+  color: #ffffff;
+}
+
+.gl-lite-editor.gl-theme-dark .list-dropdown-item.active:hover {
+  background-color: var(--gl-color-primary-hover, #4da3ff);
+}
+
+.gl-lite-editor.gl-theme-dark .list-dropdown-item .gl-svg-icon {
+  color: var(--gl-color-text-1, #f8f9fa);
+  fill: var(--gl-color-text-1, #f8f9fa);
+}
+
+.gl-lite-editor.gl-theme-dark .list-dropdown-item.active .gl-svg-icon {
+  color: #ffffff;
+  fill: #ffffff;
+}
+
 @media (prefers-color-scheme: dark) {
   .list-dropdown-menu {
-    background: var(--gl-bg-color, #2d2d2d);
-    border-color: var(--gl-border-color, #404040);
+    background: var(--gl-color-bg-popup, #2d2d2d);
+    border-color: var(--gl-color-border, #404040);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
   
   .list-dropdown-item {
-    color: var(--gl-text-color, #ffffff);
+    color: var(--gl-color-text-1, #f8f9fa);
   }
   
   .list-dropdown-item:hover {
-    background-color: var(--gl-hover-color, #404040);
+    background-color: var(--gl-color-bg-3, #404040);
+  }
+  
+  .list-dropdown-item.active {
+    background-color: var(--gl-color-primary, #66b3ff);
+    color: #ffffff;
+  }
+  
+  .list-dropdown-item.active:hover {
+    background-color: var(--gl-color-primary-hover, #4da3ff);
+  }
+  
+  .list-dropdown-item .gl-svg-icon {
+    color: var(--gl-color-text-1, #f8f9fa);
+    fill: var(--gl-color-text-1, #f8f9fa);
+  }
+  
+  .list-dropdown-item.active .gl-svg-icon {
+    color: #ffffff;
+    fill: #ffffff;
   }
 }
 </style>
